@@ -10,6 +10,7 @@ from Session import Session
 from Connexion import Connexion
 from EnsAdmins import EnsAdmins
 import sys
+import getpass #Masquer saisie mot de passe
 global user
 global ActiveSession
 UserList = EnsUtilisateurs()
@@ -20,10 +21,12 @@ def cls():
 
 def firstmenu():
     cls()
-    print("============== GESTION DE LA LUDOTHEQUE ===============\n")
+    print("================================================================================")
+    print("===                         GESTION DE LA LUDOTHEQUE                         ===")
+    print("================================================================================\n")
     print("1. Se connecter")
     print("2. Quitter")
-    Choix = int(raw_input("Choix: "))
+    Choix = int(raw_input("\nChoix: "))
     if Choix==1:
         connexion()
     elif Choix==2:
@@ -36,10 +39,12 @@ def connexion():
 
     while(res==False):
         cls()
-        print("============== GESTION DE LA LUDOTHEQUE ===============")
-        print("CONNEXION:")
+        print("================================================================================")
+        print("===                         GESTION DE LA LUDOTHEQUE                         ===")
+        print("================================================================================\n")
+        print("CONNEXION:\n")
         login = str(raw_input("Nom d'utilisateur: "))
-        password = str(raw_input("Mot de passe: "))
+        password = getpass.getpass("Mot de passe: ")
         try:
             con = Connexion(login,password)
             res=con.est_valide()
@@ -66,27 +71,27 @@ def newSession(login):
 
 def connecte():
     cls()
-    print("============== GESTION DE LA LUDOTHEQUE ===============")
-    print "----- Connecte en tant que "+user.get_username()
+    print("================================================================================")
+    print("===                         GESTION DE LA LUDOTHEQUE                         ===")
+    print("================================================================================")
     if ActiveSession.est_admin():
-
-        print "-- ADMIN\n\n"
-    elif user.get_username() == 'Blasfm':
-        print "-- Princesse"
+        statut= "Administrateur\n\n"
     else:
-        print"-- Adherent\n\n"
+        statut= "Adherent\n\n"
+    print "----- Connecte en tant que "+user.get_username()+" :: "+statut
 
 
 def menu():
     connecte()
-    print "==== MENU ===="
+    print "=========== MENU ==========="
     
     print "1. Afficher liste des jeux"
     if ActiveSession.est_admin():
         print "2. Afficher utilisateurs"
     print "9. Se deconnecter"
     print "0. Quitter"
-    choix = int(raw_input("Choix: "))
+    print "============================"
+    choix = int(raw_input("\nChoix: "))
     if (choix==2 and ActiveSession.est_admin()):
         listeUtilisateurs()
     elif (choix==1):
@@ -106,27 +111,65 @@ def logoff():
 def listeUtilisateurs():
 
     connecte()
-    print "==== LISTE UTILISATEURS ===="
+    print "====== LISTE UTILISATEURS ======"
     rows=UserList.printAll()
     for row in rows:
         print('{0} - {1} '.format(row[0], row[1]))
-    print "============================"
+    print "================================"
     print "\n1. Selectionner un utilisateur"
     print "2. Ajouter un utilisateur"
     print "0. Retour au menu"
     choixUtilisateur=int(raw_input("Choix: "))
-    if choixUtilisateur==2:
+    if choixUtilisateur==1:
+        user_id=int(raw_input("\nID de l'utilisateur: ")) # Verifier si existe !!!
+        selectionnerUtilisateur(user_id)
+    elif choixUtilisateur==2:
         ajouterUtilisateur()
     elif choixUtilisateur == 0:
         menu()
+    else:
+        listeUtilisateurs()
 
-
+def selectionnerUtilisateur(user_id):
+    EnsA=EnsAdmins()
+    selectedUser = Utilisateur("","",user_id)
+    connecte()
+    print "===== Utilisateur selectionné ====="
+    print "ID: "+str(selectedUser.get_user_id())
+    print "Nom d'utilisateur: "+selectedUser.get_username()
+    if EnsA.est_admin(selectedUser.get_user_id()):
+        status="Admin"
+    else:
+        status="Adhérent"
+    print "Statut: "+status
+    print "==================================="
+    print "\n"
+    print "1. Modifier"
+    print "2. Supprimer"
+    if (status!="Admin"):
+        print "3. Promouvoir administrateur"
+    print "0. Retour"
+    choix = int(raw_input("Choix: "))
+    if (choix==1):
+        print "En construction..."
+    elif (choix==2):
+        selectedUser.delete_user()
+        raw_input("Utilisateur supprimé. Appuyez sur Entrer pour continuer.")
+        listeUtilisateurs()
+    elif (choix==3 and status != "admin"):
+        selectedUser.make_admin()
+        selectionnerUtilisateur(selectedUser.get_user_id())
+    elif (choix==0):
+        listeUtilisateurs()
+    else:
+        selectionnerUtilisateur(user_id)
+        
 def ajouterUtilisateur():
     connecte()
     # Verifier s'il n'existe pas déjà ???? Dans EnsUtilisiteurs sinon raise error
-    print "AJOUT D'UN UTILISATEUR:\n"
-    username=str(raw_input("Nom de l'utilisateur à ajouter: "))
-    password=str(raw_input("Mot de passe de l'utilisateur à ajouter: "))
+    print ".::# AJOUT D'UN UTILISATEUR #::.\n"
+    username=str(raw_input("Nom de l'utilisateur: "))
+    password=str(raw_input("Mot de passe: "))
     newUser=Utilisateur(username,password)
     print("==== NOUVEL UTILISATEUR")
     print("Nom d'utilisateur: "+username+"\nMot de passe: "+password)
@@ -138,11 +181,12 @@ def ajouterUtilisateur():
 
 def listeJeux():
     connecte()
-    print "==== LISTE DES JEUX ===="
+    print "====== LISTE DES JEUX ======"
     rows=GameList.printAll()
-    print("ID |      Nom du jeu     | Age Mini | Description")
+    print("ID |      Nom du jeu     ")
+    print("-----------------------------")
     for row in rows:
-        print('{0} | {1}  {2}  {3}'.format(row[0], row[1], row[2], row[3]))
+        print('{0} | {1}'.format(row[0], row[1]))
     print "============================"
     print "\n1. Selectionner un jeu"
     if ActiveSession.est_admin():
@@ -158,6 +202,8 @@ def listeJeux():
         menu()
     else: 
         listeJeux()
+
+
 
 def ajouterJeu():
     connecte()

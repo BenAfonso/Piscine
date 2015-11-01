@@ -46,16 +46,22 @@ class EnsUtilisateurs:
                 result=self.cur.fetchone()
                 return result[0]
 
-
+        def delete_user(self,user_id):
+                try:
+                        self.cur.execute("""DELETE FROM EnsUtilisateurs WHERE user_id = ?""",(user_id,))
+                        self.conn.commit()
+                except: 
+                        print "Erreur lors de la suppression !"
 
         def insert(self,username,password):
+                # VERIFIER SI USERNAME EXISTES PAS DEJA
                 try:	
                         self.cur.execute("""INSERT INTO EnsUtilisateurs(username, password) VALUES (?, ?)""",(username,password))
                         self.conn.commit()
+                        print("Utilisateur ajoute avec succes !")
                 except:
                         print("Erreur lors de l'ajout de l'utilisateur")
-                finally:
-                        print("Utilisateur ajoute avec succes !")
+                        
 
         def printAll(self):
                 self.cur.execute("""SELECT user_id,username,password FROM EnsUtilisateurs""") # Enlever passwords
