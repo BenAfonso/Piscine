@@ -8,20 +8,26 @@ from EnsUtilisateurs import EnsUtilisateurs
 from EnsAdmins import EnsAdmins
 
 class Utilisateur:
-
     def __init__(self,username="",password="",user_id=0):
-        Ens = EnsUtilisateurs()
+        Userlist = EnsUtilisateurs()
         self.user_id = user_id
         if (user_id == 0):
             self.username = username
             self.password = password
         else:
-            self.username = Ens.get_username(user_id)
-            self.password = Ens.get_password(user_id)
+            self.username = Userlist.get_username(user_id)
+            self.password = Userlist.get_password(user_id)
 
     def get_user(self):
         return [self.username,self.password]
-    
+
+    def get_user_id(self):
+        return self.user_id
+
+    def est_admin(self):
+        AdminListe = EnsAdmins()
+        return AdminListe.est_admin(self.user_id)
+
     def get_username(self):
         return self.username
 
@@ -33,6 +39,14 @@ class Utilisateur:
 
     def set_password(self, password):
         self.password = password
+
+    def delete_user(self):
+        Userlist = EnsUtilisateurs()
+        if self.est_admin():
+            AdminListe = EnsAdmins()
+            AdminListe.delete_admin(self.user_id)
+        Userlist.delete_user(self.user_id)
+
 
     def make_admin(self):
         if (self.user_id != 0):

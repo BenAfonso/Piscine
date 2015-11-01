@@ -22,6 +22,13 @@ class EnsAdmins:
                 res=self.cur.fetchone()
                 return res != None
 
+        def delete_admin(self,user_id):
+                try:
+                        self.cur.execute("""DELETE FROM EnsAdmins WHERE user_id = ?""",(user_id,))
+                        self.conn.commit()
+                except: 
+                        print "Erreur lors de la suppression !"
+
         def insert(self,user_id):
                 try:    
                         self.cur.execute("""INSERT INTO EnsAdmins(user_id) VALUES (?)""",(user_id,))

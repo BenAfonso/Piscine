@@ -10,3 +10,4 @@ from Session import Session
 from Connexion import Connexion
 from Admin import Admin
 from EnsAdmins import EnsAdmins
+import JeuView
