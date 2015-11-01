@@ -20,6 +20,7 @@
 #
 #
 from EnsJeux import EnsJeux
+from EnsExemplaires import EnsExemplaires
 
 class Jeu:
 
@@ -57,6 +58,11 @@ class Jeu:
 
     def set_Description(self,Description):
         self.Description = Description
+
+    def get_nombre_exemplaires(self,disponible=2):
+        EnsE = EnsExemplaires()
+        return EnsE.get_nombre_exemplaires(self.Jeu_id,disponible)
+
 
     def set_Jeu_id(self,Jeu_id):
         self.Jeu_id = Jeu_id
