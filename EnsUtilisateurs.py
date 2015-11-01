@@ -30,7 +30,24 @@ class EnsUtilisateurs:
                 self.cur.execute("""SELECT password FROM EnsUtilisateurs WHERE user_id = ?""",(user_id,))
                 result=self.cur.fetchone()
                 return str(result[0]) == password
-                
+
+        def get_nombre_utilisateurs(self):
+                self.cur.execute("""SELECT COUNT(User_id) FROM EnsUtilisateurs""")
+                result=self.cur.fetchone()
+                return result[0]
+
+        def get_username(self,user_id):
+                self.cur.execute("""SELECT username FROM EnsUtilisateurs WHERE user_id = ?""",(user_id,))
+                result=self.cur.fetchone()
+                return result[0]
+
+        def get_password(self,user_id):
+                self.cur.execute("""SELECT password FROM EnsUtilisateurs WHERE user_id = ?""",(user_id,))
+                result=self.cur.fetchone()
+                return result[0]
+
+
+
         def insert(self,username,password):
                 try:	
                         self.cur.execute("""INSERT INTO EnsUtilisateurs(username, password) VALUES (?, ?)""",(username,password))
@@ -43,9 +60,9 @@ class EnsUtilisateurs:
         def printAll(self):
                 self.cur.execute("""SELECT user_id,username,password FROM EnsUtilisateurs""") # Enlever passwords
                 rows = self.cur.fetchall()
-                
-                for row in rows:
-                        print('{0} : {1} - {2}'.format(row[0], row[1], row[2]))
+                return rows
+                #for row in rows:
+                        #print('{0} : {1} - {2}'.format(row[0], row[1], row[2]))
 
         def __del__(self):
                 self.conn.close()
