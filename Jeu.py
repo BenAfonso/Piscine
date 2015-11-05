@@ -19,24 +19,16 @@
 # est_disponible : idJeu --> bool
 #
 #
-from EnsJeux import EnsJeux
-from EnsExemplaires import EnsExemplaires
+import EnsJeux
+import EnsExemplaires
 
 class Jeu:
 
-    def __init__(self,Jeu_id=0,Nom_jeu="",AgeMini="",Description=""):
-        Ens=EnsJeux()
-        if (Jeu_id==0):
-            self.Jeu_id = Jeu_id
-            self.Nom_jeu = Nom_jeu
-            self.AgeMini = AgeMini
-            self.Description = Description
-        else:
-            Jeu=Ens.get_Jeu(Jeu_id)
-            self.Jeu_id = Jeu_id
-            self.Nom_jeu = Jeu[1]
-            self.AgeMini = Jeu[2]
-            self.Description = Jeu[3]
+    def __init__(self,Jeu_id=None,Nom_jeu="",AgeMini="",Description=""):
+        self.Jeu_id = Jeu_id
+        self.Nom_jeu = Nom_jeu
+        self.AgeMini = AgeMini
+        self.Description = Description
 
     def get_Nom_jeu(self):
         return self.Nom_jeu
@@ -50,6 +42,12 @@ class Jeu:
     def get_Jeu_id(self):
         return self.Jeu_id
 
+    def get_nombre_exemplaires(self,disponible=2):
+        return EnsExemplaires.get_nombre_exemplaires(self,disponible)
+
+    def get_nombre_exemplaires_dispo(self,disponible=1):
+        return EnsExemplaires.get_nombre_exemplaires(self,disponible)
+
     def set_Nom_jeu(self,Nom_jeu):
         self.Nom_jeu = Nom_jeu
 
@@ -59,18 +57,18 @@ class Jeu:
     def set_Description(self,Description):
         self.Description = Description
 
-    def get_nombre_exemplaires(self,disponible=2):
-        EnsE = EnsExemplaires()
-        return EnsE.get_nombre_exemplaires(self.Jeu_id,disponible)
+
 
 
     def set_Jeu_id(self,Jeu_id):
         self.Jeu_id = Jeu_id
 
     def save(self):
-        listeJeux = EnsJeux()
-        Jeu = [self.Jeu_id,self.Nom_jeu,self.AgeMini,self.Description]
-        listeJeux.insert(Jeu)
+        print("TEST")
+        if (self.Jeu_id==None):
+            EnsJeux.insert(self)
+        else:
+            EnsJeux.update(self)
 
 
    

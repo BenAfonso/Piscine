@@ -1,44 +1,77 @@
 import sqlite3
-class EnsJeux:
+from Jeu import Jeu
 
-        def __init__(self):
-                self.conn = sqlite3.connect("Ludotheque.db")
-                self.conn.execute('pragma foreign_keys = on')
-                self.conn.commit()
-                self.cur = self.conn.cursor()
 
-        def createTable(self):
-                self.cur.execute("""CREATE TABLE IF NOT EXISTS EnsJeux(
-                                Jeu_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                                Nom_jeu STRING,
-                                AgeMini STRING,
-                                Description TEXT)""")
-                self.conn.commit()
 
-        def destroyTable(self):
-                self.cur.execute("""DROP TABLE EnsJeux""")
-                self.conn.commit()
+conn = sqlite3.connect("Ludotheque.db")
+conn.execute('pragma foreign_keys = on')
+conn.commit()
+cur = conn.cursor()
+def createTable():
+        cur.execute("""CREATE TABLE IF NOT EXISTS EnsJeux(
+                        Jeu_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                        Nom_jeu STRING,
+                        AgeMini STRING,
+                        Description TEXT)""")
+        conn.commit()
 
-        def get_Jeu(self,Jeu_id):
-                self.cur.execute("""SELECT * FROM EnsJeux WHERE Jeu_id = ?""",(Jeu_id,))
-                jeu=self.cur.fetchone()
-                return jeu
-                
-        def insert(self,Jeu):
+def destroyTable():
+        cur.execute("""DROP TABLE EnsJeux""")
+        conn.commit()
+
+def jeu_to_table(Jeu):
+        # User -> List
+        JeuTable=(Jeu.get_Jeu_id(),Jeu.get_Nom_jeu(),Jeu.get_AgeMini(),Jeu.get_Description())
+        return JeuTable
+
+def get_Jeu(Jeu_id=None,Nom_jeu=None):
+        if (Jeu_id!=None): cur.execute("""SELECT * FROM EnsJeux WHERE Jeu_id = ?""",(Jeu_id,))
+        if (Nom_jeu!=None): cur.execute("""SELECT * FROM EnsJeux WHERE Nom_jeu = ?""",(Nom_jeu,))
+        try:     
+                result=cur.fetchone()
+                return Jeu(result[0],result[1],result[2],result[3])
+        except:
+                print "Erreur: ID du jeu non valide"
+
+def delete_Jeu(Jeu):
+        try:
+                cur.execute("""DELETE FROM EnsJeux WHERE Jeu_id = ?""",(Jeu.get_Jeu_id(),))
+                conn.commit()
+        except: 
+                print "Erreur lors de la suppression !"
+
+def has_Jeu(Nom_jeu):
+        cur.execute("""SELECT Jeu_id FROM EnsJeux WHERE Nom_jeu = ?""",(Nom_jeu,))
+        result=cur.fetchone()
+        return result != None
+
+
+def insert(Jeu):
+        """Fonction permettant d'inserer un jeu dans l'ensemble de Jeux
+        #Jeu x EnsJeux => EnsJeux
+        >>>EnsJeux.insert(Type Jeu)"""
+        if not(has_Jeu(Jeu.get_Nom_jeu())):
                 try:	
-                        self.cur.execute("""INSERT INTO EnsJeux(Nom_jeu, AgeMini, Description) VALUES (?, ?, ?)""",(Jeu[1],Jeu[2],Jeu[3]))
-                        self.conn.commit()
+                        cur.execute("""INSERT INTO EnsJeux(Jeu_id,Nom_jeu, AgeMini, Description) VALUES (?, ?, ?, ?)""",jeu_to_table(Jeu))
+                        conn.commit()
+                        print("Jeu ajoute avec succes !")
                 except:
                         print("Erreur lors de l'ajout du jeu")
-                finally:
-                        print("Jeu ajoute avec succes !")
+        else:
+                print("Erreur: Un jeu est deja enregistre au meme nom.")        
+                
+def rechercher(nom): # RAJOUTER PLUSIEURS RESULTATS :: fetchall()
+        cur.execute("""SELECT * FROM EnsJeux WHERE Nom_jeu LIKE ?""",(nom,))
+        result = cur.fetchone()
+        return Jeu(result[0],result[1],result[2],result[3])
 
-        def printAll(self):
-                self.cur.execute("""SELECT * FROM EnsJeux""") # Enlever passwords
-                rows = self.cur.fetchall()
-                return rows
-                #for row in rows:
-                        #print('{0} : {1} - {2} : {3}'.format(row[0], row[1], row[2], row[3]))
+def update(Jeu):
+        """ Fonction permettant d'actualiser les infos d'un jeu dans l'ensemble de Jeux"""
+        # A FAIRE !
 
-        def __del__(self):
-                self.conn.close()
+def printAll():
+        cur.execute("""SELECT * FROM EnsJeux""") # Enlever passwords
+        rows = cur.fetchall()
+        return rows
+        #for row in rows:
+                #print('{0} : {1} - {2} : {3}'.format(row[0], row[1], row[2], row[3]))

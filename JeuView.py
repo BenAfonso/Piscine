@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
 import os
-from Utilisateur import Utilisateur
-from EnsUtilisateurs import EnsUtilisateurs
-from Jeu import Jeu
-from EnsJeux import EnsJeux
-from Exemplaire import Exemplaire
-from EnsExemplaires import EnsExemplaires
+#from Utilisateur import Utilisateur
+import EnsUtilisateurs
+#from Jeu import Jeu
+import EnsJeux
+#from Exemplaire import Exemplaire
+import EnsExemplaires
 from Session import Session
 from Connexion import Connexion
-from EnsAdmins import EnsAdmins
+import EnsAdmins
 import sys
 import getpass #Masquer saisie mot de passe
 global user
 global ActiveSession
-UserList = EnsUtilisateurs()
-GameList = EnsJeux()
 
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
@@ -45,29 +43,24 @@ def connexion():
         print("CONNEXION:\n")
         login = str(raw_input("Nom d'utilisateur: "))
         password = getpass.getpass("Mot de passe: ")
-        try:
-            con = Connexion(login,password)
-            res=con.est_valide()
-            if res:
-                newSession(login)
-                menu()
-            else:
-                cls()
-                print "Erreur:: Merci de vous reconnecter"
-                raw_input("Press Enter to try again")
-                connexion()
-        except: 
+        # Rajoute try
+        con = Connexion(login,password)
+        res=con.est_valide()
+        if res:
+            newSession(login)
+            menu()
+        else:
             cls()
-            print "Nom d'utilisateur et/ou mot de passe incorrect"
+            print "Erreur:: Merci de vous reconnecter"
             raw_input("Press Enter to try again")
             connexion()
+   
 
 def newSession(login):
     global user
     global ActiveSession
-    userid=UserList.has_username(login)
-    user = Utilisateur("","",userid)
-    ActiveSession = Session(userid)
+    user = EnsUtilisateurs.get_user(username=login)
+    ActiveSession = Session(user)
 
 def connecte():
     cls()
@@ -112,7 +105,7 @@ def listeUtilisateurs():
 
     connecte()
     print "====== LISTE UTILISATEURS ======"
-    rows=UserList.printAll()
+    rows=EnsUtilisateurs.printAll()
     for row in rows:
         print('{0} - {1} '.format(row[0], row[1]))
     print "================================"
@@ -131,13 +124,13 @@ def listeUtilisateurs():
         listeUtilisateurs()
 
 def selectionnerUtilisateur(user_id):
-    EnsA=EnsAdmins()
-    selectedUser = Utilisateur("","",user_id)
+    
+    selectedUser = EnsUtilisateurs.get_user(user_id=user_id)
     connecte()
     print "===== Utilisateur selectionné ====="
     print "ID: "+str(selectedUser.get_user_id())
     print "Nom d'utilisateur: "+selectedUser.get_username()
-    if EnsA.est_admin(selectedUser.get_user_id()):
+    if EnsAdmins.est_admin(selectedUser):
         status="Admin"
     else:
         status="Adhérent"
@@ -170,7 +163,7 @@ def ajouterUtilisateur():
     print ".::# AJOUT D'UN UTILISATEUR #::.\n"
     username=str(raw_input("Nom de l'utilisateur: "))
     password=str(raw_input("Mot de passe: "))
-    newUser=Utilisateur(username,password)
+    newUser=EnsUtilisateurs.Utilisateur(username=username,password=password)
     print("==== NOUVEL UTILISATEUR")
     print("Nom d'utilisateur: "+username+"\nMot de passe: "+password)
     valider=raw_input("Appuyez sur Entrer pour valider")
@@ -182,22 +175,32 @@ def ajouterUtilisateur():
 def listeJeux():
     connecte()
     print "====== LISTE DES JEUX ======"
-    rows=GameList.printAll()
+    rows=EnsJeux.printAll()
     print("ID |      Nom du jeu     ")
     print("-----------------------------")
     for row in rows:
         print('{0} | {1}'.format(row[0], row[1]))
     print "============================"
     print "\n1. Selectionner un jeu"
+    print "2. Rechercher un jeu"
     if ActiveSession.est_admin():
-        print "2. Ajouter un jeu"
+        print "3. Ajouter un jeu"
     print "0. Retour au menu"
     choixUtilisateur=int(raw_input("Choix: "))
     if choixUtilisateur==1:
         game_id=int(raw_input("\nID du jeu: "))
         selectionnerJeu(game_id)
-    elif (choixUtilisateur==2 and ActiveSession.est_admin()):
+    elif choixUtilisateur==2:
+        key="%%%%%%%%%%%%%%%%%%%%%%%%"+str(raw_input("Rechercher un jeu (par nom): "))+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+        FoundJeu = EnsJeux.rechercher(key)
+        print("Resultat: "+str(FoundJeu.get_Jeu_id())+" :: "+FoundJeu.get_Nom_jeu())
+        raw_input("Press Enter to go back")
+        listeJeux()
+
+        
+    elif (choixUtilisateur==3 and ActiveSession.est_admin()):
         ajouterJeu()
+
     elif choixUtilisateur==0:
         menu()
     else: 
@@ -213,7 +216,7 @@ def ajouterJeu():
     AgeMini=str(raw_input("Age Minimum: "))
     Description=str(raw_input("Description: "))
 
-    newGame=Jeu(0,Nom_jeu,AgeMini,Description)
+    newGame=EnsJeux.Jeu(Nom_jeu=Nom_jeu,AgeMini=AgeMini,Description=Description)
     print("==> AJOUT DE:")
     print("Nom: "+Nom_jeu)
     print("Age Minimum: "+AgeMini)
@@ -229,7 +232,7 @@ def ajouterJeu():
 
 def selectionnerJeu(game_id):
     
-    selectedGame = Jeu(game_id)
+    selectedGame = EnsJeux.get_Jeu(Jeu_id=game_id)
     connecte()
     print "===== JEU ====="
     print "ID: "+str(selectedGame.get_Jeu_id())
@@ -237,7 +240,7 @@ def selectionnerJeu(game_id):
     print "Age Minimum: "+str(selectedGame.get_AgeMini())
     print "Description: "+selectedGame.get_Description()
     print "Nombre d'exemplaires: "+str(selectedGame.get_nombre_exemplaires())
-    print "Nombre d'exemplaires disponibles: "+str(selectedGame.get_nombre_exemplaires(1))
+    print "Nombre d'exemplaires disponibles: "+str(selectedGame.get_nombre_exemplaires_dispo())
     print "==============="
     print "\n"
     print "1. Emprunter"
@@ -253,7 +256,7 @@ def selectionnerJeu(game_id):
     if (choix==3 and ActiveSession.est_admin()):
         modifierJeu()
     if (choix==4 and ActiveSession.est_admin()):
-        supprimerJeu()
+        supprimerJeu(selectedGame)
     if (choix==5 and ActiveSession.est_admin()):
         ajouterExemplaire(selectedGame)
     if choix==0:
@@ -270,12 +273,12 @@ def modifierJeu():
     raw_input("")
     menu()
 
-def supprimerJeu():
-    menu()
+def supprimerJeu(selectedGame):
+    EnsJeux.delete_Jeu(selectedGame)
+    listeJeux()
 
 def ajouterExemplaire(selectedGame):
-    NewExemplaire = Exemplaire(selectedGame.get_Jeu_id())
-    valider = raw_input("Etes vous sur de vouloir ajouter un nouvel exemplaire pour "+selectedGame.get_Nom_jeu())
-    if valider=="":
-        NewExemplaire.save()
-        selectionnerJeu(selectedGame.get_Jeu_id())
+    NewExemplaire = EnsExemplaires.Exemplaire(Jeu_id=selectedGame.get_Jeu_id())
+    raw_input("Etes vous sur de vouloir ajouter un nouvel exemplaire pour "+selectedGame.get_Nom_jeu())
+    NewExemplaire.save()
+    selectionnerJeu(selectedGame.get_Jeu_id())
