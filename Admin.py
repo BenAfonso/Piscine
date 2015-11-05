@@ -4,12 +4,12 @@
 # password : string
 # 
 
-from EnsAdmins import EnsAdmins
+import EnsAdmins
 
 class Admin:
 
-    def __init__(self,user_id):
-        self.user_id = user_id
+    def __init__(self,User):
+        self.user_id = User.get_user_id()
 
     def get_user(self):
         return [self.username,self.password]
@@ -28,15 +28,13 @@ class Admin:
 
     def make_admin(self):
         if (self.user_id != 0):
-            AdminListe = EnsAdmins()
-            AdminListe.insert(self.user_id)
+            EnsAdmins.insert(self)
         else:
             print "Pas d'utilisateur selectionne !"
 
 
     def save(self):
-        Userlist = EnsUtilisateurs()
-        Userlist.insert(self.get_username(),self.get_password())
+        EnsUtilisateurs.insert(self.get_username(),self.get_password())
         
         # SAVE AN USER IN DATABASE
 

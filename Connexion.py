@@ -1,22 +1,25 @@
 # -*- coding: utf-8 -*-
-from EnsUtilisateurs import EnsUtilisateurs
+import EnsUtilisateurs
+
 from Session import Session
 
 class Connexion:
         def __init__(self,username,password):
                 self.username = username
                 self.password = password
-                self.Userlist = EnsUtilisateurs()
 
 
         def est_valide(self):
-                return self.Userlist.is_password(self.password,self.Userlist.has_username(self.username))
+
+                User=EnsUtilisateurs.get_user(username=self.username) # On récupère l'utilisateur
+
+                return EnsUtilisateurs.is_password(self.password,User)
 
         def creer_session(self):
                 global session
                 if self.est_valide():
-                        userid = self.Userlist.has_username(self.username) # ID Associe à username fourni
-                        session=Session(userid)
+                        User=EnsUtilisateurs.get_user(username=self.username) # ID Associe à username fourni
+                        session=Session(User)
                 else:
                         print "Oops !"
 
