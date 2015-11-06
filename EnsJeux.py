@@ -70,7 +70,7 @@ def update(Jeu):
         # A FAIRE !
 
 def printAll():
-        cur.execute("""SELECT * FROM EnsJeux""") # Enlever passwords
+        cur.execute("""SELECT * FROM EnsJeux""") 
         rows = cur.fetchall()
         return rows
         #for row in rows:
