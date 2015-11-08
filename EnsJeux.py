@@ -24,7 +24,7 @@ def destroyTable():
 
 def jeu_to_table(Jeu):
         # User -> List
-        JeuTable=(Jeu.get_Jeu_id(),Jeu.get_Nom_jeu(),Jeu.get_AgeMini(),Jeu.get_Description())
+        JeuTable=(Jeu.get_Jeu_id(),Jeu.get_Nom_jeu(),Jeu.get_Annee(),Jeu.get_Editeur(),Jeu.get_AgeMini(),Jeu.get_NombreJoueurs(),Jeu.get_Description())
         return JeuTable
 
 def get_Jeu(Jeu_id=None,Nom_jeu=None):
@@ -55,14 +55,17 @@ def insert(Jeu):
         >>>EnsJeux.insert(Type Jeu)"""
         if not(has_Jeu(Jeu.get_Nom_jeu())):
                 try:	
-                        cur.execute("""INSERT INTO EnsJeux(Jeu_id,Nom_jeu,AgeMini,Description) VALUES (?, ?, ?, ?)""",jeu_to_table(Jeu))
+                        cur.execute("""INSERT INTO EnsJeux(Jeu_id,Nom_jeu,Annee,Editeur,AgeMini,NombreJoueurs,Description) VALUES (?, ?, ?, ?, ?, ?, ?)""",jeu_to_table(Jeu))
                         conn.commit()
                         print("Jeu ajoute avec succes !")
                 except:
+                        print (jeu_to_table(Jeu))
                         print("Erreur lors de l'ajout du jeu")
         else:
                 print("Erreur: Un jeu est deja enregistre au meme nom.")        
 
+
+#### FONCTION SEULEMENT POUR IMPORTATION DE LA BASE INITIAL DES JEUX #####
 def insertFromMain(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description=""):
         """Fonction permettant d'inserer un jeu dans l'ensemble de Jeux
         #Jeu x EnsJeux => EnsJeux
@@ -72,6 +75,7 @@ def insertFromMain(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description=""):
                 conn.commit()
         except:
                 print(Nom,Annee,Editeur,AgeMini,NombreJoueurs)
+##########################################################################
      
 
                 

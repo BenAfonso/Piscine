@@ -176,10 +176,10 @@ def listeJeux():
     connecte()
     print "====== LISTE DES JEUX ======"
     rows=EnsJeux.printAll()
-    print("ID |      Nom du jeu     ")
+    print("ID |      Nom du jeu           | Année |    Editeur    |")
     print("-----------------------------")
     for row in rows:
-        print('{0} | {1}'.format(row[0], row[1]))
+        print('{0} | {1} | {2} | {3} '.format(row[0], row[1], row[2], row[3]))
     print "============================"
     print "\n1. Selectionner un jeu"
     print "2. Rechercher un jeu"
@@ -193,8 +193,11 @@ def listeJeux():
     elif choixUtilisateur==2:
         key="%%%%%%%%%%%%%%%%%%%%%%%%"+str(raw_input("Rechercher un jeu (par nom): "))+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
         FoundJeu = EnsJeux.rechercher(key)
+        print("========================")
         print("Resultat: "+str(FoundJeu.get_Jeu_id())+" :: "+FoundJeu.get_Nom_jeu())
-        raw_input("Press Enter to go back")
+        
+        raw_input("\nPress Enter to go back")
+        cls()
         listeJeux()
 
         
@@ -213,13 +216,19 @@ def ajouterJeu():
     print "AJOUT D'UN JEU: "
     # Verifier s'il n'existe pas déjà ???? dans EnsJeu sinon raise error
     Nom_jeu=str(raw_input("Nom du jeu: "))
+    Annee=str(raw_input("Annee: "))
+    Editeur=str(raw_input("Editeur: "))
     AgeMini=str(raw_input("Age Minimum: "))
+    NombreJoueurs=str(raw_input("Nombre de joueurs: "))
     Description=str(raw_input("Description: "))
 
-    newGame=EnsJeux.Jeu(Nom_jeu=Nom_jeu,AgeMini=AgeMini,Description=Description)
+    newGame=EnsJeux.Jeu(Nom_jeu=Nom_jeu,Annee=Annee,Editeur=Editeur,AgeMini=AgeMini,NombreJoueurs=NombreJoueurs,Description=Description)
     print("==> AJOUT DE:")
     print("Nom: "+Nom_jeu)
+    print("Annee: "+Annee)
+    print("Editeur: "+Editeur)
     print("Age Minimum: "+AgeMini)
+    print("Nombre de joueurs: "+NombreJoueurs)
     print("Description: "+Description)
 
     valider=raw_input("Appuyez sur Entrer pour valider (0 puis Entrer pour annuler)")
@@ -237,7 +246,10 @@ def selectionnerJeu(game_id):
     print "===== JEU ====="
     print "ID: "+str(selectedGame.get_Jeu_id())
     print "Nom du jeu: "+selectedGame.get_Nom_jeu()
+    print "Annee: "+str(selectedGame.get_Annee())
+    print "Editeur: "+str(selectedGame.get_Editeur())
     print "Age Minimum: "+str(selectedGame.get_AgeMini())
+    print "Nombre de joueurs: "+str(selectedGame.get_NombreJoueurs())
     print "Description: "+selectedGame.get_Description()
     print "Nombre d'exemplaires: "+str(selectedGame.get_nombre_exemplaires())
     print "Nombre d'exemplaires disponibles: "+str(selectedGame.get_nombre_exemplaires_dispo())

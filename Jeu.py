@@ -24,12 +24,17 @@ import EnsExemplaires
 
 class Jeu:
 
-    def __init__(self,Jeu_id=None,Nom_jeu="",AgeMini="",Description=""):
+    def __init__(self,Jeu_id=None,Nom_jeu="",Annee="",Editeur="",AgeMini="",NombreJoueurs="",Description=""):
         self.Jeu_id = Jeu_id
         self.Nom_jeu = Nom_jeu
+        self.Annee = Annee
+        self.Editeur = Editeur
         self.AgeMini = AgeMini
+        self.NombreJoueurs = NombreJoueurs
         self.Description = Description
 
+
+###### GETTERS ########
     def get_Nom_jeu(self):
         return self.Nom_jeu
 
@@ -48,14 +53,27 @@ class Jeu:
     def get_nombre_exemplaires_dispo(self,disponible=1):
         return EnsExemplaires.get_nombre_exemplaires(self,disponible)
 
+    def get_NombreJoueurs(self):
+        return self.NombreJoueurs
+    def get_Editeur(self):
+        return self.Editeur
+    def get_Annee(self):
+        return self.Annee
+
+
+###### SETTERS ########
     def set_Nom_jeu(self,Nom_jeu):
         self.Nom_jeu = Nom_jeu
-
     def set_AgeMini(self,AgeMini):
         self.AgeMini = AgeMini
-
     def set_Description(self,Description):
         self.Description = Description
+    def set_NombreJoueurs(self,NombreJoueurs):
+        self.NombreJoueurs=NombreJoueurs
+    def set_Editeur(self,Editeur):
+        self.Editeur = Editeur
+    def set_Annee(self,Annee):
+        self.Annee = Annee
 
 
 
