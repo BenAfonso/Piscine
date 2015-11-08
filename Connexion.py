@@ -10,11 +10,12 @@ class Connexion:
 
 
         def est_valide(self):
-
-                User=EnsUtilisateurs.get_user(username=self.username) # On récupère l'utilisateur
-
-                return EnsUtilisateurs.is_password(self.password,User)
-
+                if EnsUtilisateurs.has_username(self.username):
+                        User=EnsUtilisateurs.get_user(username=self.username) # On récupère l'utilisateur
+                        return EnsUtilisateurs.is_password(self.password,User)
+                else:
+                        return False
+                        
         def creer_session(self):
                 global session
                 if self.est_valide():

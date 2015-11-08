@@ -48,6 +48,7 @@ def get_nombre_exemplaires(Jeu,disponible=2):
 
         
 def insert(Exemplaire):
+    
         # PRECONDITION: Jeu_id doit EXISTER ! (A FAIRE)
         #try:	
         cur.execute("""INSERT INTO EnsExemplaires(Exemplaire_id,Jeu_id,Est_disponible) VALUES (?,?,?)""",(Exemplaire.get_Exemplaire_id(),Exemplaire.get_Jeu_id(),Exemplaire.get_Est_disponible(),))

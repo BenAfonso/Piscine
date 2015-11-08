@@ -1,5 +1,27 @@
 # Piscine
 
+A FAIRE =
+
+MEHDI EnsReservations (structure de données)
+MEHDI Reservation
+JEAN EnsEmprunts (structure de données)
+JEAN Emprunt
+RAHIM EnsExtensions (sstructure de données)
+VINCENT Extension (spé fonctionnelles)
+- On peut reserver une extension sans avoir reservé le jeu de base
+- On peut reserver une extension et un jeu (SEULEMENT si l'extension lui appartient)
+- On peut reserver une seule extension
+- Recuperer le nombre d'extension d'un jeu
+- Recuperer le nombre d'extensions disponibles
+- Recuperer une Extension
+- Ajouter une extension
+- Supprimer une extension
+- Modifier une extension
+
+
+
+
+
 Projet Piscine IG3
 Gestion d'une ludothèque
 
