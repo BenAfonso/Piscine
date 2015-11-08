@@ -11,7 +11,10 @@ def createTable():
         cur.execute("""CREATE TABLE IF NOT EXISTS EnsJeux(
                         Jeu_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                         Nom_jeu STRING,
+                        Annee STRING,
+                        Editeur STRING,
                         AgeMini STRING,
+                        NombreJoueurs STRING,
                         Description TEXT)""")
         conn.commit()
 
@@ -52,13 +55,25 @@ def insert(Jeu):
         >>>EnsJeux.insert(Type Jeu)"""
         if not(has_Jeu(Jeu.get_Nom_jeu())):
                 try:	
-                        cur.execute("""INSERT INTO EnsJeux(Jeu_id,Nom_jeu, AgeMini, Description) VALUES (?, ?, ?, ?)""",jeu_to_table(Jeu))
+                        cur.execute("""INSERT INTO EnsJeux(Jeu_id,Nom_jeu,AgeMini,Description) VALUES (?, ?, ?, ?)""",jeu_to_table(Jeu))
                         conn.commit()
                         print("Jeu ajoute avec succes !")
                 except:
                         print("Erreur lors de l'ajout du jeu")
         else:
                 print("Erreur: Un jeu est deja enregistre au meme nom.")        
+
+def insertFromMain(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description=""):
+        """Fonction permettant d'inserer un jeu dans l'ensemble de Jeux
+        #Jeu x EnsJeux => EnsJeux
+        >>>EnsJeux.insert(Type Jeu)"""
+        try:	
+                cur.execute("""INSERT INTO EnsJeux(Nom_jeu,Annee,Editeur,AgeMini,NombreJoueurs,Description) VALUES (?, ?, ?, ?, ?, ?)""",(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description,))
+                conn.commit()
+        except:
+                print(Nom,Annee,Editeur,AgeMini,NombreJoueurs)
+     
+
                 
 def rechercher(nom): # RAJOUTER PLUSIEURS RESULTATS :: fetchall()
         cur.execute("""SELECT * FROM EnsJeux WHERE Nom_jeu LIKE ?""",(nom,))
