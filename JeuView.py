@@ -45,8 +45,8 @@ def connexion():
         password = getpass.getpass("Mot de passe: ")
         # Rajoute try
         con = Connexion(login,password)
-        res=con.est_valide()
-        if res:
+        
+        if con.est_valide():
             newSession(login)
             menu()
         else:

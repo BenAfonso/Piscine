@@ -60,9 +60,6 @@ class Jeu:
 
 
 
-    def set_Jeu_id(self,Jeu_id):
-        self.Jeu_id = Jeu_id
-
     def save(self):
         print("TEST")
         if (self.Jeu_id==None):
