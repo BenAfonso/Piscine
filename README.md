@@ -38,8 +38,8 @@ Vincent:
 #Class Connexion
 
 Structure de données:
-- username : string
-- password : string
+- username: string
+- password: string
 
 Spécification fonctionnelle:
 <br><b>est_valide</b>: Connexion  -> Bool
@@ -51,8 +51,8 @@ Spécification fonctionnelle:
 #Class Session
 
 Structure de données:
-- User : Utilisateur
-- admin : Bool
+- User: Utilisateur
+- admin: Bool
 
 Spécification fonctionnelle:
 <br><b>est_admin</b>: Session  -> Bool
@@ -68,9 +68,9 @@ Structure de données:
 - username: STRING
 - password: STRING
 - abonnementValide: Bool
-- empruntEnCours = Bool
-- reservationEnCours = Bool
-- nbRetard = Int
+- empruntEnCours: Bool
+- reservationEnCours: Bool
+- nbRetard: Int
 
 Spécification fonctionnelle:
 <br><b>get_user_id</b>: Utilisateur  -> String
@@ -101,9 +101,9 @@ Structure de données:
 - Nom_jeu: STRING
 - Annee: STRING
 - Editeur: STRING
-- AgeMini = STRING
-- NombreJoueurs = STRING
-- Description = TEXT
+- AgeMini: STRING
+- NombreJoueur: STRING
+- Description: TEXT
 
 Spécification fonctionnelle:
 <br><b>get_Nom_jeu</b>: Jeu  -> String
@@ -147,27 +147,7 @@ Spécification fonctionnelle:
 <br><b>save</b>: Exemplaire -> 
 
 -----------------------------------------------------------------------
-#Class Exemplaire
 
-Structure de données:
-- Exemplaire_id: Int
-- Jeu_id: Int
-- Est_disponible: Bool
-
-Spécification fonctionnelle:
-
-<br><b>get_Jeu_id</b>: Exemplaire  -> Int
-<br><b>get_Exemplaire_id</b>: Exemplaire  -> Int
-<br><b>get_Est_disponible</b>: Exemplaire  -> Bool
-
-<br>
-<br><b>set_Jeu_id</b>: Exemplaire x Int -> Exemplaire
-<br><b>set_Est_disponible</b>: Exemplaire x Bool -> Exemplaire
-
-<br>
-<br><b>save</b>: Exemplaire -> 
-
------------------------------------------------------------------------
 <h3> Modules </h3>
 
 <h4> EnsUtilisateurs </h4>
