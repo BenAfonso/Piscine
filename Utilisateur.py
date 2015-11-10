@@ -14,16 +14,11 @@ class Utilisateur:
         self.user_id = user_id
         self.username = username
         self.password = password
-        if (user_id == None):
-            self.abonnementValide = abonnementValide
-            self.empruntEnCours = empruntEnCours
-            self.reservationEnCours = reservationEnCours
-            self.nbRetard = nbRetard
-        else:
-            self.abonnementValide = abonnementValide
-            self.empruntEnCours = empruntEnCours
-            self.reservationEnCours = reservationEnCours
-            self.nbRetard = nbRetard
+        self.abonnementValide = abonnementValide
+        self.empruntEnCours = empruntEnCours
+        self.reservationEnCours = reservationEnCours
+        self.nbRetard = nbRetard
+
 
 ##### GETTERS ########
     def get_user_id(self):
@@ -40,6 +35,7 @@ class Utilisateur:
         return self.reservationEnCours
     def get_nbRetard(self):
         return self.nbRetard
+    
 ##### SETTERS #####
     def set_username(self, username):
         self.username = username
@@ -53,6 +49,7 @@ class Utilisateur:
         return self.reservationEnCours
     def get_nbRetard(self):
         return self.nbRetard
+    
 ##### FONCTIONS ANNEXES #####
     def est_admin(self):
         return EnsAdmins.est_admin(self)

@@ -32,7 +32,7 @@ def get_Jeu(Jeu_id=None,Nom_jeu=None):
         if (Nom_jeu!=None): cur.execute("""SELECT * FROM EnsJeux WHERE Nom_jeu = ?""",(Nom_jeu,))
         try:     
                 result=cur.fetchone()
-                return Jeu(result[0],result[1],result[2],result[3])
+                return Jeu(result[0],result[1],result[2],result[3],result[4],result[5],result[6])
         except:
                 print "Erreur: ID du jeu non valide"
 

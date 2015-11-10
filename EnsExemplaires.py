@@ -25,6 +25,11 @@ def exemplaire_to_table(Exemplaire):
         ExemplaireTable=(Exemplaire.get_Exemplaire_id(),Exemplaire.get_Jeu_id(),Exemplaire.get_Est_disponible())
         return ExemplaireTable
 
+def get_Exemplaire_dispo(Jeu):
+        cur.execute("""SELECT * FROM EnsExemplaires WHERE Jeu_id = ?""", (Jeu.get_Jeu_id()))
+        result = cur.fetchone()
+        return Exemplaire(result[0],result[1),result[2])
+        
 def get_nombre_exemplaires(Jeu,disponible=2):
         # 1 Disponibles
         # 0 Indisponibles

@@ -25,9 +25,6 @@ def main(args):
 
     MainWindow2=MainWindow()
     MainWindow2.show()
-    #MainWindow2.show()
-
-    #MainWindow2.show()
     
 
     r=mainApp.exec_()
