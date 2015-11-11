@@ -28,7 +28,7 @@ def exemplaire_to_table(Exemplaire):
 def get_Exemplaire_dispo(Jeu):
         cur.execute("""SELECT * FROM EnsExemplaires WHERE Jeu_id = ?""", (Jeu.get_Jeu_id()))
         result = cur.fetchone()
-        return Exemplaire(result[0],result[1),result[2])
+        return Exemplaire(result[0],result[1],result[2])
         
 def get_nombre_exemplaires(Jeu,disponible=2):
         # 1 Disponibles

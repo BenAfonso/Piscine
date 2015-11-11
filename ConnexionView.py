@@ -39,7 +39,7 @@ class ConnexionView(QtGui.QWidget):
 
 		self.setLayout(self.grid)
 
-		self.setGeometry(200,50,200,40)
+		self.setGeometry(250,70,200,40)
 		self.setWindowTitle(':: LudoConnexion ::')
 
 		self.show()
@@ -59,7 +59,7 @@ class ConnexionView(QtGui.QWidget):
 		else:
 			QtGui.QMessageBox.warning(self, 		# Création d'une message box d'avertissement (ECHEC)
              self.trUtf8("Erreur"), 
-             self.trUtf8("Nom d'utilisateur et/ou mot de passe incorrect !"))
+             self.trUtf8("Nom d'utilisateur / mot de passe incorrect !"))
 			self.state=False
 
 

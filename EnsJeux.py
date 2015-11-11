@@ -48,6 +48,10 @@ def has_Jeu(Nom_jeu):
         result=cur.fetchone()
         return result != None
 
+def get_nombre_jeux():
+        cur.execute("""SELECT COUNT(Jeu_id) FROM EnsJeux """)
+        result = cur.fetchone()
+        return result[0]
 
 def insert(Jeu):
         """Fonction permettant d'inserer un jeu dans l'ensemble de Jeux
@@ -81,8 +85,8 @@ def insertFromMain(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description=""):
                 
 def rechercher(nom): # RAJOUTER PLUSIEURS RESULTATS :: fetchall()
         cur.execute("""SELECT * FROM EnsJeux WHERE Nom_jeu LIKE ?""",(nom,))
-        result = cur.fetchone()
-        return Jeu(result[0],result[1],result[2],result[3])
+        rows = cur.fetchall()
+        return rows
 
 def update(Jeu):
         """ Fonction permettant d'actualiser les infos d'un jeu dans l'ensemble de Jeux"""

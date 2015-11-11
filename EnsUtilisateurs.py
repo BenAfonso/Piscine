@@ -77,7 +77,7 @@ def insert(User):
                 
 
 def printAll():
-        cur.execute("""SELECT user_id,username,password FROM EnsUtilisateurs""")
+        cur.execute("""SELECT * FROM EnsUtilisateurs""")
         rows = cur.fetchall()
         return rows
         #for row in rows:
