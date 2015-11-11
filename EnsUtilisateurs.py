@@ -62,6 +62,11 @@ def user_to_table(User):
         UserTable=(User.get_user_id(),User.get_username(),User.get_password(),User.get_abonnementValide(),User.get_empruntEnCours(),User.get_reservationEnCours(),User.get_nbRetard())
         return UserTable
 
+def rechercher(username): # RAJOUTER PLUSIEURS RESULTATS :: fetchall()
+        cur.execute("""SELECT * FROM EnsUtilisateurs WHERE username LIKE ?""",(username,))
+        rows = cur.fetchall()
+        return rows
+
 def insert(User):
         # VERIFIER SI USERNAME EXISTES PAS DEJA
         if not(has_username(User.get_username())):

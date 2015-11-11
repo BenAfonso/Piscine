@@ -2,7 +2,7 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import EnsJeux
-
+from JeuView import JeuView
 import sys
 
 
@@ -27,6 +27,7 @@ class JeuxView(QTableWidget):
         self.setSelectionBehavior(self.SelectRows)
         # Pas de sélection de cellule
         self.setSelectionMode(self.NoSelection)
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setFocusPolicy(Qt.NoFocus)
         self.setAlternatingRowColors(True)
         self.verticalHeader().hide()
@@ -137,6 +138,11 @@ class JeuxView(QTableWidget):
         print "col=",col
         item = self.item(row,0).text()
         print "item=",item
+        JeuV = JeuView()
+        selection = QMessageBox.information(self,  
+        self.trUtf8("Selection"), 
+        self.trUtf8("Vous avez séléctionné le jeu: \nID: "+item+" \nNom du jeu: "+self.item(row,1).text()))
+        #self.parent().setCentralWidget(JeuV)
         # Changer vue vers 1 Seul jeu et sa fiche !
 
 

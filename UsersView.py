@@ -26,7 +26,8 @@ class UsersView(QTableWidget):
         # Selection de lignes activé
         self.setSelectionBehavior(self.SelectRows)
         # Pas de sélection de cellule
-        self.setSelectionMode(self.NoSelection)
+        self.setSelectionMode(self.NoSelection)  # Desactive la selection de lignes
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers) # Desactive l'edition de cellules
         self.setFocusPolicy(Qt.NoFocus)
         self.setAlternatingRowColors(True)
         self.verticalHeader().hide()
@@ -102,7 +103,7 @@ class UsersView(QTableWidget):
 
         Password2 = QLabel(u"Ré-entrez le mot de passe: ")
         PasswordText2 = QLineEdit()
-        PasswordText2.setEchoMode(QtGui.QLineEdit.Password)
+        PasswordText2.setEchoMode(QLineEdit.Password)
 
         # Test si PasswordText1 = PasswordText2
         SubmitButton = QPushButton(u"Créer")
@@ -128,6 +129,14 @@ class UsersView(QTableWidget):
         print "col=",col
         item = self.item(row,0).text()
         print "item=",item
+        selected=EnsUtilisateurs.get_user(user_id=int(item))
+        if selected.est_admin():
+            statut = "Administrateur"
+        else:
+            statut = "Adhérent"
+        selection = QMessageBox.information(self,  
+        self.trUtf8("Selection"), 
+        self.trUtf8("Vous avez séléctionné l'utilisateur: \nID: "+item+" \nNom d'utilisateur: "+self.item(row,1).text()+"\nStatut: "+statut))
         # Changer vue vers 1 Seul User et sa fiche !
 
 

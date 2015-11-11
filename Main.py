@@ -10,7 +10,7 @@ import EnsAdmins
 from Session import Session
 from Connexion import Connexion
 
-import JeuView
+import ConsoleView
 import os
 global user
 
@@ -18,7 +18,7 @@ global user
 
 
 
-JeuView.firstmenu()
+ConsoleView.firstmenu()
 # MENU 
 
 
