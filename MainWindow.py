@@ -76,52 +76,9 @@ class MainWindow(QMainWindow):
 
         
     def jeux(self): # WIDGET JEUX
-        widget = QWidget()
-        # Création du widget
-        self.Jeux = JeuxView()
-        # Conteneur Vertical
-        VLayout = QVBoxLayout() 
-        # Element 1 du Conteneur Vertical : Label
+        Jeux=JeuxView()
+        self.setCentralWidget(Jeux)    
 
-
-        VLayout.addWidget(QLabel("Jeux")) 
-
-        # Layout de recherche
-        RechercheLayout = QHBoxLayout()
-
-        self.RechercheText = QLineEdit()
-
-        RechercheButton = QPushButton("Rechercher")
-
-        self.RechercheText.textEdited.connect(self.rechercheJeu)
-        # Ajout des widgets au layout de recherche
-        RechercheLayout.addWidget(self.RechercheText)
-        RechercheLayout.addWidget(RechercheButton)
-        
-
-        
-
-        # Ajout du layout de recherche au layout principal
-        VLayout.addLayout(RechercheLayout)
-
-        # Connexion:
-        
-        VLayout.addWidget(self.Jeux)
-        # Conteneur Horizontal pour boutons
-        Buttons = QHBoxLayout() 
-        # Ajout d'un bouton (2)
-        AddJeu = QPushButton("Ajouter un jeu")
-        Buttons.addWidget(AddJeu) 
-        #  Ajout du conteneur horizontal au conteneur principal (vertical)
-        VLayout.addLayout(Buttons) 
-        # On affecte le layout vertical au widget
-        widget.setLayout(VLayout) 
-        #  On change le widget central !
-        self.setCentralWidget(widget)
-        AddJeu.clicked.connect(self.Jeux.AddJeu)
-
-    def rechercheJeu(self):
-        self.Jeux.searchmydata(str(self.RechercheText.text()))
     def rechercheUser(self):
         self.Users.searchmydata(str(self.RechercheText.text()))
 

@@ -32,7 +32,7 @@ def main(args):
 
 
 if __name__=="__main__":
-    #main(sys.argv)
-    valide=connexion(sys.argv)
+    main(sys.argv)
+    #valide=connexion(sys.argv)
     if valide: # Si la connexion est valide on affiche la suite
         main(sys.argv)
