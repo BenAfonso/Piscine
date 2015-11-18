@@ -14,7 +14,7 @@
 # nombrejoueursExtension : String
 # descriptionExtension : String
 
-import EnsExtension
+import EnsExtensions
 import EnsJeux
 
 class Extension:
@@ -37,7 +37,7 @@ class Extension:
     def get_Disponible(self):
         return self.Disponible
 	
-	def get_Nom(self):
+	def get_Nom_Extension(self):
         return self.Nom
 
     def get_AgeMini(self):
@@ -81,7 +81,7 @@ class Extension:
     def save(self):
         print("TEST")
         if (self.Extension_id==None):
-            EnsExtension.insert(self)
+            EnsExtension.ajouter_Extension(self)
         else:
             EnsExtension.update(self)
 

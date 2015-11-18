@@ -1,7 +1,7 @@
 from Extension import Extension
+from Jeu import Jeu 
 import EnsJeux
 import sqlite3
-import EnsJeux
 
 conn = sqlite3.connect("Ludotheque.db")
 conn.execute('pragma foreign_keys = on')
@@ -9,35 +9,35 @@ conn.commit()
 cur = conn.cursor()
 
 
-def create_table_extension():
+def create_table_Extension():
 
 	cur.execute=(""" CREATE TABLE IF NOT EXISTS EnsExtensions(
 						Extension_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 						Jeu_id INTEGER,
-						nom_extension VARCHAR,
-						nombre_extension INTEGER) """)
+						Nom_Extension VARCHAR,
+						Disponibilité BOOLEAN) """)
 	conn.commit()
 
 
-def destroy_table_extension():
+def destroy_table_Extension():
 	cur.execute=(""" DROP TABLE EnsExtensions """)
 	cur.commit()
 
 
-def est_presente_extension(NomExtension):
-	""" est_presente_extension: Text x EnsExtensions -> Bool, True si l'extension est dans EnsExtensions, False sinon """
+def est_Presente_Extension(Extension):
+	""" est_Presente_Extension: Text x EnsExtensions -> Bool, True si l'extension est dans EnsExtensions, False sinon """
 
-	cur.execute=(""" SELECT nom_extension FROM EnsExtensions WHERE nom_extension = ? """, (NomExtension))
+	cur.execute=(""" SELECT Extension_id FROM EnsExtensions WHERE Extension_id = ? """, (Extension.get_Extension_id()))
 	#recupère le premier résultat correspondant à la recherche, vide sinon.
 	result=cur.fetchone()
 	return result != None
 
 
-def ajouter_extension(Extension):
-	""" ajouter_extension: Extension x EnsExtensions -> EnsExtensions, est_presente_extension(Extension.get_nom_extension) == False avant ajout. """
-	if not(est_presente_extension(Extension.get_nom_extension())):
+def ajouter_Extension(Extension):
+	""" ajouter_extension: Extension x EnsExtensions -> EnsExtensions, est_Presente_Extension(Extension.get_Nom_Extension) == False avant ajout. """
+	if (not(est_Presente_Extension(Extension))):
 		try:
-			cur.execute=(""" INSERT INTO EnsExtensions(Extension_id, Jeu_id, nom_extension, nombre_extension) VALUES(?, ?, ?, ?) """, (Extension.get_extension_id(), Extension.get_extension_jeu_id(), Extension.get_nom_extension(), Extension.get_nombre_extension() ))
+			cur.execute=(""" INSERT INTO EnsExtensions(Extension_id, Jeu_id, Nom_Extension, Disponibilité) VALUES(?, ?, ?, ?) """, (Extension.get_Extension_id(), Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible() ))
 			conn.commit()
 		except:
 			print "Erreur lors de l'ajout de l'extension"
@@ -45,9 +45,9 @@ def ajouter_extension(Extension):
 	else:
 		print "L'extension est déjà présente dans la base."
 
-def supprimer_extension(Extension):
+def supprimer_Extension(Extension):
 	try:
-		cur.execute=(""" DELETE FROM EnsExtensions WHERE Extension_id = ?""", (Extension.get_extension_id()))
+		cur.execute=(""" DELETE FROM EnsExtensions WHERE Extension_id = ?""", (Extension.get_Extension_id()))
 		conn.commit()
 	except:
 		print "Erreur lors de la suppression de l'extension"
@@ -56,23 +56,39 @@ def nombre_extensions_Jeu(Jeu):
 	""" nombre_extensions: Jeu -> Entier, renvoie le nomrbe d'extension d'un jeu donné. Le jeu doit être dans EnsJeux"""
 
 	if not(has_jeu(Jeu.get_Nom_jeu())):
-		cur.execute =(""" SELECT COUNT (Extension_id) FROM EnsJeux, EnsExtensions WHERE EnsJeux.? = EnsExtensions.? """, (Jeu.get_Jeu_id, Extension.get_extension_id))
+		cur.execute =(""" SELECT COUNT (Extension_id) FROM EnsExtensions WHERE EnsExtensions.Jeu_id = ?""", (Jeu.get_Jeu_id()))
 		result = cur.fetchone()
 		return result[0]
 	else:
 		print "Impossible de récupérer le nombre d'extensions de ce jeu car il n'est pas dans la base"
 
-def nombre_extensions():
+def nombre_Extensions():
 	""" nombre_extensions: EnsExtensions -> Entier, renvoie le nombre d'extensions en base. """
 
 	cur.execute =(""" SELECT COUNT (Extension_id) FROM EnsExtensions""")
 	result = cur.fetchone()
 	return result[0]
 
-def rechercher_extension(nomExtension):
+def rechercher_Extensions_Jeu(Jeu):
 	""" rechercher_extension: Text -> EnsExtensions, renvoie une ou plusieurs extensions présentes en base
-	correspondant au critère de recherche nom_extension """
+	correspondant au Jeu donné en paramètre """
 
-	cur.execute =(""" SELECT * FROM EnsExtensions WHERE nom_extension LIKE ?) """, (nomExtension))
-	result = cur.fetchall()
-	return result
+	cur.execute =(""" SELECT Extension_id, Nom_Extension FROM EnsExtensions  WHERE EnsExtensions.Jeu_id = ? ) """, (Jeu.get_Jeu_id))
+	all_Extensions = cur.fetchall()
+	return all_Extensions
+
+def est_Disponible_Extension(Extension):
+	""" est_Disponible_Extension: Extension -> Bool, True si l'extension est disponible, False sinon. """
+
+	cur.execute=(""" SELECT Disponibilité FROM EnsExtensions WHERE Extension_id = ?""", (Extension.get_Extension_id))
+	disponibility = cur.fetchone()
+
+	return disponibility
+
+def update_Extension(Extension):
+	""" update_Extension: Extension -> Extension, modifie les informations d'une extension donnée """
+	if (est_Presente_Extension(Extension)):
+		cur.execute =(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilité = ? """, (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible() ))
+	else:
+		print "L'extension à modifier n'existe pas."
+
