@@ -11,9 +11,10 @@ cur = conn.cursor()
 
 def createTable():
         cur.execute("""CREATE TABLE IF NOT EXISTS EnsReservation(
-                        Reservation_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE
+                        Reservation_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                         user_id INTEGER,
                         Jeu_id INTEGER,
+                        Extension_id INTEGER,
                         Exemplaire_id INTEGER,
                         date_Reservation VARCHAR,
                         
