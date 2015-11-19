@@ -1,6 +1,8 @@
 import sqlite3
-
+from Extension import Extension
+from Jeu import Jeu 
 from Reservation import Reservation
+
 
 conn = sqlite3.connect("Ludotheque.db")
 conn.execute('pragma foreign_keys = on')
