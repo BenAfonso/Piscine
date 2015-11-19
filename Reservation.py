@@ -17,7 +17,7 @@ class Reservation :
         return self.Reservation_id
     def get_user_id(self):
         return self.user_id   
-    def get_Jeu_id(self)
+    def get_Jeu_id(self):
         return self.Jeu_id
     def get_Exemplaire_id(self):
         return self.Exemplaire_id
