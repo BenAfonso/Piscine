@@ -27,15 +27,15 @@ def destroyTable():
         cur.execute("""DROP TABLE EnsReservation""")
         conn.commit()
 
-def Reservation_EnCours() :
+def Reservation_EnCours(User) :
 
-	cur.execute=(""" SELECT Reservation_id FROM EnsReservation WHERE Reservation_id = ? """, (Reservation.get_Reservation_id()))
+	cur.execute=(""" SELECT user_id FROM EnsReservation WHERE user_id = ? """, (Reservation.get_user_id()))
 	result=cur.fetchone()
 	return result != None
 
-def Ajouter_Reservation(Reservation):
+def Ajouter_Reservation(User):
         #Ajouter_Reservation : Reservation x Utilisateur x EnsReservation -> EnsReservation
-   if (not(Reservation_EnCours(Reservation))):
+   if (not(Reservation_EnCours(User))):
 		try:
 			cur.execute=(""" INSERT INTO EnsReservation(Reservation_id, Jeu_id, user_id, Exemplaire_id, date_Reservation) VALUES(?, ?, ?, ?, ?) """, (Reservation.get_Reservation_id(), Reservation.get_Jeu_id(), Reservation.get_user_id(), Extension.get_date_Reservation() ))
 			conn.commit()
