@@ -6,6 +6,7 @@ import EnsUtilisateurs
 import EnsJeux
 import EnsExemplaires
 import EnsAdmins
+import EnsExtensions
 
 from Session import Session
 from Connexion import Connexion
