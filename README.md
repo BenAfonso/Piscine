@@ -205,3 +205,14 @@ Fonctions:
 - <b>printAll()</b>: Renvoie un tableau avec tous les Exemplaires
 
 
+<h4> EnsReservation </h4>
+
+- <b>createTable()</b>: Crée la table EnsReservation
+- <b>destroyTable()</b>: Detruit la table EnsReservation
+- <b>Reservation_EnCours(User)<b> : Prend en paramètre un utilisateur et renvoie si il a une reservation en cours.
+- <b>get_Reservation(User)<b> : Renvoie une reservation associé à un Type Utilisateur
+- <b>Ajouter_Reservation(Reservation)<b> : Créer une reservation pour un utilisateur
+- <b>supprimer_Reservation(Reservation)<b> : Supprime une réservation pour un utilisateur
+- <b>Nombre_De_Reservation()<b> : renvoie le nombre de Reservation
+- <b>rechercher_Reservation_User(User)<b> Trouver la reservation en cours de l'utilisateur entré en paramètre
+- <b>Reservation_to_table(Reservation)<b> Renvoie une liste avec les attributs d'un type Reservation
