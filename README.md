@@ -147,7 +147,7 @@ Spécification fonctionnelle:
 <br><b>save</b>: Exemplaire -> 
 
 -----------------------------------------------------------------------
- #Class Reservation
+#Class Reservation
 
 Structure de données:
 - Reservation_id = int
@@ -158,7 +158,7 @@ Structure de données:
 - date_Reservation = date
 - Terminer = bool
 
- Spécification fonctionnelle:
+Spécification fonctionnelle:
  
 <br><b>get_Reservation_id</b>: Reservation  -> Int
 <br><b>get_user_id</b>: Utilisateur -> Int
