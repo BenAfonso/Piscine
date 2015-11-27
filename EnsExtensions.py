@@ -27,7 +27,7 @@ def destroy_table_Extension():
 def est_Presente_Extension(Extension):
 	""" est_Presente_Extension: Text x EnsExtensions -> Bool, True si l'extension est dans EnsExtensions, False sinon """
 
-	cur.execute(""" SELECT Extension_id FROM EnsExtensions WHERE Extension_id = ? """, (Extension.get_Extension_id(),))
+	cur.execute(""" SELECT Extension_id FROM EnsExtensions WHERE Nom_Extension = ?  """, (Extension.get_Nom_Extension(),))
 	#recupère le premier résultat correspondant à la recherche, vide sinon.
 	result=cur.fetchone()
 	return result != None
@@ -46,11 +46,14 @@ def ajouter_Extension(Extension):
 		print "L'extension est déjà présente dans la base."
 
 def supprimer_Extension(Extension):
-	try:
-		cur.execute(""" DELETE FROM EnsExtensions WHERE Extension_id = ?""", (Extension.get_Extension_id(),))
-		conn.commit()
-	except:
-		print "Erreur lors de la suppression de l'extension"
+	if(est_Presente_Extension(Extension)):
+		try:
+			cur.execute(""" DELETE FROM EnsExtensions WHERE Nom_Extension = ?""", (Extension.get_Nom_Extension(),))
+			conn.commit()
+		except:
+			print "Erreur lors de la suppression de l'extension"
+	else:
+		print "Impossible de supprimer une extension non présente dans la base."
 
 def nombre_extensions_Jeu(Jeu): # A tester apres avoir corriger les bugs de cle primaire et attribut dispo
 	""" nombre_extensions: Jeu -> Entier, renvoie le nomrbe d'extension d'un jeu donné. Le jeu doit être dans EnsJeux"""
