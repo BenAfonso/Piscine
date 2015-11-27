@@ -15,13 +15,24 @@ def create_table_Extension():
 						Extension_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
 						Jeu_id INTEGER,
 						Nom_Extension VARCHAR,
-						Disponibilité BOOLEAN) """)
+						Disponibilite BOOLEAN) """)
 	conn.commit()
 
 
 def destroy_table_Extension():
 	cur.execute(""" DROP TABLE EnsExtensions """)
 	cur.commit()
+
+
+def get_Extension(Extension_id=None,Nom_Extension=None):
+        if (Extension_id!=None): cur.execute("""SELECT * FROM EnsExtensions WHERE Extension_id = ?""",(Extension_id,))
+        if (Nom_Extension!=None): cur.execute("""SELECT * FROM EnsExtensions WHERE Nom_Extension = ?""",(Nom_Extension,))
+        try:     
+                result=cur.fetchone()
+                return Extension(result[0],result[1],result[2],result[3])
+        except:
+                print "Erreur: ID du jeu non valide"
+
 
 
 def est_Presente_Extension(Extension):
@@ -37,8 +48,9 @@ def ajouter_Extension(Extension):
 	""" ajouter_extension: Extension x EnsExtensions -> EnsExtensions, est_Presente_Extension(Extension.get_Nom_Extension) == False avant ajout. """
 	if (not(est_Presente_Extension(Extension))):
 		try:
-			cur.execute(""" INSERT INTO EnsExtensions(Extension_id, Jeu_id, Nom_Extension, Disponibilité) VALUES(?, ?, ?, ?) """, (Extension.get_Extension_id(), Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(),))
+			cur.execute(""" INSERT INTO EnsExtensions(Extension_id, Jeu_id, Nom_Extension, Disponibilite) VALUES(?, ?, ?, ?) """, (Extension.get_Extension_id(), Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(),))
 			conn.commit()
+			print "L'extension a bien ete ajoutee"
 		except:
 			print "Erreur lors de l'ajout de l'extension"
 
@@ -48,7 +60,7 @@ def ajouter_Extension(Extension):
 def supprimer_Extension(Extension):
 	if(est_Presente_Extension(Extension)):
 		try:
-			cur.execute(""" DELETE FROM EnsExtensions WHERE Nom_Extension = ?""", (Extension.get_Nom_Extension(),))
+			cur.execute(""" DELETE FROM EnsExtensions WHERE Extension_id = ?""", (Extension.get_Extension_id(),))
 			conn.commit()
 		except:
 			print "Erreur lors de la suppression de l'extension"
@@ -83,7 +95,7 @@ def rechercher_Extensions_Jeu(Jeu):  # A tester apres avoir corriger les bugs de
 def est_Disponible_Extension(Extension): # A debugger: retourne un entier au lieu d'un boolean...
 	""" est_Disponible_Extension: Extension -> Bool, True si l'extension est disponible, False sinon. """
 
-	cur.execute(""" SELECT Disponibilité FROM EnsExtensions WHERE Extension_id = ?""", (Extension.get_Extension_id(),))
+	cur.execute(""" SELECT Disponibilite FROM EnsExtensions WHERE Extension_id = ?""", (Extension.get_Extension_id(),))
 	disponibility = cur.fetchone()
 
 	return disponibility[0]
@@ -98,7 +110,8 @@ def afficher_Extensions():
 def update_Extension(Extension):
 	""" update_Extension: Extension -> Extension, modifie les informations d'une extension donnée """
 	if (est_Presente_Extension(Extension)):
-		cur.execute(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilité = ? """, (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(),))
+		cur.execute(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilite = ? """, (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(),))
+		print "L'extension a bien ete mise a jour"
 	else:
 		print "L'extension à modifier n'existe pas."
 

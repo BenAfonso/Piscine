@@ -1,28 +1,15 @@
 # -*- coding: utf-8 -*-
-### Type Extension : Extension
-
-# Représentation des données:
-#
-# idExtension : int (UNIQUE)
-# idJeu : int
-# nomExtension : String
-# anneeExtension : int 
-# disponible: bool
-# anneeExtension : Int
-# editeurExtension : String
-# ageminiExtension : Int
-# nombrejoueursExtension : String
-# descriptionExtension : String
 
 
+import EnsExtensions
 import EnsJeux
 
 class Extension:
-    def __init__(self,Extension_id=None, Jeu_id = int(0), Nom_Extenion="", Disponible=True):
+    def __init__(self,Extension_id=None, Jeu_id = int(0), Nom_Extension="", Disponible=True):
         self.Extension_id = Extension_id
         self.Jeu_id = Jeu_id
         self.Disponible = Disponible
-        self.Nom_Extenion = Nom_Extenion
+        self.Nom_Extension = Nom_Extension
 
 ###### GETTERS ########
     def get_Id_Jeu_Associe(self):
@@ -32,7 +19,7 @@ class Extension:
         return self.Disponible
 	
     def get_Nom_Extension(self):
-        return self.Nom_Extenion
+        return self.Nom_Extension
 
    
     def get_Extension_id(self):
@@ -50,12 +37,12 @@ class Extension:
         self.Disponible = Disponible
     
     def set_Nom(self,Nom):
-        self.Nom_Extenion = Nom_Extenion
+        self.Nom_Extension = Nom_Extension
 
     def save_Extension(self):
-        print("TEST")
+        print("Test de sauvegarde")
         if (self.Extension_id==None):
-            EnsExtension.ajouter_Extension(self)
+            EnsExtensions.ajouter_Extension(self)
         else:
-            EnsExtension.update(self)
+            EnsExtensions.update_Extension(self)
 
