@@ -147,7 +147,36 @@ Spécification fonctionnelle:
 <br><b>save</b>: Exemplaire -> 
 
 -----------------------------------------------------------------------
+ #Class Reservation
 
+Structure de données:
+- Reservation_id = int
+- user_id = int
+- Jeu_id = int
+- Extension_id = int
+- Exemplaire_id = int
+- date_Reservation = date
+- Terminer = bool
+
+ Spécification fonctionnelle:
+ 
+<br><b>get_Reservation_id</b>: Reservation  -> Int
+<br><b>get_user_id</b>: Utilisateur -> Int
+<br><b>get_Jeu_id</b>: Jeu  -> Int
+<br><b>get_Extension_id</b>: Extension -> Int
+<br><b>get_Exemplaire_id</b>: Exemplaire  -> Bool
+<br><b>get_date_Reservation</b>: Reservation-> date
+<br><b>get_Terminer</b>: Reservation -> Bool
+
+<br><b>set_Reservation_id</b>: Reservation x int-> Reservation
+<br><b>set_user_id</b>: Utilisateur x int -> Utilisateur
+<br><b>set_Jeu_id</b>: Jeu x int  -> Jeu
+<br><b>set_Extension_id</b>: Extension x int -> Extension
+<br><b>set_Exemplaire_id</b>: Exemplaire x int  -> Exemplaire
+<br><b>set_date_Reservation</b>: Reservation x date -> Reservation
+<br><b>set_Terminer</b>: Reservation x Bool -> Reservation
+
+------------------------------------------------------------------------
 <h3> Modules </h3>
 
 <h4> EnsUtilisateurs </h4>
@@ -206,7 +235,7 @@ Fonctions:
 
 
 <h4> EnsReservation </h4>
-
+Fonctions: 
 - <b>createTable()</b>: Crée la table EnsReservation
 - <b>destroyTable()</b>: Detruit la table EnsReservation
 - <b>Reservation_EnCours(User)<b> : Prend en paramètre un utilisateur et renvoie si il a une reservation en cours.
@@ -216,3 +245,4 @@ Fonctions:
 - <b>Nombre_De_Reservation()<b> : renvoie le nombre de Reservation
 - <b>rechercher_Reservation_User(User)<b> Trouver la reservation en cours de l'utilisateur entré en paramètre
 - <b>Reservation_to_table(Reservation)<b> Renvoie une liste avec les attributs d'un type Reservation
+
