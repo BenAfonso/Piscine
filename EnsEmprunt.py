@@ -7,6 +7,7 @@ conn.execute('pragma foreign_keys = on')
 conn.commit()
 cur = conn.cursor()
 
+#  Est-ce que l'emprunt est supprimé une fois qu'il est rendu ?
 def createTable():
         cur.execute("""CREATE TABLE IF NOT EXISTS EnsEmprunt(
                         emprunt_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -31,21 +32,26 @@ def insert_emprunt(self, Emprunt):
 	cur.execute("""INSERT INTO EnsEmprunt(emprunt_id,user_id,jeu_id,date_emprunt) VALUES (?, ?, ?, ?)""",emprunt_to_table(Emprunt))
         conn.commit()
 
+#  A modifier => Renvoyer des instances d'emprunts dans un tableau
 def rechercher_emprunt (self, Emprunt_id):
         cur.execute("""SELECT * FROM EnsEmprunt WHERE emprunt_id = Emprunt_id""")
         res = cur.fetchone()
         return res
 
+
+# ????
 def rechercher_user (self, User_id):
         cur.execute("""SELECT * FROM EnsEmprunt WHERE user_id = User_id""" )
         res = cur.fetchone()
         return res
 
+# ????
 def rechercher_jeu (self, Jeu_id):
         cur.execute("""SELECT * FROM EnsEmprunt WHERE jeu_id = Jeu_id""")
         res = cur.fetchall()
         return res
 
+#  A modifier => Renvoyer des instances d'emprunts dans un tableau
 def rechercher_date_emprunt (self, Date_emprunt):
         cur.execute("""SELECT * FROM EnsEmprunt WHERE date_emprunt = Date_emprunt""")
         res = cur.fetchall()
