@@ -1,5 +1,8 @@
+#-*- coding:utf-8-*-
 from datetime import date
-
+import EnsUtilisateurs
+import EnsJeux
+from Utilisateur import Utilisateur
 
 class Emprunt : #Donne les infos concernant un emprunt
 	"""un emprunt est def par :
@@ -10,19 +13,22 @@ class Emprunt : #Donne les infos concernant un emprunt
 		-son statut (en retard ou à l'heure)
 		-sa validité  """
 	# Sa validité ??
-	def __init__(self, Emprunt_id = None, Adherent_id, Jeu_id, date_emprunt=date.today()):
-		self.emprunt_id = Emprunt_id   		#Id de l'emprunt
-		self.adherent_id = Adherent_id  			#Id de l'adhérent
-		self.jeu_id = Jeu 						#Id du jeu emprunté
-		self.date_emprunt = date_emprunt	
-		self.date_echeance = calcul_echeance(self)
+	def __init__(self, Emprunt_id = None, date_emprunt=date.today(), User=None, Jeu_id=None):
+		self.Emprunt_id = Emprunt_id   		#Id de l'emprunt
+		self.User_id = User.get_user_id() 			#Id de l'adhérent
+		self.Jeu_id = Jeu_id 						#Id du jeu emprunté
+		self.date_emprunt = date_emprunt
+		self.date_echeance = self.calcul_Date_Echeance()
 
-	# A Rajouter: Et l'plus important : get_emprunt_id(self) 
-	def get_adherent_id (self):
-		return(self.adherent_id)
+	# A Rajouter: Et l'plus important : get_emprunt_id(self)
+	def get_emprunt_id(self):
+		return self.Emprunt_id
 
-	def get_jeu_id (self):
-		return(self.jeu_id)
+	def get_User_id(self):
+		return(self.User_id)
+
+	def get_Jeu_id(self):
+		return(self.Jeu_id)
 
 	def get_date_emprunt (self):
 		return(self.date_emprunt)
@@ -38,7 +44,7 @@ class Emprunt : #Donne les infos concernant un emprunt
 		new_Day = int(self.get_date_emprunt().day + 21)
 		date_echeance=(self.get_date_emprunt()).replace(day=new_Day)
 		return date_echeance
-	
+
 	# Si la date de retour est inférieure: Renvoyer False => A inverser
 	# Mettre sur une seule ligne :: return (date_retour > self.get_date_echeance())
 	def emprunt_En_Retard(self, date_retour):
@@ -54,62 +60,12 @@ class Emprunt : #Donne les infos concernant un emprunt
 		date_retour = datetime.today()
 		if emprunt_En_Retard(self, date_retour):
 			jour_de_retard = date_retour - date_echeance
-		else : 
+		else :
 			return 0
-	
+
 	# ???? Mauvais type pour cette fonction, on en discute demain
-	def emprunt_valide(self, adherent_id):
+	def emprunt_valide(self, User_id):
 		""" emprunt_valide : Emprunt x Adherent -> Bool, renvoie True si l'utilisateur a les droits d'emprunt et qu'il n'a pas d'emprunt en cours, False sinon"""
-		User = EnsUtilisateurs.get_user(adherent_id,)
+		User = EnsUtilisateurs.get_user(User_id,)
 		return User.empruntEnCours == False
 		""" Il manque le droit d'emprunt dans utilisateurs, que faire si il y a une reservation en cours (conflit de dates)"""
-
-
-
-
-"""
-	def calcul_echeance (self):
-		date_emprunt = self.date_emprunt
-		date_echeance = []						#Date de retour. gère les années bissectiles de **** et les mois.
-		mois_de_31_jours = [1, 3, 5, 7, 8, 10, 12]
-		jour_de_retour = date_emprunt[0] + 7
-		mois_de_retour = date_emprunt[1]
-		annee_de_retour = date_emprunt[2]
-
-		if date_emprunt[1] == 2 :	#check mois de février ?
-			if date_emprunt[2] %4 == 0 : #check année bissextile ?
-				if jour_de_retour > 29 : #check dépasse le nombre de jours du mois
-					jour_de_retour = jour_de_retour -29
-					mois_de_retour = mois_de_retour +1
-			else :
-				if jour_de_retour > 28 : #check dépasse le nombre de jours du mois
-					jour_de_retour = jour_de_retour -28
-					mois_de_retour = mois_de_retour +1
-
-		elif date_emprunt[1] in mois_de_31_jours: #check tous les mois de 31 jours
-			if jour_de_retour > 31 :
-				jour_de_retour = jour_de_retour - 31
-				mois_de_retour = mois_de_retour +1
-				if mois_de_retour == 13 :	#check si on dépasse le 31 décembre
-					mois_de_retour = mois_de_retour - 12
-					annee_de_retour = annee_de_retour +1 #Bonne année !
-
-		else :
-			if jour_de_retour > 30:
-				jour_de_retour = jour_de_retour - 30
-				mois_de_retour = mois_de_retour +1
-
-		date_echeance.append(jour_de_retour)
-		date_echeance.append(mois_de_retour)
-		date_echeance.append(annee_de_retour)
-		return (date_echeance)
-"""
-
-
-"""
-	def est_en_retard (self, date_retour):
-		date_echeance = self.date_echeance
-		retard = (date_retour[0] > date_echeance[0] and date_retour[1] == date_echeance[1]) or (date_retour[1] > date_echeance[1]) or (date_retour[2] > date_echeance[2])
-		 #si on rend trop tard retard = True
-		return (retard)
-"""

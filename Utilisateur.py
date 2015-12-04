@@ -2,7 +2,7 @@
 
 # username : string
 # password : string
-# 
+#
 
 import EnsUtilisateurs
 import EnsAdmins
@@ -10,7 +10,7 @@ import EnsAdmins
 class Utilisateur:
 
     def __init__(self,user_id=None,username="",password="",abonnementValide=False,empruntEnCours = False,reservationEnCours = False,nbRetard = 0):
-        
+
         self.user_id = user_id
         self.username = username
         self.password = password
@@ -35,7 +35,7 @@ class Utilisateur:
         return self.reservationEnCours
     def get_nbRetard(self):
         return self.nbRetard
-    
+
 ##### SETTERS #####
     def set_username(self, username):
         self.username = username
@@ -49,7 +49,7 @@ class Utilisateur:
         return self.reservationEnCours
     def get_nbRetard(self):
         return self.nbRetard
-    
+
 ##### FONCTIONS ANNEXES #####
     def est_admin(self):
         return EnsAdmins.est_admin(self)
@@ -72,16 +72,7 @@ class Utilisateur:
 
 
     def save(self):
-        
+
         EnsUtilisateurs.insert(self)
-        
+
         # SAVE AN USER IN DATABASE
-
-    
-
-    
-
-
-
-   
-    
