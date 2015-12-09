@@ -29,6 +29,7 @@ def destroyTable():
 	cur.execute("""DROP TABLE EnsReservation""")
 	conn.commit()
 
+# Il faut aussi que la reservation n'ait pas "Terminer == True" à rajouter dans la requête
 def Reservation_EnCours(User) :
 
 	cur.execute=(""" SELECT user_id FROM EnsReservation WHERE user_id = ? """, (Reservation.get_user_id()))
@@ -57,7 +58,7 @@ def Ajouter_Reservation(Reservation):
 	else:
 		print ("Une reservation est deja en cours " ) 
 		
-		
+# Reservation_id = User_id <== Faux - faut mettre get_reservation_id
 def supprimer_Reservation(Reservation):
 	#Supprime une reservation
 	try:
@@ -75,6 +76,7 @@ def Nombre_De_Reservation():
 	result = cur.fetchone()
 	return result[0]
 
+# même chose que get_reservation => mettre get_reservation_en_cours et il faut Terminer = False dans la requête et il faut le User.get_user_id()
 def rechercher_Reservation_User(User):
        #rechercher_Reservation_User: Int -> EnsReservation, renvoie la reservation de l'utilisateur que l'on veut connaitre.
 	
