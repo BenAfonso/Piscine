@@ -10,6 +10,9 @@ conn.execute('pragma foreign_keys = on')
 conn.commit()
 cur = conn.cursor()
 
+# Rajouter une fonction qui prend une reservation_id et qui renvoie la reservation (instance)
+# Rajouter une fonction qui prend un exemplaire et qui renvoie true s'il est reservé
+
 def createTable():
 	cur.execute("""CREATE TABLE IF NOT EXISTS EnsReservation(
 			Reservation_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
