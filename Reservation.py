@@ -1,5 +1,9 @@
 import EnsReservation
 
+# Rajouter implementation de la date (date automatique lors de la creation) voir Classe Emprunt de Jean
+# Faire en sorte qu'on rentre des Instances Utilisateurs et non des user_id (pareil pour exemplaire, ...)
+# Jeu inutile parce qu'on a l'exemplaire qui est associé au jeu 
+
 class Reservation :
 
     def __init__(self,Reservation_id = None, user_id = None,Jeu_id = None, Extension_id = None ,Exemplaire_id = None,date_Reservation = None, Terminer = False) :
