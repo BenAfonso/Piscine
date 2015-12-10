@@ -5,27 +5,36 @@ from Emprunt import Emprunt
 from Utilisateur import Utilisateur
 from Jeu import Jeu
 from Exemplaire import Exemplaire
-
+import EnsUtilisateurs
+import EnsExemplaires
 conn = sqlite3.connect("Ludotheque.db")
 conn.execute('pragma foreign_keys = on')
 conn.commit()
 cur = conn.cursor()
 
-#  Est-ce que l'emprunt est supprimé une fois qu'il est rendu ?
+
+# A RAJOUTER : Fonction d'update dans la base avec test si ID != None Sinon faut Insert
+# Fonction: save() Qui va rediriger la requête vers Insert ou Update en fonction de si l'id existes
+# Fonction: update_emprunt() Qui Met à jours un emprunt dans la base
+
+#  Est-ce que l'emprunt est supprimé une fois qu'il est date_rendu ?
+
+
 def createTable():
         cur.execute("""CREATE TABLE IF NOT EXISTS EnsEmprunt(
                         emprunt_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                         user_id INTEGER,
                         exemplaire_id INTEGER,
                         date_emprunt DATE,
-                        date_echeance DATE)""")  #DATE est représenté comme : YYYY-MM-DD
+                        date_echeance DATE,
+                        date_rendu DATE)""")  #DATE est représenté comme : YYYY-MM-DD
         conn.commit()
 
 def destroyTable():
         cur.execute("""DROP TABLE EnsEmprunt""")
         conn.commit()
 def emprunt_to_table(Emprunt):
-		emprunt_table = (Emprunt.get_User_id(), Emprunt.get_Exemplaire_id(), Emprunt.get_date_emprunt(), Emprunt.get_date_echeance())
+		emprunt_table = (Emprunt.get_User_Emprunt().get_user_id(), Emprunt.get_Exemplaire_Emprunt().get_Exemplaire_id(), Emprunt.get_date_emprunt(), Emprunt.get_date_echeance(), Emprunt.get_date_rendu())
 		return emprunt_table
 
 def delete_emprunt(Emprunt):
@@ -33,31 +42,46 @@ def delete_emprunt(Emprunt):
         conn.commit()
 
 def insert_emprunt(Emprunt):
-        cur.execute("""INSERT INTO EnsEmprunt(user_id,jeu_id,date_emprunt,date_echeance) VALUES (?, ?, ?, ?)""",emprunt_to_table(Emprunt))
+
+        cur.execute("""INSERT INTO EnsEmprunt(user_id,exemplaire_id,date_emprunt,date_echeance,date_rendu) VALUES (?, ?, ?, ?, ?)""",emprunt_to_table(Emprunt))
         conn.commit()
 
-#  A modifier => Renvoyer des instances d'emprunts dans un tableau
-def rechercher_emprunt (Emprunt_id):
+def get_Emprunt (Emprunt_id):
         cur.execute("""SELECT * FROM EnsEmprunt WHERE emprunt_id = (?)""",(Emprunt_id,))
         res = cur.fetchone()
-        return res
+        return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5])
 
 
-# ????
-def rechercher_user(User):
-        cur.execute("""SELECT * FROM EnsEmprunt WHERE user_id = ?""",(User.get_user_id()) )
-        res = cur.fetchone()
-        return res
-
-# ????
-def rechercher_jeu (Jeu_id):
-        cur.execute("""SELECT * FROM EnsEmprunt WHERE jeu_id = Jeu_id""")
+def get_emprunts_User(User):
+        cur.execute("""SELECT * FROM EnsEmprunt WHERE user_id = ?""",(User.get_user_id(),) )
         res = cur.fetchall()
         return res
 
+def a_un_emprunt_en_cours(User):
+        cur.execute("""SELECT * FROM EnsEmprunt WHERE user_id = ? AND date_rendu IS NULL""",(User.get_user_id(),) )
+        res = cur.fetchone()
+        print res
+        return res != None
+
+def get_emprunt_en_cours(User):
+        if a_un_emprunt_en_cours(User):
+                cur.execute("""SELECT * FROM EnsEmprunt WHERE user_id = ? AND date_rendu IS NULL""",(User.get_user_id(),) )
+                res = cur.fetchone()
+                return Emprunt(res)
+        else:
+                return None
+
+def rechercher_Exemplaire (Exemplaire):
+        cur.execute("""SELECT * FROM EnsEmprunt WHERE Exemplaire_id = ?""",(Exemplaire.get_Exemplaire_id()))
+        res = cur.fetchall()
+        return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5])
+
 #  A modifier => Renvoyer des instances d'emprunts dans un tableau
-def rechercher_date_emprunt (Date_emprunt):
-        cur.execute("""SELECT * FROM EnsEmprunt WHERE date_emprunt = Date_emprunt""")
+def rechercher_date_emprunt (Date):
+        #Date=Date.split("-")
+        #Date=date(int(Date[0]),int(Date[1]),int(Date[2]))
+        print Date
+        cur.execute("""SELECT * FROM EnsEmprunt WHERE date_emprunt = ? """,Date)
         res = cur.fetchall()
         return res
 

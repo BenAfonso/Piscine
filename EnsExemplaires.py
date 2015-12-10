@@ -29,7 +29,12 @@ def get_Exemplaire_dispo(Jeu):
         cur.execute("""SELECT * FROM EnsExemplaires WHERE Jeu_id = ?""", (Jeu.get_Jeu_id()))
         result = cur.fetchone()
         return Exemplaire(result[0],result[1],result[2])
-        
+
+def get_Exemplaire(exemplaire_id):
+        cur.execute("""SELECT * FROM EnsExemplaires WHERE Exemplaire_id = ?""", (exemplaire_id,))
+        result = cur.fetchone()
+        return Exemplaire(result[0],result[1],result[2])
+
 def get_nombre_exemplaires(Jeu,disponible=2):
         # 1 Disponibles
         # 0 Indisponibles
@@ -51,24 +56,22 @@ def get_nombre_exemplaires(Jeu,disponible=2):
 
 
 
-        
+
 def insert(Exemplaire):
-    
+
         # PRECONDITION: Jeu_id doit EXISTER ! (A FAIRE)
-        #try:	
+        #try:
         cur.execute("""INSERT INTO EnsExemplaires(Exemplaire_id,Jeu_id,Est_disponible) VALUES (?,?,?)""",(Exemplaire.get_Exemplaire_id(),Exemplaire.get_Jeu_id(),Exemplaire.get_Est_disponible(),))
         conn.commit()
         print("Exemplaire ajoute avec succes !")
         #except:
 
          #       print("Erreur lors de l'ajout de l'exemplaire")
-        
-                
+
+
 
 def printAll():
         cur.execute("""SELECT * FROM EnsExemplaires""")
         rows = cur.fetchall()
         for row in rows:
                 print('{0} : {1} => Dispo ? {2}'.format(row[0], EnsJeux.get_Jeu(row[1]).get_Nom_jeu(), row[2]))
-
-

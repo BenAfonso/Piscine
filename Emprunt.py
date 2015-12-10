@@ -13,22 +13,38 @@ class Emprunt : #Donne les infos concernant un emprunt
 		-son statut (en retard ou à l'heure)
 		-sa validité  """
 	# Sa validité ??
-	def __init__(self, Emprunt_id = None, date_emprunt=date.today(), User=None, Jeu_id=None):
+	def __init__(self, Emprunt_id = None,  User=None, Exemplaire=None,date_emprunt=None,date_echeance=None,date_rendu=None):
 		self.Emprunt_id = Emprunt_id   		#Id de l'emprunt
-		self.User_id = User.get_user_id() 			#Id de l'adhérent
-		self.Jeu_id = Jeu_id 						#Id du jeu emprunté
-		self.date_emprunt = date_emprunt
-		self.date_echeance = self.calcul_Date_Echeance()
+		self.User = User 			#Id de l'adhérent
+		self.Exemplaire = Exemplaire						#Id du jeu emprunté
+		self.date_rendu = date_rendu
+		if date_emprunt == None:
+			self.date_emprunt = date.today()
+			self.date_echeance = self.calcul_Date_Echeance()
+		else:
+			self.date_emprunt = date_emprunt
+			self.date_echeance = date_echeance
+
 
 	# A Rajouter: Et l'plus important : get_emprunt_id(self)
 	def get_emprunt_id(self):
 		return self.Emprunt_id
 
-	def get_User_id(self):
-		return(self.User_id)
+	def get_User_Emprunt(self):
+		return self.User
 
-	def get_Jeu_id(self):
-		return(self.Jeu_id)
+	def get_date_rendu(self):
+		return self.date_rendu
+
+	def est_rendu(self):
+		return self.date_rendu != None
+
+	def rendre_Emprunt(self):
+		self.date_rendu = date.today()
+		# sauvegarder l'emprunt en base
+		
+	def get_Exemplaire_Emprunt(self):
+		return(self.Exemplaire)
 
 	def get_date_emprunt (self):
 		return(self.date_emprunt)
