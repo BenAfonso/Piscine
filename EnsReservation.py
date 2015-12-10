@@ -54,7 +54,7 @@ def get_Reservation_User(User) :
 		ReservationCur = Reservation(ReservationCur[0],ReservationCur[1],ReservationCur[2],ReservationCur[3],ReservationCur[4],ReservationCur[5],ReservationCur[6])
 
 # fonction qui prend une reservation_id et qui renvoie la reservation (instance)
-def get_Reservation(Reservation_id)
+def get_Reservation(Reservation_id):
 	cur.execute("""SELECT * FROM EnsReservation WHERE Reservation_id = (?)""",(Reservation_id,))
 	res = cur.fetchone()
 	return Reservation(Reservation_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Jeu=EnsJeux.get_Jeu(res[2]),Exemplaire=EnsExemplaires.get_Exemplaire(res[3]),Extension=EnsExtension.get_Extension(res[4]),date_Reservation=res[5])
