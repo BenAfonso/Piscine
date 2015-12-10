@@ -1,9 +1,14 @@
 #-*-coding: utf-8 -*-
 import sqlite3
+from datetime import date, datetime
 from Extension import Extension
 from Jeu import Jeu 
 from Reservation import Reservation
-
+from Utilisateur import Utilisateur
+import EnsUtilisateurs
+import EnsExemplaires
+import EnsExtension
+import EnsJeux
 
 conn = sqlite3.connect("Ludotheque.db")
 conn.execute('pragma foreign_keys = on')
@@ -39,14 +44,20 @@ def Reservation_EnCours(User) :
 	result=cur.fetchone()
 	return result != None
 
-def get_Reservation(User) :
+# fonction qui prend un user et qui renvoie la reservation (instance)
+def get_Reservation_User(User) : 
 
 	cur.execute=(""" SELECT * FROM EnsReservation WHERE user_id = ? """, (Reservation.get_user_id()))
 	result = cur.fetchall()
 
 	for ReservationCur in result :
 		ReservationCur = Reservation(ReservationCur[0],ReservationCur[1],ReservationCur[2],ReservationCur[3],ReservationCur[4],ReservationCur[5],ReservationCur[6])
-	
+
+# fonction qui prend une reservation_id et qui renvoie la reservation (instance)
+def get_Reservation(Reservation_id):
+	cur.execute("""SELECT * FROM EnsReservation WHERE Reservation_id = (?)""",(Reservation_id,))
+	res = cur.fetchone()
+	return Reservation(Reservation_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Jeu=EnsJeux.get_Jeu(res[2]),Exemplaire=EnsExemplaires.get_Exemplaire(res[3]),Extension=EnsExtension.get_Extension(res[4]),date_Reservation=res[5])
 
 def Ajouter_Reservation(Reservation):
 	#Ajouter_Reservation : Reservation x Utilisateur x EnsReservation -> EnsReservation
@@ -65,7 +76,7 @@ def Ajouter_Reservation(Reservation):
 def supprimer_Reservation(Reservation):
 	#Supprime une reservation
 	try:
-		cur.execute=(""" DELETE FROM EnsReservation WHERE Reservation_id = ?""", (Reservation.get_user_id()))
+		cur.execute=(""" DELETE FROM EnsReservation WHERE Reservation_id = ?""", (Reservation.get_reservation_id()))
 		conn.commit()
 		
 	except:
