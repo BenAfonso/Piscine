@@ -7,7 +7,7 @@
 # nomJeu : String
 # nbExemplaire : int (calculé FAIRE FONCTION)
 # disponibilité: bool (faire fonction)
-# 
+#
 
 # Fonctionnalités:
 #
@@ -21,10 +21,11 @@
 #
 import EnsJeux
 import EnsExemplaires
+import EnsCategories
 
 class Jeu:
 
-    def __init__(self,Jeu_id=None,Nom_jeu="",Annee="",Editeur="",AgeMini="",NombreJoueurs="",Description=""):
+    def __init__(self,Jeu_id=None,Nom_jeu="",Annee="",Editeur="",AgeMini="",NombreJoueurs="",Description="",Categorie_id=None):
         self.Jeu_id = Jeu_id
         self.Nom_jeu = Nom_jeu
         self.Annee = Annee
@@ -32,6 +33,7 @@ class Jeu:
         self.AgeMini = AgeMini
         self.NombreJoueurs = NombreJoueurs
         self.Description = Description
+        self.Categorie_id = Categorie_id
 
 
 ###### GETTERS ########
@@ -60,6 +62,17 @@ class Jeu:
     def get_Annee(self):
         return self.Annee
 
+    def get_Categorie_id(self):
+        return self.Categorie_id
+
+    def set_Categorie_id(Categorie_id):
+        if EnsCategories.categorieExiste():
+            self.Categorie_id = Categorie_id
+            # AJOUTER FONCTION UPDATE
+        else:
+            print "Oops, la categorie n'existe pas !"
+
+
 
 ###### SETTERS ########
     def set_Nom_jeu(self,Nom_jeu):
@@ -85,10 +98,3 @@ class Jeu:
             EnsJeux.insert(self)
         else:
             EnsJeux.update(self)
-
-
-   
-    
-
-   
-    

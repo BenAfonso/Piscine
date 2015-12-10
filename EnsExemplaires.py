@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sqlite3
 
 from Exemplaire import Exemplaire
@@ -28,12 +29,13 @@ def exemplaire_to_table(Exemplaire):
 def get_Exemplaire_dispo(Jeu):
         cur.execute("""SELECT * FROM EnsExemplaires WHERE Jeu_id = ?""", (Jeu.get_Jeu_id()))
         result = cur.fetchone()
-        return Exemplaire(result[0],result[1],result[2])
+        return Exemplaire(EnsJeux.get_Jeu(result[1]),result[2],result[0])
 
 def get_Exemplaire(exemplaire_id):
         cur.execute("""SELECT * FROM EnsExemplaires WHERE Exemplaire_id = ?""", (exemplaire_id,))
         result = cur.fetchone()
-        return Exemplaire(result[0],result[1],result[2])
+        return Exemplaire(EnsJeux.get_Jeu(result[1]),result[2],result[0])
+        # Jeu => Est_Disponible => Exemplaire_id
 
 def get_nombre_exemplaires(Jeu,disponible=2):
         # 1 Disponibles
@@ -61,13 +63,17 @@ def insert(Exemplaire):
 
         # PRECONDITION: Jeu_id doit EXISTER ! (A FAIRE)
         #try:
-        cur.execute("""INSERT INTO EnsExemplaires(Exemplaire_id,Jeu_id,Est_disponible) VALUES (?,?,?)""",(Exemplaire.get_Exemplaire_id(),Exemplaire.get_Jeu_id(),Exemplaire.get_Est_disponible(),))
+        cur.execute("""INSERT INTO EnsExemplaires(Exemplaire_id,Jeu_id,Est_disponible) VALUES (?,?,?)""",(Exemplaire.get_Exemplaire_id(),Exemplaire.get_Jeu_Exemplaire().get_Jeu_id(),Exemplaire.get_Est_disponible(),))
         conn.commit()
         print("Exemplaire ajoute avec succes !")
         #except:
 
          #       print("Erreur lors de l'ajout de l'exemplaire")
 
+def update(Exemplaire):
+        cur.execute("""UPDATE EnsExemplaires SET Jeu_id = ?, Est_Disponible = ? WHERE Exemplaire_id=?""", (Exemplaire.get_Jeu_Exemplaire().get_Jeu_id(),Exemplaire.get_Est_disponible(),Exemplaire.get_Exemplaire_id()))
+        conn.commit()
+        print("Exemplaire modifie avec succes !")
 
 
 def printAll():

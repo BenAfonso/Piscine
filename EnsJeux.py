@@ -1,6 +1,6 @@
 import sqlite3
 from Jeu import Jeu
-
+import EnsCategories
 
 
 conn = sqlite3.connect("Ludotheque.db")
@@ -15,7 +15,8 @@ def createTable():
                         Editeur STRING,
                         AgeMini STRING,
                         NombreJoueurs STRING,
-                        Description TEXT)""")
+                        Description TEXT,
+                        Categorie_id INTEGER)""")
         conn.commit()
 
 def destroyTable():
@@ -24,15 +25,15 @@ def destroyTable():
 
 def jeu_to_table(Jeu):
         # User -> List
-        JeuTable=(Jeu.get_Jeu_id(),Jeu.get_Nom_jeu(),Jeu.get_Annee(),Jeu.get_Editeur(),Jeu.get_AgeMini(),Jeu.get_NombreJoueurs(),Jeu.get_Description())
+        JeuTable=(Jeu.get_Jeu_id(),Jeu.get_Nom_jeu(),Jeu.get_Annee(),Jeu.get_Editeur(),Jeu.get_AgeMini(),Jeu.get_NombreJoueurs(),Jeu.get_Description(),Jeu.get_Categorie_id())
         return JeuTable
 
 def get_Jeu(Jeu_id=None,Nom_jeu=None):
         if (Jeu_id!=None): cur.execute("""SELECT * FROM EnsJeux WHERE Jeu_id = ?""",(Jeu_id,))
         if (Nom_jeu!=None): cur.execute("""SELECT * FROM EnsJeux WHERE Nom_jeu = ?""",(Nom_jeu,))
-        try:     
+        try:
                 result=cur.fetchone()
-                return Jeu(result[0],result[1],result[2],result[3],result[4],result[5],result[6])
+                return Jeu(result[0],result[1],result[2],result[3],result[4],result[5],result[6],result[7])
         except:
                 print "Erreur: ID du jeu non valide"
 
@@ -40,7 +41,7 @@ def delete_Jeu(Jeu):
         try:
                 cur.execute("""DELETE FROM EnsJeux WHERE Jeu_id = ?""",(Jeu.get_Jeu_id(),))
                 conn.commit()
-        except: 
+        except:
                 print "Erreur lors de la suppression !"
 
 def has_Jeu(Nom_jeu):
@@ -58,15 +59,15 @@ def insert(Jeu):
         #Jeu x EnsJeux => EnsJeux
         >>>EnsJeux.insert(Type Jeu)"""
         if not(has_Jeu(Jeu.get_Nom_jeu())):
-                try:	
-                        cur.execute("""INSERT INTO EnsJeux(Jeu_id,Nom_jeu,Annee,Editeur,AgeMini,NombreJoueurs,Description) VALUES (?, ?, ?, ?, ?, ?, ?)""",jeu_to_table(Jeu))
+                try:
+                        cur.execute("""INSERT INTO EnsJeux(Jeu_id,Nom_jeu,Annee,Editeur,AgeMini,NombreJoueurs,Description,Categorie_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",jeu_to_table(Jeu))
                         conn.commit()
                         print("Jeu ajoute avec succes !")
                 except:
                         print (jeu_to_table(Jeu))
                         print("Erreur lors de l'ajout du jeu")
         else:
-                print("Erreur: Un jeu est deja enregistre au meme nom.")        
+                print("Erreur: Un jeu est deja enregistre au meme nom.")
 
 
 #### FONCTION SEULEMENT POUR IMPORTATION DE LA BASE INITIAL DES JEUX #####
@@ -74,15 +75,15 @@ def insertFromMain(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description=""):
         """Fonction permettant d'inserer un jeu dans l'ensemble de Jeux
         #Jeu x EnsJeux => EnsJeux
         >>>EnsJeux.insert(Type Jeu)"""
-        try:	
-                cur.execute("""INSERT INTO EnsJeux(Nom_jeu,Annee,Editeur,AgeMini,NombreJoueurs,Description) VALUES (?, ?, ?, ?, ?, ?)""",(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description,))
+        try:
+                cur.execute("""INSERT INTO EnsJeux(Nom_jeu,Annee,Editeur,AgeMini,NombreJoueurs,Description,Categorie_id) VALUES (?, ?, ?, ?, ?, ?, ?)""",(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description,Categorie_id,))
                 conn.commit()
         except:
                 print(Nom,Annee,Editeur,AgeMini,NombreJoueurs)
 ##########################################################################
-     
 
-                
+
+
 def rechercher(nom): # RAJOUTER PLUSIEURS RESULTATS :: fetchall()
         cur.execute("""SELECT * FROM EnsJeux WHERE Nom_jeu LIKE ?""",(nom,))
         rows = cur.fetchall()
@@ -93,7 +94,7 @@ def update(Jeu):
         # A FAIRE !
 
 def printAll():
-        cur.execute("""SELECT * FROM EnsJeux""") 
+        cur.execute("""SELECT * FROM EnsJeux""")
         rows = cur.fetchall()
         return rows
         #for row in rows:

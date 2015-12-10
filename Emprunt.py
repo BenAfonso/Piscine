@@ -2,6 +2,10 @@
 from datetime import date
 import EnsUtilisateurs
 import EnsJeux
+import EnsExemplaires
+# A MODIFIER:
+# save est une fonction locale à Emprunt et non à EnsEmprunt (Voir Exemplaire/EnsExemplaires)
+import EnsEmprunt
 from Utilisateur import Utilisateur
 
 class Emprunt : #Donne les infos concernant un emprunt
@@ -14,16 +18,24 @@ class Emprunt : #Donne les infos concernant un emprunt
 		-sa validité  """
 	# Sa validité ??
 	def __init__(self, Emprunt_id = None,  User=None, Exemplaire=None,date_emprunt=None,date_echeance=None,date_rendu=None):
+
 		self.Emprunt_id = Emprunt_id   		#Id de l'emprunt
 		self.User = User 			#Id de l'adhérent
 		self.Exemplaire = Exemplaire						#Id du jeu emprunté
 		self.date_rendu = date_rendu
-		if date_emprunt == None:
+		# PréCondition: Exemplaire Disponible !
+		if date_emprunt == None and self.Exemplaire.get_Est_disponible():
 			self.date_emprunt = date.today()
 			self.date_echeance = self.calcul_Date_Echeance()
+			try:
+				EnsEmprunt.insert_emprunt(self)
+				EnsExemplaires.get_Exemplaire(self.Exemplaire.get_Exemplaire_id()).set_Est_disponible(False)
+			except:
+				raise
 		else:
 			self.date_emprunt = date_emprunt
 			self.date_echeance = date_echeance
+
 
 
 	# A Rajouter: Et l'plus important : get_emprunt_id(self)
@@ -39,10 +51,17 @@ class Emprunt : #Donne les infos concernant un emprunt
 	def est_rendu(self):
 		return self.date_rendu != None
 
+# Rajouter des tests et s'assurer de bien faire TOUTES les opérations ou aucune.
 	def rendre_Emprunt(self):
 		self.date_rendu = date.today()
-		# sauvegarder l'emprunt en base
-		
+		try:
+			EnsEmprunt.update(self)
+			if self.est_rendu():
+				print "Emprunt Rendu !"
+				self.get_Exemplaire_Emprunt().set_Est_disponible(True)
+		except:
+			print "ERREUR"
+
 	def get_Exemplaire_Emprunt(self):
 		return(self.Exemplaire)
 

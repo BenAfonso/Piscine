@@ -42,9 +42,17 @@ def delete_emprunt(Emprunt):
         conn.commit()
 
 def insert_emprunt(Emprunt):
+        if Emprunt.get_Exemplaire_Emprunt() == None:
+            print "Oops. Vous voulez inserer quelque chose de vide !"
+        else:
+            cur.execute("""INSERT INTO EnsEmprunt(user_id,exemplaire_id,date_emprunt,date_echeance,date_rendu) VALUES (?, ?, ?, ?, ?)""",emprunt_to_table(Emprunt))
+            conn.commit()
 
-        cur.execute("""INSERT INTO EnsEmprunt(user_id,exemplaire_id,date_emprunt,date_echeance,date_rendu) VALUES (?, ?, ?, ?, ?)""",emprunt_to_table(Emprunt))
+def update(Emprunt):
+        cur.execute("""UPDATE EnsEmprunt SET date_rendu=? WHERE Emprunt_id=?""", (Emprunt.get_date_rendu(),Emprunt.get_emprunt_id()))
         conn.commit()
+        print("Exemplaire modifie avec succes !")
+
 
 def get_Emprunt (Emprunt_id):
         cur.execute("""SELECT * FROM EnsEmprunt WHERE emprunt_id = (?)""",(Emprunt_id,))
@@ -63,6 +71,7 @@ def a_un_emprunt_en_cours(User):
         print res
         return res != None
 
+
 def get_emprunt_en_cours(User):
         if a_un_emprunt_en_cours(User):
                 cur.execute("""SELECT * FROM EnsEmprunt WHERE user_id = ? AND date_rendu IS NULL""",(User.get_user_id(),) )
@@ -78,9 +87,6 @@ def rechercher_Exemplaire (Exemplaire):
 
 #  A modifier => Renvoyer des instances d'emprunts dans un tableau
 def rechercher_date_emprunt (Date):
-        #Date=Date.split("-")
-        #Date=date(int(Date[0]),int(Date[1]),int(Date[2]))
-        print Date
         cur.execute("""SELECT * FROM EnsEmprunt WHERE date_emprunt = ? """,Date)
         res = cur.fetchall()
         return res
@@ -96,7 +102,3 @@ def printAll():
         return rows
         #for row in rows:
                 #print('{0} : {1} - {2}'.format(row[0], row[1], row[2]))
-"""
-date = str( year + "-"+month+"-"+day);
-date = date (date)
-"""
