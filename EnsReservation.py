@@ -1,13 +1,13 @@
 #-*-coding: utf-8 -*-
 import sqlite3
 from datetime import date, datetime
-from Extension import Extension
+#from Extension import Extension
 from Jeu import Jeu 
 from Reservation import Reservation
 from Utilisateur import Utilisateur
 import EnsUtilisateurs
 import EnsExemplaires
-import EnsExtension
+#import EnsExtension
 import EnsJeux
 
 conn = sqlite3.connect("Ludotheque.db")
@@ -26,7 +26,7 @@ def createTable():
 			Extension_id INTEGER,
 			Exemplaire_id INTEGER,
 			date_Reservation DATE,
-			Terminer BOOLEAN,
+			Terminer BOOLEAN
 			
 					)""")
 					
@@ -40,14 +40,14 @@ def destroyTable():
 # Il faut aussi que la reservation n'ait pas "Terminer == True" à rajouter dans la requête
 def Reservation_EnCours(User) :
 
-	cur.execute=(""" SELECT user_id FROM EnsReservation WHERE user_id = ? """, (Reservation.get_user_id()))
+	cur.execute(""" SELECT user_id FROM EnsReservation WHERE user_id = ? """, (User.get_user_id(),))
 	result=cur.fetchone()
 	return result != None
 
 # fonction qui prend un user et qui renvoie la reservation (instance)
 def get_Reservation_User(User) : 
 
-	cur.execute=(""" SELECT * FROM EnsReservation WHERE user_id = ? """, (Reservation.get_user_id()))
+	cur.execute(""" SELECT * FROM EnsReservation WHERE user_id = ? """, (User.get_user_id(),))
 	result = cur.fetchall()
 
 	for ReservationCur in result :
@@ -61,13 +61,14 @@ def get_Reservation(Reservation_id):
 
 def Ajouter_Reservation(Reservation):
 	#Ajouter_Reservation : Reservation x Utilisateur x EnsReservation -> EnsReservation
-	if (not(Reservation_EnCours(User))):
-		try:
-			cur.execute=(""" INSERT INTO EnsReservation(Reservation_id, Jeu_id, user_id, Exemplaire_id, date_Reservation) VALUES(?, ?, ?, ?, ?) """, (Reservation.get_Reservation_id(), Reservation.get_Jeu_id(), Reservation.get_user_id(), Extension.get_date_Reservation() ))
-			conn.commit()
-			print(" Reservation ajoutée !")
-		except:
-			print ("Erreur lors de l'ajout d'une reservation")
+	if (not(Reservation_EnCours(EnsUtilisateurs.get_user(Reservation.get_user_id())))):
+		#try:
+		cur.execute(""" INSERT INTO EnsReservation(Reservation_id, user_id, Exemplaire_id, date_Reservation) 
+			VALUES(?, ?, ?, ?) """, (Reservation.get_Reservation_id(), Reservation.get_user_id(),Reservation.get_Exemplaire_id(), Reservation.get_date_Reservation(), ))
+		conn.commit()
+		print(" Reservation ajoutée !")
+		#except:
+		#	print ("Erreur lors de l'ajout d'une reservation")
 
 	else:
 		print ("Une reservation est deja en cours " ) 
@@ -76,7 +77,7 @@ def Ajouter_Reservation(Reservation):
 def supprimer_Reservation(Reservation):
 	#Supprime une reservation
 	try:
-		cur.execute=(""" DELETE FROM EnsReservation WHERE Reservation_id = ?""", (Reservation.get_reservation_id()))
+		cur.execute(""" DELETE FROM EnsReservation WHERE Reservation_id = ?""", (Reservation.get_reservation_id()))
 		conn.commit()
 		
 	except:
@@ -86,7 +87,7 @@ def supprimer_Reservation(Reservation):
 def Nombre_De_Reservation():
 	# nombre_Reservation: EnsReservation -> Entier, renvoie le nombre de Reservation . """
 
-	cur.execute =(""" SELECT COUNT (Reservation_id) FROM EnsReservation""")
+	cur.execute(""" SELECT COUNT (Reservation_id) FROM EnsReservation""")
 	result = cur.fetchone()
 	return result[0]
 
@@ -103,3 +104,7 @@ def Reservation_to_table(Reservation):
 	ReservationTable=(Reservation.get_Reservation_id(),Reservation.get_user_id(),Reservation.get_Jeu_id(),Reservation.get_Exemplaire_id(),Reservation.get_date_Reservation())
 	return ReservationTable
 		
+def printAll():
+	cur.execute(""" SELECT * FROM EnsReservation""")
+	result = cur.fetchall()
+	return result
