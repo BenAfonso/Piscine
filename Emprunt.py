@@ -1,5 +1,6 @@
 #-*- coding:utf-8-*-
 from datetime import date
+from datetime import timedelta
 import EnsUtilisateurs
 import EnsJeux
 import EnsExemplaires
@@ -76,8 +77,9 @@ class Emprunt : #Donne les infos concernant un emprunt
 		""" calcul_date_echeance: Emprunt -> Date, renvoie la date d'echeance de l'emprunt"""
 		""" nouvelle date d'échance : 3 semaines """
 		# Est-ce que ça incrémente le mois si JJ > 10 ?
-		new_Day = int(self.get_date_emprunt().day + 21)
-		date_echeance=(self.get_date_emprunt()).replace(day=new_Day)
+		#new_Day = int(self.get_date_emprunt().day + 21)
+		#date_echeance=(self.get_date_emprunt()).replace(day=new_Day)
+		date_echeance=date.today()+timedelta(days=21)
 		return date_echeance
 
 	# Si la date de retour est inférieure: Renvoyer False => A inverser
