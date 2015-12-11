@@ -41,14 +41,15 @@ class Utilisateur:
         self.username = username
     def set_password(self, password):
         self.password = password
-    def get_abonnementValide(self):
-        return self.abonnementValide
-    def get_empruntEnCours(self):
-        return self.empruntEnCours
-    def get_reservationEnCours(self):
-        return self.reservationEnCours
-    def get_nbRetard(self):
-        return self.nbRetard
+    def set_abonnementValide(self, Nbool):
+        self.abonnementValide= Nbool
+    def set_empruntEnCours(self,empruntEnCours):
+        self.empruntEnCours = empruntEnCours
+    def set_reservationEnCours(self, reservationEnCours):
+        self.reservationEnCours = reservationEnCours
+    def set_nbRetard(self, nbRetard):
+        self.nbRetard = nbRetard
+
 
 ##### FONCTIONS ANNEXES #####
     def est_admin(self):

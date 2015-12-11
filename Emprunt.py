@@ -60,6 +60,9 @@ class Emprunt : #Donne les infos concernant un emprunt
 			if self.est_rendu():
 				print "Emprunt Rendu !"
 				self.get_Exemplaire_Emprunt().set_Est_disponible(True)
+				user = self.get_User_Emprunt()
+				user.set_nbRetard(user.get_nbRetard() + calcul_retard(self))
+				EnsExemplaires.delete_emprunt(self)
 		except:
 			print "ERREUR"
 
@@ -87,16 +90,18 @@ class Emprunt : #Donne les infos concernant un emprunt
 	def emprunt_En_Retard(self, date_retour):
 		""" emprunt_En_Retard: Emprunt x Date -> Bool, True si le retour de l'emprunt dépasse la date d'echeance, False sinon """
 		# Une date est considérée comme inférieure à une autre lorsqu'elle la précède dans le temps. cf doc python > date object
-		if(date_retour <= self.calcul_Date_Echeance()):
+		if(date_retour <= self.date_echeance:
 			return True
 		else:
 			return False
 
-	def calcul_retard (self):
+	def calcul_retard(self):
 		""" calcul_retard : Emprunt -> entier, 0 si emprunt_En_Retard est False, la difference entre date_retour et date_echeance sinon"""
 		date_retour = datetime.today()
 		if emprunt_En_Retard(self, date_retour):
+			
 			jour_de_retard = date_retour - date_echeance
+			return jour_de_retard.days
 		else :
 			return 0
 
