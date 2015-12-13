@@ -1,3 +1,4 @@
+#-*- coding:utf-8-*-
 import EnsReservation
 from datetime import date
 
@@ -55,7 +56,5 @@ class Reservation :
         
   ##### FONCTIONS ANNEXES #####
   
-      def save(self):
-        
-        EnsReservation.insert(self)
-
+    def save(self):
+        EnsReservation.Ajouter_Reservation(self)
