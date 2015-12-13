@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 import sqlite3
 from Utilisateur import Utilisateur
 
@@ -79,6 +80,15 @@ def insert(User):
                         print("Erreur lors de l'ajout de l'utilisateur")
         else:
                 print("Erreur: Utilisateur deja existant")
+
+def update(User):
+        try:
+                cur.execute("""UPDATE EnsUtilisateurs SET username=?,password=?,abonnementValide=?,empruntEnCours=?,reservationEnCours=?,nbRetard=? WHERE user_id=?""",(User.get_username(),User.get_password(),User.get_abonnementValide(),User.get_empruntEnCours(),User.get_reservationEnCours(),User.get_nbRetard(),User.get_user_id()))
+                conn.commit()
+                print "Les informations de l'utilisateur ont bien été modifiées !"
+        except:
+                print "La modification des informations Utilisateur ont échouées"
+                raise
                 
 
 def printAll():

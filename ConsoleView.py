@@ -8,6 +8,7 @@ import EnsJeux
 import EnsExemplaires
 from Session import Session
 from Connexion import Connexion
+import EnsEmprunt
 import EnsAdmins
 import sys
 import getpass #Masquer saisie mot de passe
@@ -69,8 +70,10 @@ def connecte():
     print("================================================================================")
     if ActiveSession.est_admin():
         statut= "Administrateur\n\n"
-    else:
+    elif ActiveSession.get_session_User().get_abonnementValide():
         statut= "Adherent\n\n"
+    else:
+        statut= "Non Adherent\n\n"
     print "----- Connecte en tant que "+user.get_username()+" :: "+statut
 
 
@@ -135,27 +138,43 @@ def selectionnerUtilisateur(user_id):
     else:
         status="Adhérent"
     print "Statut: "+status
+
+    if selectedUser.get_abonnementValide():
+        print "[V] Abonnement valide"
+    else:
+        print "[X] Abonnement non valide"
+    if EnsEmprunt.a_un_emprunt_en_cours(selectedUser):
+        print "\nEmprunt en cours: \n"+EnsEmprunt.get_emprunt_en_cours(selectedUser).display()
     print "==================================="
     print "\n"
-    print "1. Modifier"
-    print "2. Supprimer"
+    print "1. Emprunt rendu"
+    if not(selectedUser.get_abonnementValide()):
+        print "2. Valider abonnement"
+    print "8. Modifier"
+    print "9. Supprimer"
     if (status!="Admin"):
-        print "3. Promouvoir administrateur"
+        print "10. Promouvoir administrateur"
     print "0. Retour"
     choix = int(raw_input("Choix: "))
-    if (choix==1):
+    if (choix == 1 and EnsEmprunt.a_un_emprunt_en_cours(selectedUser)):
+        rendreEmprunt(selectedUser)
+        selectionnerUtilisateur(selectedUser.get_user_id())
+    if (choix==2 and not(selectedUser.get_abonnementValide())):
+        selectedUser.set_abonnementValide(True)
+        selectionnerUtilisateur(selectedUser.get_user_id())
+    if (choix==8):
         print "En construction..."
-    elif (choix==2):
+    elif (choix==9):
         selectedUser.delete_user()
         raw_input("Utilisateur supprimé. Appuyez sur Entrer pour continuer.")
         listeUtilisateurs()
-    elif (choix==3 and status != "admin"):
+    elif (choix==10 and status != "admin"):
         selectedUser.make_admin()
         selectionnerUtilisateur(selectedUser.get_user_id())
     elif (choix==0):
         listeUtilisateurs()
     else:
-        selectionnerUtilisateur(user_id)
+        selectionnerUtilisateur(selectedUser.get_user_id())
         
 def ajouterUtilisateur():
     connecte()
@@ -245,17 +264,20 @@ def selectionnerJeu(game_id):
     connecte()
     print "===== JEU ====="
     print "ID: "+str(selectedGame.get_Jeu_id())
-    print "Nom du jeu: "+selectedGame.get_Nom_jeu()
+    print "Nom du jeu: "+str(selectedGame.get_Nom_jeu())
     print "Annee: "+str(selectedGame.get_Annee())
     print "Editeur: "+str(selectedGame.get_Editeur())
     print "Age Minimum: "+str(selectedGame.get_AgeMini())
     print "Nombre de joueurs: "+str(selectedGame.get_NombreJoueurs())
-    print "Description: "+selectedGame.get_Description()
+    print "Description: "+str(selectedGame.get_Description())
     print "Nombre d'exemplaires: "+str(selectedGame.get_nombre_exemplaires())
     print "Nombre d'exemplaires disponibles: "+str(selectedGame.get_nombre_exemplaires_dispo())
     print "==============="
     print "\n"
-    print "1. Emprunter"
+    if (ActiveSession.get_session_User().peut_emprunter()):
+        print "1. Emprunter"
+    else:
+        print "1. Emprunter (Non disponible)"
     print "2. Reserver"
     if ActiveSession.est_admin():
         print "3. Modifier"
@@ -263,34 +285,83 @@ def selectionnerJeu(game_id):
         print "5. Ajouter un exemplaire"
     print "0. Retour"
     choix = int(raw_input("Choix: "))
-    if (choix==1):
-        emprunterJeu()
+
+    # L'utilisateur n'a pas d'emprunt en cours 
+    if (choix==1 and ActiveSession.get_session_User().peut_emprunter()):
+        d=ActiveSession.get_session_User()
+        print d.get_username()
+        try:
+            D=EnsEmprunt.Emprunt(User=d,Jeu=selectedGame)
+            raw_input("Le jeu a bien été emprunté. A rendre pour le "+str(D.calcul_date_echeance()))
+        except:
+            raw_input("Oops, une erreur est survenue.")
+        finally:
+            selectionnerJeu(selectedGame.get_Jeu_id())
+
+    # L'Utilisateur a déjà un emprunt en cours 
+    elif(choix==1 and EnsEmprunt.a_un_emprunt_en_cours(ActiveSession.get_session_User())):
+        print "[ERREUR] Vous ne pouvez pas emprunter. Vous avez déjà un emprunt en cours."
+        raw_input("Continuer.")
+        selectionnerJeu(selectedGame.get_Jeu_id())
+    # L'Utilisateur n'est pas adhérent
+    elif(choix==1 and not(ActiveSession.get_session_User().get_abonnementValide())):
+        print "[ERREUR] Vous ne pouvez pas emprunter. Votre abonnement n'est pas valide."
+        raw_input("Continuer.")
+        selectionnerJeu(selectedGame.get_Jeu_id())
+
     if (choix==3 and ActiveSession.est_admin()):
-        modifierJeu()
+        modifierJeu(selectedGame)
     if (choix==4 and ActiveSession.est_admin()):
         supprimerJeu(selectedGame)
     if (choix==5 and ActiveSession.est_admin()):
         ajouterExemplaire(selectedGame)
+    if (choix == 6):
+        rendreEmprunt(selectedGame)
+
     if choix==0:
         listeJeux()
     else:
         listeJeux()
 
-def emprunterJeu():
-    listeJeux()
 
-def modifierJeu():
-    global ActiveSession
-    print ActiveSession.get_id()
-    raw_input("")
-    menu()
+def rendreEmprunt(selectedUser):
+    EnsEmprunt.get_emprunt_en_cours(selectedUser).rendre_Emprunt()
+ 
+
+def modifierJeu(selectedGame):
+    connecte()
+    newNom=raw_input("Nom du jeu ("+str(selectedGame.get_Nom_jeu())+"): ")
+    if newNom != "":
+        selectedGame.set_Nom_jeu(newNom)
+
+    newAnnee=raw_input("Année ("+str(selectedGame.get_Annee())+"): ")
+    if newAnnee != "":
+        selectedGame.set_Annee(newAnnee)
+
+    newEditeur=raw_input("Editeur ("+str(selectedGame.get_Editeur())+"): ")
+    if newEditeur != "":
+        selectedGame.set_Editeur(newEditeur)
+
+    newAgeMin=raw_input("Age Minimum ("+str(selectedGame.get_AgeMini())+"): ")
+    if newAgeMin != "":
+        selectedGame.set_AgeMini(newAgeMin)
+
+    newNbJoueurs=raw_input("Nombre de joueurs ("+str(selectedGame.get_NombreJoueurs())+"): ")
+    if newNbJoueurs != "":
+        selectedGame.set_NombreJoueurs(newNbJoueurs)
+
+    newDescription=raw_input("Description ("+str(selectedGame.get_Description())+"): ")
+    if newDescription != "":
+        selectedGame.set_Description(newDescription)
+        
+    selectionnerJeu(selectedGame.get_Jeu_id())
 
 def supprimerJeu(selectedGame):
     EnsJeux.delete_Jeu(selectedGame)
     listeJeux()
 
 def ajouterExemplaire(selectedGame):
-    NewExemplaire = EnsExemplaires.Exemplaire(Jeu_id=selectedGame.get_Jeu_id())
+    NewExemplaire = EnsExemplaires.Exemplaire(Jeu=selectedGame)
     raw_input("Etes vous sur de vouloir ajouter un nouvel exemplaire pour "+selectedGame.get_Nom_jeu())
     NewExemplaire.save()
     selectionnerJeu(selectedGame.get_Jeu_id())

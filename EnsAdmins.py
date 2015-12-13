@@ -3,6 +3,7 @@ import sqlite3
 
 conn = sqlite3.connect("Ludotheque.db")
 conn.execute('pragma foreign_keys = on')
+conn.execute("PRAGMA busy_timeout = 30000") 
 conn.commit()
 cur = conn.cursor()
 

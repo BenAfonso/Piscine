@@ -7,6 +7,7 @@ import EnsJeux
 import EnsExemplaires
 import EnsAdmins
 import EnsExtensions
+import EnsEmprunt
 
 from Session import Session
 from Connexion import Connexion

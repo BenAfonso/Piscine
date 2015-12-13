@@ -9,6 +9,9 @@ class Session:
 		
 		return EnsAdmins.est_admin(self.User)
 
+	def get_session_User(self):
+		return self.User
+
 	def set_admin(self,admin):
 		self.admin = admin
 

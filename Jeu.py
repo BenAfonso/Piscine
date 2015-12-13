@@ -35,7 +35,6 @@ class Jeu:
         self.Description = Description
         self.Categorie_id = Categorie_id
 
-
 ###### GETTERS ########
     def get_Nom_jeu(self):
         return self.Nom_jeu
@@ -77,16 +76,22 @@ class Jeu:
 ###### SETTERS ########
     def set_Nom_jeu(self,Nom_jeu):
         self.Nom_jeu = Nom_jeu
+        self.save()
     def set_AgeMini(self,AgeMini):
         self.AgeMini = AgeMini
+        self.save()
     def set_Description(self,Description):
         self.Description = Description
+        self.save()
     def set_NombreJoueurs(self,NombreJoueurs):
         self.NombreJoueurs=NombreJoueurs
+        self.save()
     def set_Editeur(self,Editeur):
         self.Editeur = Editeur
+        self.save()
     def set_Annee(self,Annee):
         self.Annee = Annee
+        self.save()
 
 
 

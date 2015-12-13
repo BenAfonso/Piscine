@@ -6,6 +6,7 @@
 
 import EnsUtilisateurs
 import EnsAdmins
+import EnsEmprunt
 
 class Utilisateur:
 
@@ -39,16 +40,22 @@ class Utilisateur:
 ##### SETTERS #####
     def set_username(self, username):
         self.username = username
+        self.save()
     def set_password(self, password):
         self.password = password
+        self.save()
     def set_abonnementValide(self, Nbool):
         self.abonnementValide= Nbool
+        self.save()
     def set_empruntEnCours(self,empruntEnCours):
         self.empruntEnCours = empruntEnCours
+        self.save()
     def set_reservationEnCours(self, reservationEnCours):
         self.reservationEnCours = reservationEnCours
+        self.save()
     def set_nbRetard(self, nbRetard):
         self.nbRetard = nbRetard
+        self.save()
 
 
 ##### FONCTIONS ANNEXES #####
@@ -68,12 +75,17 @@ class Utilisateur:
             EnsAdmins.delete_admin(self)
         EnsUtilisateurs.delete_user(self)
 
+    def peut_emprunter(self):
+        return (not(EnsEmprunt.a_un_emprunt_en_cours(self)) and self.abonnementValide)
+
 
 
 
 
     def save(self):
-
-        EnsUtilisateurs.insert(self)
+        if self.user_id == None:
+            EnsUtilisateurs.insert(self)
+        else:
+            EnsUtilisateurs.update(self)
 
         # SAVE AN USER IN DATABASE

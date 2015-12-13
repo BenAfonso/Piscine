@@ -2,7 +2,7 @@
 import sqlite3
 from datetime import date, datetime
 from Emprunt import Emprunt
-from Utilisateur import Utilisateur
+
 from Jeu import Jeu
 from Exemplaire import Exemplaire
 import EnsUtilisateurs
@@ -49,9 +49,14 @@ def insert_emprunt(Emprunt):
             conn.commit()
 
 def update(Emprunt):
-        cur.execute("""UPDATE EnsEmprunt SET date_rendu=? WHERE Emprunt_id=?""", (Emprunt.get_date_rendu(),Emprunt.get_emprunt_id()))
-        conn.commit()
-        print("Exemplaire modifie avec succes !")
+        try:
+            cur.execute("""UPDATE EnsEmprunt SET date_rendu=? WHERE Emprunt_id=?""", (Emprunt.get_date_rendu(),Emprunt.get_emprunt_id()))
+            conn.commit()
+            print("Emprunt modifie avec succes !")
+        except:
+            print "La modification de l'exemplaire à échouée"
+            raise
+
 
 
 def get_Emprunt (Emprunt_id):
@@ -68,7 +73,6 @@ def get_emprunts_User(User):
 def a_un_emprunt_en_cours(User):
         cur.execute("""SELECT * FROM EnsEmprunt WHERE user_id = ? AND date_rendu IS NULL""",(User.get_user_id(),) )
         res = cur.fetchone()
-        print res
         return res != None
 
 
@@ -76,7 +80,7 @@ def get_emprunt_en_cours(User):
         if a_un_emprunt_en_cours(User):
                 cur.execute("""SELECT * FROM EnsEmprunt WHERE user_id = ? AND date_rendu IS NULL""",(User.get_user_id(),) )
                 res = cur.fetchone()
-                return Emprunt(res)
+                return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5])
         else:
                 return None
 
@@ -99,6 +103,7 @@ def rechercher_date_echeance (Date_echeance):
 def printAll():
         cur.execute("""SELECT * FROM EnsEmprunt""")
         rows = cur.fetchall()
-        return rows
+        for row in rows:
+            print (str(row[0])+" "+str(EnsUtilisateurs.get_user(row[1]).get_username())+" "+str(EnsExemplaires.get_Exemplaire(row[2]).get_Jeu_Exemplaire().get_Nom_jeu())+" Emprunté le: "+str(row[3])+" a rendre le : "+str(row[4])+" rendu le "+str(row[5]))
         #for row in rows:
                 #print('{0} : {1} - {2}'.format(row[0], row[1], row[2]))

@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 import sqlite3
 from Jeu import Jeu
 import EnsCategories
@@ -91,8 +92,14 @@ def rechercher(nom): # RAJOUTER PLUSIEURS RESULTATS :: fetchall()
 
 def update(Jeu):
         """ Fonction permettant d'actualiser les infos d'un jeu dans l'ensemble de Jeux"""
-        # A FAIRE !
-
+        # A FAIRE !(Nom_jeu,Annee,Editeur,AgeMini,NombreJoueurs,Description,Categorie_id)
+        try:
+                cur.execute("""UPDATE EnsJeux SET Nom_jeu=?,Annee=?,Editeur=?,AgeMini=?,NombreJoueurs=?,Description=?,Categorie_id=? WHERE Jeu_id=?""", (Jeu.get_Nom_jeu(),Jeu.get_Annee(),Jeu.get_Editeur(),Jeu.get_AgeMini(),Jeu.get_NombreJoueurs(),Jeu.get_Description(),Jeu.get_Categorie_id(),Jeu.get_Jeu_id()))
+                conn.commit()
+                print "Le jeu a bien été modifié !"
+        except:
+                print "La modification du jeu à échouée"
+                raise
 def printAll():
         cur.execute("""SELECT * FROM EnsJeux""")
         rows = cur.fetchall()

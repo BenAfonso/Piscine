@@ -7,7 +7,7 @@ import EnsExemplaires
 # A MODIFIER:
 # save est une fonction locale à Emprunt et non à EnsEmprunt (Voir Exemplaire/EnsExemplaires)
 import EnsEmprunt
-from Utilisateur import Utilisateur
+
 
 class Emprunt : #Donne les infos concernant un emprunt
 	"""un emprunt est def par :
@@ -18,24 +18,42 @@ class Emprunt : #Donne les infos concernant un emprunt
 		-son statut (en retard ou à l'heure)
 		-sa validité  """
 	# Sa validité ??
-	def __init__(self, Emprunt_id = None,  User=None, Exemplaire=None,date_emprunt=None,date_echeance=None,date_rendu=None):
+	def __init__(self, Emprunt_id = None,  User=None, Jeu=None,Exemplaire=None,date_emprunt=None,date_echeance=None,date_rendu=None):
 
 		self.Emprunt_id = Emprunt_id   		#Id de l'emprunt
 		self.User = User 			#Id de l'adhérent
-		self.Exemplaire = Exemplaire						#Id du jeu emprunté
-		self.date_rendu = date_rendu
-		# PréCondition: Exemplaire Disponible !
-		if date_emprunt == None and self.Exemplaire.get_Est_disponible():
-			self.date_emprunt = date.today()
-			self.date_echeance = self.calcul_Date_Echeance()
-			try:
-				EnsEmprunt.insert_emprunt(self)
-				EnsExemplaires.get_Exemplaire(self.Exemplaire.get_Exemplaire_id()).set_Est_disponible(False)
-			except:
+		
+		if Emprunt_id == None:
+			# Test si l'exemplaire est disponible
+			if EnsExemplaires.get_nombre_exemplaires(Jeu,disponible=1) > 0:
+				self.Exemplaire = EnsExemplaires.get_Exemplaire_dispo(Jeu)
+			else:
+				self.Exemplaire=None
+				print "Oops, ce jeu n'est pas disponible !"
 				raise
+			self.date_rendu = date_rendu
+			# PréCondition: Exemplaire Disponible !
+			if (date_emprunt == None and self.Exemplaire.get_Est_disponible() and not(EnsEmprunt.a_un_emprunt_en_cours(User))):
+				self.date_emprunt = date.today()
+				self.date_echeance = self.calcul_Date_Echeance()
+				try:
+					EnsExemplaires.get_Exemplaire(self.Exemplaire.get_Exemplaire_id()).set_Est_disponible(False)
+					self.save()
+					print "Un emprunt a été créé !"
+				except:
+					print "Oops, impossible d'emprunter, déjà un emprunt en cours ?!"
+					raise
+			else:
+				print "Oops ! Emprunt non valide !"
+				raise
+				self.date_emprunt = date_emprunt
+				self.date_echeance = date_echeance
 		else:
-			self.date_emprunt = date_emprunt
-			self.date_echeance = date_echeance
+			self.Exemplaire=Exemplaire
+			self.date_emprunt=date_emprunt
+			self.date_echeance=date_echeance
+			self.date_rendu=date_rendu
+			
 
 
 
@@ -59,10 +77,11 @@ class Emprunt : #Donne les infos concernant un emprunt
 			EnsEmprunt.update(self)
 			if self.est_rendu():
 				print "Emprunt Rendu !"
-				self.get_Exemplaire_Emprunt().set_Est_disponible(True)
+				self.Exemplaire.set_Est_disponible(True)
 				user = self.get_User_Emprunt()
-				user.set_nbRetard(user.get_nbRetard() + calcul_retard(self))
-				EnsExemplaires.delete_emprunt(self)
+				#nbRetard = self.calcul_retard()
+				#user.set_nbRetard(nbRetard)
+				EnsEmprunt.delete_emprunt(self)
 		except:
 			print "ERREUR"
 
@@ -87,22 +106,17 @@ class Emprunt : #Donne les infos concernant un emprunt
 
 	# Si la date de retour est inférieure: Renvoyer False => A inverser
 	# Mettre sur une seule ligne :: return (date_retour > self.get_date_echeance())
-	def emprunt_En_Retard(self, date_retour):
+	def emprunt_En_Retard(self):
 		""" emprunt_En_Retard: Emprunt x Date -> Bool, True si le retour de l'emprunt dépasse la date d'echeance, False sinon """
 		# Une date est considérée comme inférieure à une autre lorsqu'elle la précède dans le temps. cf doc python > date object
-		if(date_retour <= self.date_echeance:
-			return True
-		else:
-			return False
+		return (self.date_rendu > self.date_echeance)
 
 	def calcul_retard(self):
 		""" calcul_retard : Emprunt -> entier, 0 si emprunt_En_Retard est False, la difference entre date_retour et date_echeance sinon"""
-		date_retour = datetime.today()
-		if emprunt_En_Retard(self, date_retour):
-			
-			jour_de_retard = date_retour - date_echeance
+		if self.emprunt_En_Retard():
+			jour_de_retard = self.date_rendu - self.date_echeance
 			return jour_de_retard.days
-		else :
+		else:
 			return 0
 
 	# ???? Mauvais type pour cette fonction, on en discute demain
@@ -111,3 +125,10 @@ class Emprunt : #Donne les infos concernant un emprunt
 		User = EnsUtilisateurs.get_user(User_id,)
 		return User.empruntEnCours == False
 		""" Il manque le droit d'emprunt dans utilisateurs, que faire si il y a une reservation en cours (conflit de dates)"""
+
+	def display(self):
+		return "= Nom du jeu: "+str(self.Exemplaire.get_Jeu_Exemplaire().get_Nom_jeu())+"\n= Date Emprunt: "+str(self.date_emprunt)+"\n= Echeance: "+str(self.date_echeance)
+	def save(self):
+		if self.Emprunt_id == None:
+			EnsEmprunt.insert_emprunt(self)
+
