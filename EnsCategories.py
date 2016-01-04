@@ -16,7 +16,7 @@ def destroyTable():
         cur.execute("""DROP TABLE EnsCategories""")
         conn.commit()
 
-def ajouterCategorie(nomCategorie):
+def ajouterCategorie(nomCategorie): #ajouter un test estPresent_Categorie: Text x EnsCategorie -> Bool, True la categorie est presente, False sinon
         if nomCategorie != None:
                 cur.execute("""INSERT INTO EnsCategories(Categorie) VALUES (?)""",(nomCategorie,))
                 conn.commit()
@@ -46,6 +46,9 @@ def get_Categorie(Categorie_id=None,Categorie=None):
         else:
                 print "Erreur."
         return result
+
+
+
 
 def printAll():
         cur.execute("""SELECT * FROM EnsCategories""")
