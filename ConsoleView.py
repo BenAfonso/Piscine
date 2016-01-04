@@ -24,11 +24,14 @@ def firstmenu():
     print("===                         GESTION DE LA LUDOTHEQUE                         ===")
     print("================================================================================\n")
     print("1. Se connecter")
-    print("2. Quitter")
+    print("2. Creer un compte")
+    print("0. Quitter")
     Choix = int(raw_input("\nChoix: "))
     if Choix==1:
         connexion()
-    elif Choix==2:
+    if Choix==2:
+        creerCompte()
+    elif Choix==0:
         exit()
     else:
         firstmenu()
@@ -46,7 +49,7 @@ def connexion():
         password = getpass.getpass("Mot de passe: ")
         # Rajoute try
         con = Connexion(login,password)
-        
+
         if con.est_valide():
             newSession(login)
             menu()
@@ -55,7 +58,35 @@ def connexion():
             print "Erreur:: Merci de vous reconnecter"
             raw_input("Press Enter to try again")
             connexion()
-   
+
+# Création de compte pour les nouveaux utilisateurs avec prenom.nom
+def creerCompte():
+    prenom= ""
+    nom=""
+    password=""
+    while (len(prenom) < 3 and len(nom) < 3 and len(password) < 3 and (prenom != "0" or nom != "0")):
+        cls()
+        print "Entrez 0 pour revenir en arrière"
+        prenom = str(raw_input("Prenom: "))
+        nom = str(raw_input("Nom: "))
+        password=str(raw_input("Mot de passe (plus de 4 caractères): "))
+
+    if prenom == 0 or nom == 0:
+        firstmenu()
+    else:
+        username = str(prenom)+"."+str(nom)
+        newUser=EnsUtilisateurs.Utilisateur(username=username,password=password)
+        print("==== NOUVEL UTILISATEUR")
+        print("Nom d'utilisateur: "+username+"\nMot de passe: "+password)
+        valider=raw_input("Appuyez sur Entrer pour valider")
+        if valider=="":
+            try:
+                newUser.save()
+                firstmenu()
+            except:
+                raw_input("Utilisateur déjà existant !")
+                creerCompte()
+
 
 def newSession(login):
     global user
@@ -80,7 +111,7 @@ def connecte():
 def menu():
     connecte()
     print "=========== MENU ==========="
-    
+
     print "1. Afficher liste des jeux"
     if ActiveSession.est_admin():
         print "2. Afficher utilisateurs"
@@ -93,7 +124,7 @@ def menu():
     elif (choix==1):
         listeJeux()
     elif (choix==0):
-        exit() 
+        exit()
     elif (choix==9):
         logoff()
     else:
@@ -127,7 +158,7 @@ def listeUtilisateurs():
         listeUtilisateurs()
 
 def selectionnerUtilisateur(user_id):
-    
+
     selectedUser = EnsUtilisateurs.get_user(user_id=user_id)
     connecte()
     print "===== Utilisateur selectionné ====="
@@ -163,7 +194,7 @@ def selectionnerUtilisateur(user_id):
         selectedUser.set_abonnementValide(True)
         selectionnerUtilisateur(selectedUser.get_user_id())
     if (choix==8):
-        print "En construction..."
+        modifierUtilisateur(selectedUser)
     elif (choix==9):
         selectedUser.delete_user()
         raw_input("Utilisateur supprimé. Appuyez sur Entrer pour continuer.")
@@ -175,7 +206,7 @@ def selectionnerUtilisateur(user_id):
         listeUtilisateurs()
     else:
         selectionnerUtilisateur(selectedUser.get_user_id())
-        
+
 def ajouterUtilisateur():
     connecte()
     # Verifier s'il n'existe pas déjà ???? Dans EnsUtilisiteurs sinon raise error
@@ -190,6 +221,20 @@ def ajouterUtilisateur():
         newUser.save()
         cls()
         listeUtilisateurs()
+
+def modifierUtilisateur(selectedUser):
+    connecte()
+    newUsername=raw_input("Nom d'utilisateur ("+str(selectedUser.get_username())+"): ")
+    if newUsername != "":
+        selectedUser.set_username(newUsername)
+
+    newPass=raw_input("Mot de passe: ("+str(selectedUser.get_password())+"): ")
+    if newPass != "":
+        selectedUser.set_password(newPass)
+
+
+    selectionnerUtilisateur(selectedUser.get_user_id())
+
 
 def listeJeux():
     connecte()
@@ -214,18 +259,18 @@ def listeJeux():
         FoundJeu = EnsJeux.rechercher(key)
         print("========================")
         print("Resultat: "+str(FoundJeu.get_Jeu_id())+" :: "+FoundJeu.get_Nom_jeu())
-        
+
         raw_input("\nPress Enter to go back")
         cls()
         listeJeux()
 
-        
+
     elif (choixUtilisateur==3 and ActiveSession.est_admin()):
         ajouterJeu()
 
     elif choixUtilisateur==0:
         menu()
-    else: 
+    else:
         listeJeux()
 
 
@@ -259,7 +304,7 @@ def ajouterJeu():
         listeJeux()
 
 def selectionnerJeu(game_id):
-    
+
     selectedGame = EnsJeux.get_Jeu(Jeu_id=game_id)
     connecte()
     print "===== JEU ====="
@@ -286,7 +331,7 @@ def selectionnerJeu(game_id):
     print "0. Retour"
     choix = int(raw_input("Choix: "))
 
-    # L'utilisateur n'a pas d'emprunt en cours 
+    # L'utilisateur n'a pas d'emprunt en cours
     if (choix==1 and ActiveSession.get_session_User().peut_emprunter()):
         d=ActiveSession.get_session_User()
         print d.get_username()
@@ -298,7 +343,7 @@ def selectionnerJeu(game_id):
         finally:
             selectionnerJeu(selectedGame.get_Jeu_id())
 
-    # L'Utilisateur a déjà un emprunt en cours 
+    # L'Utilisateur a déjà un emprunt en cours
     elif(choix==1 and EnsEmprunt.a_un_emprunt_en_cours(ActiveSession.get_session_User())):
         print "[ERREUR] Vous ne pouvez pas emprunter. Vous avez déjà un emprunt en cours."
         raw_input("Continuer.")
@@ -326,7 +371,7 @@ def selectionnerJeu(game_id):
 
 def rendreEmprunt(selectedUser):
     EnsEmprunt.get_emprunt_en_cours(selectedUser).rendre_Emprunt()
- 
+
 
 def modifierJeu(selectedGame):
     connecte()
@@ -353,7 +398,7 @@ def modifierJeu(selectedGame):
     newDescription=raw_input("Description ("+str(selectedGame.get_Description())+"): ")
     if newDescription != "":
         selectedGame.set_Description(newDescription)
-        
+
     selectionnerJeu(selectedGame.get_Jeu_id())
 
 def supprimerJeu(selectedGame):
