@@ -40,9 +40,16 @@ def destroyTable():
 # Il faut aussi que la reservation n'ait pas "Terminer == True" à rajouter dans la requête
 def Reservation_EnCours(User) :
 
-	cur.execute(""" SELECT user_id FROM EnsReservation WHERE user_id = ? """, (User.get_user_id(),))
+	cur.execute(""" SELECT * FROM EnsReservation WHERE user_id = ? AND Terminer = False """, (User.get_user_id(),))
 	result=cur.fetchone()
 	return result != None
+
+# Historique de reservation
+def Reservation_Termine(User) :
+    
+    cur.execute(""" SELECT * FROM EnsReservation WHERE user_id = ? AND Terminer = True """, (User.get_user_id(),))
+        result=cur.fetchone()
+        return result != None
 
 # fonction qui prend un user et qui renvoie la reservation (instance)
 def get_Reservation_User(User) : 
@@ -98,7 +105,13 @@ def rechercher_Reservation_User(User):
 	cur.execute("""SELECT * FROM EnsReservation WHERE user_id LIKE ?""",(user_id,))
 	Reservaton_user = cur.fetchall()
 	return Reservaton_user
-	
+
+#  A modifier => Renvoyer des instances d'emprunts dans un tableau
+def rechercher_date_reservation (Date):
+    cur.execute("""SELECT * FROM EnsReservation WHERE date_Reservation = ? """,Date)
+        res = cur.fetchall()
+        return res
+
 def Reservation_to_table(Reservation):
 	# Reservation -> List
 	ReservationTable=(Reservation.get_Reservation_id(),Reservation.get_user_id(),Reservation.get_Jeu_id(),Reservation.get_Exemplaire_id(),Reservation.get_date_Reservation())
