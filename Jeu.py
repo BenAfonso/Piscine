@@ -99,7 +99,6 @@ class Jeu:
     def save(self):
 
         if (self.Jeu_id==None):
-            print("TEST")
             EnsJeux.insert(self)
         else:
             EnsJeux.update(self)
