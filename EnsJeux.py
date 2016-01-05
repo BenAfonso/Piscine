@@ -89,7 +89,8 @@ def insertFromMain(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description=""):
 def rechercher(nom): # RAJOUTER PLUSIEURS RESULTATS :: fetchall()
         cur.execute("""SELECT * FROM EnsJeux WHERE Nom_jeu LIKE ?""",(nom,))
         result = cur.fetchall()
-        return (Jeu(result[0],result[1],result[2],result[3],result[4],result[5],result[6]))
+        # REnvoyer un tableau de jeux comme les extensions
+        return result
 
 def update(Jeu):
         """ Fonction permettant d'actualiser les infos d'un jeu dans l'ensemble de Jeux"""

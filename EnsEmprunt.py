@@ -21,10 +21,12 @@ cur = conn.cursor()
 
 
 def createTable():
+    # Rajouter extension id: Pour les tests, tester si empruntEncours.extension_id = None ou si emprunt.jeu = none
         cur.execute("""CREATE TABLE IF NOT EXISTS EnsEmprunt(
                         emprunt_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                         user_id INTEGER,
                         exemplaire_id INTEGER,
+
                         date_emprunt DATE,
                         date_echeance DATE,
                         date_rendu DATE)""")  #DATE est représenté comme : YYYY-MM-DD

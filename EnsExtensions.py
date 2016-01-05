@@ -71,12 +71,10 @@ def supprimer_Extension(Extension):
 def nombre_extensions_Jeu(Jeu): # A tester apres avoir corriger les bugs de cle primaire et attribut dispo
 	""" nombre_extensions: Jeu -> Entier, renvoie le nomrbe d'extension d'un jeu donné. Le jeu doit être dans EnsJeux"""
 
-	if not(has_jeu(Jeu.get_Nom_jeu())):
-		cur.execute =(""" SELECT COUNT (Extension_id) FROM EnsExtensions WHERE EnsExtensions.Jeu_id = ?""", (Jeu.get_Jeu_id(),))
-		result = cur.fetchone()
-		return result[0]
-	else:
-		print "Impossible de récupérer le nombre d'extensions de ce jeu car il n'est pas dans la base"
+	cur.execute(""" SELECT COUNT(Extension_id) FROM EnsExtensions WHERE Jeu_id = (?)""", (Jeu.get_Jeu_id(),))
+	result = cur.fetchone()
+	return result[0]
+
 
 def nombre_Extensions():
 	""" nombre_extensions: EnsExtensions -> Entier, renvoie le nombre d'extensions en base. """
@@ -88,8 +86,10 @@ def nombre_Extensions():
 def rechercher_Extensions_Jeu(Jeu):  # A tester apres avoir corriger les bugs de cle primaire et attribut dispo
 	""" rechercher_extension: Text -> EnsExtensions, renvoie une ou plusieurs extensions présentes en base
 	correspondant au Jeu donné en paramètre """
+	# Serieux testez vos codes !!...
+	# cur.execute =(""" SELECT Extension_id, Nom_Extension FROM EnsExtensions  WHERE EnsExtensions.Jeu_id = ? ) """, (Jeu.get_Jeu_id(),))
 
-	cur.execute =(""" SELECT Extension_id, Nom_Extension FROM EnsExtensions  WHERE EnsExtensions.Jeu_id = ? ) """, (Jeu.get_Jeu_id(),))
+	cur.execute(""" SELECT * FROM EnsExtensions  WHERE Jeu_id = ? """, (Jeu.get_Jeu_id(),))
 	all_Extensions = cur.fetchall()
 	return all_Extensions
 
@@ -117,8 +117,7 @@ def get_Extension_Jeu(Jeu):
 	i=0
 	for ext in res:
 		ext = Extension(ext[0],ext[1],ext[2],ext[3])
-		#resultat.push(ext)
-		#i=i+1
+		resultat.append(ext)
 	return resultat
 
 

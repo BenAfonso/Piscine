@@ -6,6 +6,7 @@ import EnsUtilisateurs
 import EnsJeux
 #from Exemplaire import Exemplaire
 import EnsExemplaires
+import EnsExtensions
 from Session import Session
 from Connexion import Connexion
 import EnsEmprunt
@@ -145,6 +146,7 @@ def listeUtilisateurs():
     print "================================"
     print "\n1. Selectionner un utilisateur"
     print "2. Ajouter un utilisateur"
+    print "3. Re-initialiser tous les abonnements"
     print "0. Retour au menu"
     choixUtilisateur=int(raw_input("Choix: "))
     if choixUtilisateur==1:
@@ -152,6 +154,16 @@ def listeUtilisateurs():
         selectionnerUtilisateur(user_id)
     elif choixUtilisateur==2:
         ajouterUtilisateur()
+    elif choixUtilisateur==3:
+        confirm = str(raw_input("Etes vous surs de vouloir réinitialiser les abonnements de TOUS les utilisateurs ? (OK pour valider / 0 pour quitter)  :  "))
+        if confirm == "OK":
+            try:
+                EnsUtilisateurs.reinitAbonnements()
+                listeUtilisateurs()
+            except:
+                print "Oops ! Grosseu mistake"
+        else:
+            listeUtilisateurs()
     elif choixUtilisateur == 0:
         menu()
     else:
@@ -163,7 +175,7 @@ def selectionnerUtilisateur(user_id):
     connecte()
     print "===== Utilisateur selectionné ====="
     print "ID: "+str(selectedUser.get_user_id())
-    print "Nom d'utilisateur: "+selectedUser.get_username()
+    print "Nom d'utilisateur: "+str(selectedUser.get_username())
     if EnsAdmins.est_admin(selectedUser):
         status="Admin"
     else:
@@ -258,7 +270,9 @@ def listeJeux():
         key="%%%%%%%%%%%%%%%%%%%%%%%%"+str(raw_input("Rechercher un jeu (par nom): "))+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
         FoundJeu = EnsJeux.rechercher(key)
         print("========================")
-        print("Resultat: "+str(FoundJeu.get_Jeu_id())+" :: "+FoundJeu.get_Nom_jeu())
+        print("Resultat: ")
+        for Jeu in FoundJeu:
+            print str(Jeu[0])+" :: "+str(Jeu[1])
 
         raw_input("\nPress Enter to go back")
         cls()
@@ -319,20 +333,25 @@ def selectionnerJeu(game_id):
     print "Nombre d'exemplaires disponibles: "+str(selectedGame.get_nombre_exemplaires_dispo())
     print "==============="
     print "\n"
+    print "1. Afficher les extensions ("+str(EnsExtensions.nombre_extensions_Jeu(selectedGame))+")"
     if (ActiveSession.get_session_User().peut_emprunter()):
-        print "1. Emprunter"
+        print "2. Emprunter"
     else:
-        print "1. Emprunter (Non disponible)"
-    print "2. Reserver"
+        print "2. Emprunter (Non disponible)"
+    print "3. Reserver"
     if ActiveSession.est_admin():
-        print "3. Modifier"
-        print "4. Supprimer"
-        print "5. Ajouter un exemplaire"
+        print "4. Modifier"
+        print "5. Supprimer"
+        print "6. Ajouter un exemplaire"
     print "0. Retour"
     choix = int(raw_input("Choix: "))
 
+    # Selection de la liste des extensions
+    if choix==1:
+        listeExtensions(selectedGame)
+
     # L'utilisateur n'a pas d'emprunt en cours
-    if (choix==1 and ActiveSession.get_session_User().peut_emprunter()):
+    if (choix==2 and ActiveSession.get_session_User().peut_emprunter()):
         d=ActiveSession.get_session_User()
         print d.get_username()
         try:
@@ -344,24 +363,23 @@ def selectionnerJeu(game_id):
             selectionnerJeu(selectedGame.get_Jeu_id())
 
     # L'Utilisateur a déjà un emprunt en cours
-    elif(choix==1 and EnsEmprunt.a_un_emprunt_en_cours(ActiveSession.get_session_User())):
+    elif(choix==2 and EnsEmprunt.a_un_emprunt_en_cours(ActiveSession.get_session_User())):
         print "[ERREUR] Vous ne pouvez pas emprunter. Vous avez déjà un emprunt en cours."
         raw_input("Continuer.")
         selectionnerJeu(selectedGame.get_Jeu_id())
     # L'Utilisateur n'est pas adhérent
-    elif(choix==1 and not(ActiveSession.get_session_User().get_abonnementValide())):
+    elif(choix==2 and not(ActiveSession.get_session_User().get_abonnementValide())):
         print "[ERREUR] Vous ne pouvez pas emprunter. Votre abonnement n'est pas valide."
         raw_input("Continuer.")
         selectionnerJeu(selectedGame.get_Jeu_id())
 
-    if (choix==3 and ActiveSession.est_admin()):
-        modifierJeu(selectedGame)
     if (choix==4 and ActiveSession.est_admin()):
-        supprimerJeu(selectedGame)
+        modifierJeu(selectedGame)
     if (choix==5 and ActiveSession.est_admin()):
+        supprimerJeu(selectedGame)
+    if (choix==6 and ActiveSession.est_admin()):
         ajouterExemplaire(selectedGame)
-    if (choix == 6):
-        rendreEmprunt(selectedGame)
+
 
     if choix==0:
         listeJeux()
@@ -410,3 +428,24 @@ def ajouterExemplaire(selectedGame):
     raw_input("Etes vous sur de vouloir ajouter un nouvel exemplaire pour "+selectedGame.get_Nom_jeu())
     NewExemplaire.save()
     selectionnerJeu(selectedGame.get_Jeu_id())
+
+def listeExtensions(selectedGame):
+        connecte()
+        print "====== LISTE DES EXTENSIONS ======"
+        print "Jeu: "+selectedGame.get_Nom_jeu()
+        rows=EnsExtensions.rechercher_Extensions_Jeu(selectedGame)
+        print("ID |      Extension           | Dispo  |")
+        print("-----------------------------")
+        for row in rows:
+            print('{0} | {1} | {2} '.format(row[0], row[2], row[3]))
+        print "============================"
+        # MENU #
+        # A COMPLETER #
+
+        print "0. Retour au menu"
+        choixUtilisateur=int(raw_input("Choix: "))
+
+        if choixUtilisateur==0:
+            menu()
+        else:
+            listeExtensions(selectedGame)

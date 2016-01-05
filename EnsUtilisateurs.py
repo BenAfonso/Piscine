@@ -50,7 +50,16 @@ def get_user(user_id=None,username=None):
         except:
                 print "ID non valide"
 
-
+def reinitAbonnements():
+    # Reinitialise les abonnements de TOUS les utilisateurs
+        cur.execute("""SELECT user_id FROM EnsUtilisateurs""")
+        res1=cur.fetchall()
+        Users = []
+        for id in res1:
+            Users.append(get_user(id[0]))
+        for user in Users:
+            if (user.get_abonnementValide()):
+                user.set_abonnementValide(False)
 
 def delete_user(User):
         try:

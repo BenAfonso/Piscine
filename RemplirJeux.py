@@ -26,4 +26,3 @@ def remplirExtensions():
                 EnsExtensions.Extension(Jeu_id=id,Nom_Extension=ext).save_Extension()
             except:
                 raise
-remplirExtensions()
