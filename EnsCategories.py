@@ -1,3 +1,4 @@
+#-*-coding: utf-8 -*-
 import sqlite3
 
 conn = sqlite3.connect("Ludotheque.db")
@@ -16,6 +17,14 @@ def destroyTable():
         cur.execute("""DROP TABLE EnsCategories""")
         conn.commit()
 
+def rechercherCategorie(categorie):
+    """ Renvoie la catégorie associée à la chaine de caractère prise en paramètre"""
+
+    categorie = "%%%%%%%%%"+categorie+"%%%%%%%%"
+    cur.execute("""SELECT Categorie FROM EnsCategories WHERE Categorie LIKE ?""",(categorie,))
+    result = cur.fetchone()
+    return result[0]
+
 def ajouterCategorie(nomCategorie): #ajouter un test estPresent_Categorie: Text x EnsCategorie -> Bool, True la categorie est presente, False sinon
         if nomCategorie != None:
                 cur.execute("""INSERT INTO EnsCategories(Categorie) VALUES (?)""",(nomCategorie,))
@@ -30,13 +39,14 @@ def supprimerCategorie(Categorie_id):
         except:
                 print "Erreur lors de la suppression !"
 
-def categorieExiste(Categorie_id):
+def categorieExiste(Categorie):
         cur.execute("""SELECT * FROM EnsCategories WHERE Categorie_id = ?""", (Categorie_id,))
         result = cur.fetchone()
         return result != None
 
 
 def get_Categorie(Categorie_id=None,Categorie=None):
+        """ Renvoie la categorie par ID ou Nom exact de la catégorie """
         if Categorie_id != None and Categorie == None:
                 cur.execute("""SELECT * FROM EnsCategories WHERE Categorie_id = ?""", (Categorie_id,))
                 result = cur.fetchone()

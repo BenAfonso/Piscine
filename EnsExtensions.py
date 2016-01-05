@@ -1,10 +1,11 @@
 #-*-coding: utf-8 -*-
-from Extension import Extension 
+from Extension import Extension
 import EnsJeux
 import sqlite3
 
 conn = sqlite3.connect("Ludotheque.db")
 conn.execute('pragma foreign_keys = on')
+conn.text_factory = str
 conn.commit()
 cur = conn.cursor()
 
@@ -21,13 +22,13 @@ def create_table_Extension():
 
 def destroy_table_Extension():
 	cur.execute(""" DROP TABLE EnsExtensions """)
-	cur.commit()
+	conn.commit()
 
 
 def get_Extension(Extension_id=None,Nom_Extension=None):
         if (Extension_id!=None): cur.execute("""SELECT * FROM EnsExtensions WHERE Extension_id = ?""",(Extension_id,))
         if (Nom_Extension!=None): cur.execute("""SELECT * FROM EnsExtensions WHERE Nom_Extension = ?""",(Nom_Extension,))
-        try:     
+        try:
                 result=cur.fetchone()
                 return Extension(result[0],result[1],result[2],result[3])
         except:
@@ -100,12 +101,27 @@ def est_Disponible_Extension(Extension): # A debugger: retourne un entier au lie
 
 	return disponibility[0]
 
+# ????
 def afficher_Extensions():
 	""" affiche les extensions de la table EnsExtensions """
 
 	cur.execute(""" SELECT Extension_id FROM EnsExtensions""")
 	res = cur.fetchall
 	return res
+
+# A REVOIR =
+def get_Extension_Jeu(Jeu):
+	cur.execute("""SELECT * FROM EnsExtensions WHERE Jeu_id = ?""",(Jeu.get_Jeu_id(),))
+	res = cur.fetchall()
+	resultat = []
+	i=0
+	for ext in res:
+		ext = Extension(ext[0],ext[1],ext[2],ext[3])
+		#resultat.push(ext)
+		#i=i+1
+	return resultat
+
+
 
 def update_Extension(Extension):
 	""" update_Extension: Extension -> Extension, modifie les informations d'une extension donnée """
@@ -115,3 +131,7 @@ def update_Extension(Extension):
 	else:
 		print "L'extension à modifier n'existe pas."
 
+def printAll():
+        cur.execute("""SELECT * FROM EnsExtensions""")
+        rows = cur.fetchall()
+        return rows

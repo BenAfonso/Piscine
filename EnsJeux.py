@@ -6,6 +6,7 @@ import EnsCategories
 
 conn = sqlite3.connect("Ludotheque.db")
 conn.execute('pragma foreign_keys = on')
+conn.text_factory = str
 conn.commit()
 cur = conn.cursor()
 def createTable():
@@ -77,18 +78,18 @@ def insertFromMain(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description=""):
         #Jeu x EnsJeux => EnsJeux
         >>>EnsJeux.insert(Type Jeu)"""
         try:
-                cur.execute("""INSERT INTO EnsJeux(Nom_jeu,Annee,Editeur,AgeMini,NombreJoueurs,Description,Categorie_id) VALUES (?, ?, ?, ?, ?, ?, ?)""",(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description,Categorie_id,))
+                cur.execute("""INSERT INTO EnsJeux(Nom_jeu,Annee,Editeur,AgeMini,NombreJoueurs,Description) VALUES (?, ?, ?, ?, ?, ?)""",(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description,))
                 conn.commit()
         except:
-                print(Nom,Annee,Editeur,AgeMini,NombreJoueurs)
+                raise
 ##########################################################################
 
 
 
 def rechercher(nom): # RAJOUTER PLUSIEURS RESULTATS :: fetchall()
         cur.execute("""SELECT * FROM EnsJeux WHERE Nom_jeu LIKE ?""",(nom,))
-        rows = cur.fetchall()
-        return rows
+        result = cur.fetchall()
+        return (Jeu(result[0],result[1],result[2],result[3],result[4],result[5],result[6]))
 
 def update(Jeu):
         """ Fonction permettant d'actualiser les infos d'un jeu dans l'ensemble de Jeux"""
