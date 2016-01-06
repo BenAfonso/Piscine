@@ -202,7 +202,7 @@ class JeuxView(QWidget):
 	# JEU VIEW ? OU POPUP.
         self.close()
         self.parent().setCentralWidget(Jeu)
-
+        self.parent().resize(300,300)
         #self.parent().setCentralWidget(JeuV)
         # Changer vue vers 1 Seul jeu et sa fiche !
 
