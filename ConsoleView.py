@@ -467,3 +467,7 @@ def listeExtensions(selectedGame):
             menu()
         else:
             listeExtensions(selectedGame)
+
+
+################ LANCEMENT DU PROGRAMME ##################
+#ConsoleView.firstmenu()
