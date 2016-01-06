@@ -7,9 +7,9 @@ from Connexion import Connexion
 from Session import Session
 import EnsAdmins
 
-class ConnexionView(QtGui.QWidget):
+class ConnexionWidget(QtGui.QWidget):
 	def __init__(self):
-		super(ConnexionView, self).__init__()
+		super(ConnexionWidget, self).__init__()
 		self.usernameText = None
 		self.passwordText = None
 		self.state=False
@@ -36,7 +36,7 @@ class ConnexionView(QtGui.QWidget):
 		self.grid.addWidget(password,3,1,1,2)
 		self.grid.addWidget(self.passwordText,4,1,1,2)
 		self.grid.addWidget(ok,5,2)
-
+		
 		self.setLayout(self.grid)
 
 		self.setGeometry(250,70,200,40)
@@ -56,7 +56,8 @@ class ConnexionView(QtGui.QWidget):
 			user = EnsUtilisateurs.get_user(username=username)
 			self.ActiveSession = Session(user)
 			self.state = True
-			self.close()
+
+			self.parent().connected()
 
 		else:
 			QtGui.QMessageBox.warning(self, 		# Création d'une message box d'avertissement (ECHEC)

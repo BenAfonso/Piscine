@@ -14,7 +14,8 @@ def connexion(args):
     connexionView=ConnexionView() # Affichage de la fenêtre de connexion
     connexionView.show()
     r=app.exec_()
-    return connexionView.state
+    if connexionView.state:
+        return connexionView.ActiveSession
 
 
 def main(args):
@@ -25,7 +26,7 @@ def main(args):
 
     MainWindow2=MainWindow()
     MainWindow2.show()
-    
+
 
     r=mainApp.exec_()
     return r
@@ -33,6 +34,6 @@ def main(args):
 
 if __name__=="__main__":
     main(sys.argv)
-    #valide=connexion(sys.argv)
-    if valide: # Si la connexion est valide on affiche la suite
-        main(sys.argv)
+    #session=connexion(sys.argv)
+    #if session: # Si la connexion est valide on affiche la suite
+    #    main(session,sys.argv)

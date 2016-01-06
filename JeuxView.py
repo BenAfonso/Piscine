@@ -15,11 +15,11 @@ class JeuxView(QWidget):
 
         self.Table = QTableWidget()
         # Conteneur Vertical
-        VLayout = QVBoxLayout() 
+        VLayout = QVBoxLayout()
         # Element 1 du Conteneur Vertical : Label
 
 
-        VLayout.addWidget(QLabel("Jeux")) 
+        VLayout.addWidget(QLabel("Jeux"))
 
         # Layout de recherche
         RechercheLayout = QHBoxLayout()
@@ -33,25 +33,25 @@ class JeuxView(QWidget):
         # Ajout des widgets au layout de recherche
         RechercheLayout.addWidget(self.RechercheText)
         RechercheLayout.addWidget(RechercheButton)
-        
 
-        
+
+
 
         # Ajout du layout de recherche au layout principal
         VLayout.addLayout(RechercheLayout)
 
         # Connexion:
-        
+
         VLayout.addWidget(self.Table)
         # Conteneur Horizontal pour boutons
-        Buttons = QHBoxLayout() 
+        Buttons = QHBoxLayout()
         # Ajout d'un bouton (2)
         AddJeu = QPushButton("Ajouter un jeu")
-        Buttons.addWidget(AddJeu) 
+        Buttons.addWidget(AddJeu)
         #  Ajout du conteneur horizontal au conteneur principal (vertical)
-        VLayout.addLayout(Buttons) 
+        VLayout.addLayout(Buttons)
         # On affecte le layout vertical au widget
-        self.setLayout(VLayout) 
+        self.setLayout(VLayout)
         #  On change le widget central !
         AddJeu.clicked.connect(self.AddJeu)
 
@@ -77,7 +77,7 @@ class JeuxView(QWidget):
         self.Table.horizontalHeader().setStretchLastSection(True)
 
         self.Table.cellDoubleClicked.connect(self.selectedgame)
-        
+
 
     def resizeEvent(self, event):
         selfsz = event.size().width()
@@ -88,13 +88,13 @@ class JeuxView(QWidget):
         self.Table.updateGeometry()
         self.Table.showMaximized()
         self.Table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        
+
 
         #self.resizeColumnsToContents()
         #self.resizeRowsToContents()
-        
 
-    # Fonction permettant de modifier le contenu de l'affichage en fonction d'une recherche   
+
+    # Fonction permettant de modifier le contenu de l'affichage en fonction d'une recherche
     def searchmydata(self,keyword):
         ligne = 0
         randomChars="%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
@@ -131,7 +131,7 @@ class JeuxView(QWidget):
         for i, taille in enumerate(self.Table.hedprops):
             self.Table.horizontalHeader().resizeSection(i, taille)
 
-    def AddJeu(self): # Popup pour ajouter un jeu 
+    def AddJeu(self): # Popup pour ajouter un jeu
 
         self.AddJeuP = QDialog()
         NomJeu = QLabel("Nom du jeu")
@@ -140,7 +140,7 @@ class JeuxView(QWidget):
         Editeur = QLabel("Editeur")
         self.EditeurText = QLineEdit()
 
-        
+
         Annee = QLabel(u"Année")
         self.AnneeText = QLineEdit()
 
@@ -170,8 +170,8 @@ class JeuxView(QWidget):
         self.AddJeuP.setLayout(Layout)
         self.SubmitButton.clicked.connect(self.creerJeu)
         self.AddJeuP.exec_()
-        
-        
+
+
 
     def creerJeu(self):
         Nom_jeu=str(self.NomJeuText.text())
@@ -183,7 +183,7 @@ class JeuxView(QWidget):
             EnsJeux.Jeu(Nom_jeu=Nom_jeu,Editeur=Editeur,Annee=Annee,AgeMini=AgeMini,NombreJoueurs=NombreJoueurs).save()
             print "Jeu ajouté !"
             self.AddJeuP.close()
-        except: 
+        except:
             print "ERREUR!"
         # AJOUTER Categorie
 
@@ -195,8 +195,8 @@ class JeuxView(QWidget):
         print "col=",col
         item = self.Table.item(row,0).text()
         print "item=",item
-        selection = QMessageBox.information(self,  
-        self.trUtf8("Selection"), 
+        selection = QMessageBox.information(self,
+        self.trUtf8("Selection"),
         self.trUtf8("Vous avez séléctionné le jeu: \nID: "+item+" \nNom du jeu: "+self.Table.item(row,1).text()))
 	Jeu = JeuView(item=item)
 	# JEU VIEW ? OU POPUP.
@@ -208,10 +208,3 @@ class JeuxView(QWidget):
 
     def rechercheJeu(self):
         self.searchmydata(str(self.RechercheText.text()))
-
-
-
-
-
-
-
