@@ -86,10 +86,19 @@ def insertFromMain(Nom,Annee,Editeur,AgeMini,NombreJoueurs,Description=""):
 
 
 
-def rechercher(nom): # RAJOUTER PLUSIEURS RESULTATS :: fetchall()
-        cur.execute("""SELECT * FROM EnsJeux WHERE Nom_jeu LIKE ?""",(nom,))
-        result = cur.fetchall()
-        # REnvoyer un tableau de jeux comme les extensions
+def rechercher(nom=None,categorie=None,editeur=None):
+        if nom != None:
+            cur.execute("""SELECT * FROM EnsJeux WHERE Nom_jeu LIKE ?""",(nom,))
+            result = cur.fetchall()
+        elif categorie != None:
+            cat = EnsCategories.rechercherCategorie(categorie)
+            cur.execute("""SELECT * FROM EnsJeux WHERE Categorie_id LIKE ?""",(cat,))
+            result = cur.fetchall()
+        elif editeur != None:
+            cur.execute("""SELECT * FROM EnsJeux WHERE Editeur LIKE ?""",(editeur,))
+            result = cur.fetchall()
+        else:
+            raise
         return result
 
 def update(Jeu):

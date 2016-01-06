@@ -87,7 +87,7 @@ def rechercher_Extensions_Jeu(Jeu):  # A tester apres avoir corriger les bugs de
 	""" rechercher_extension: Text -> EnsExtensions, renvoie une ou plusieurs extensions présentes en base
 	correspondant au Jeu donné en paramètre """
 	# Serieux testez vos codes !!...
-	# cur.execute =(""" SELECT Extension_id, Nom_Extension FROM EnsExtensions  WHERE EnsExtensions.Jeu_id = ? ) """, (Jeu.get_Jeu_id(),))
+	#cur.execute =(""" SELECT Extension_id, Nom_Extension FROM EnsExtensions  WHERE EnsExtensions.Jeu_id = ? ) """, (Jeu.get_Jeu_id(),))
 
 	cur.execute(""" SELECT * FROM EnsExtensions  WHERE Jeu_id = ? """, (Jeu.get_Jeu_id(),))
 	all_Extensions = cur.fetchall()

@@ -266,17 +266,9 @@ def listeJeux():
     if choixUtilisateur==1:
         game_id=int(raw_input("\nID du jeu: "))
         selectionnerJeu(game_id)
+        # RECHERCHE PAR NOM UNIQUEMENT
     elif choixUtilisateur==2:
-        key="%%%%%%%%%%%%%%%%%%%%%%%%"+str(raw_input("Rechercher un jeu (par nom): "))+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-        FoundJeu = EnsJeux.rechercher(key)
-        print("========================")
-        print("Resultat: ")
-        for Jeu in FoundJeu:
-            print str(Jeu[0])+" :: "+str(Jeu[1])
-
-        raw_input("\nPress Enter to go back")
-        cls()
-        listeJeux()
+        Rechercher()
 
 
     elif (choixUtilisateur==3 and ActiveSession.est_admin()):
@@ -288,7 +280,33 @@ def listeJeux():
         listeJeux()
 
 
+def Rechercher():
+        connecte()
+        print "==== RECHERCHER UN JEU ===="
+        print "1. Par nom"
+        print "2. Par catégorie"
+        print "3. Par Editeur"
+        choix = int(raw_input("Choix: "))
+        if choix == 1:
+            key="%%%%%%%%%%%%%%%%%%%%%%%%"+str(raw_input("Rechercher un jeu (par nom): "))+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+            FoundJeu = EnsJeux.rechercher(nom=key)
+        elif choix == 2:
+            key="%%%%%%%%%%%%%%%%%%%%%%%%"+str(raw_input("Rechercher un jeu (par catégorie): "))+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+            FoundJeu = EnsJeux.rechercher(categorie=key)
+        elif choix == 3:
+            key="%%%%%%%%%%%%%%%%%%%%%%%%"+str(raw_input("Rechercher un jeu (par editeur): "))+"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+            FoundJeu = EnsJeux.rechercher(editeur=key)
+        else:
+            Rechercher()
 
+        print("========================")
+        print("Resultat: ")
+        for Jeu in FoundJeu:
+            print str(Jeu[0])+" :: "+str(Jeu[1])
+
+        raw_input("\nPress Enter to go back")
+        cls()
+        listeJeux()
 def ajouterJeu():
     connecte()
     print "AJOUT D'UN JEU: "
