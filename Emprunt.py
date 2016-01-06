@@ -1,3 +1,4 @@
+
 #-*- coding:utf-8-*-
 from datetime import date
 from datetime import timedelta
@@ -22,7 +23,7 @@ class Emprunt : #Donne les infos concernant un emprunt
 
 		self.Emprunt_id = Emprunt_id   		#Id de l'emprunt
 		self.User = User 			#Id de l'adhérent
-		
+
 		if Emprunt_id == None:
 			# Test si l'exemplaire est disponible
 			if EnsExemplaires.get_nombre_exemplaires(Jeu,disponible=1) > 0:
@@ -53,7 +54,7 @@ class Emprunt : #Donne les infos concernant un emprunt
 			self.date_emprunt=date_emprunt
 			self.date_echeance=date_echeance
 			self.date_rendu=date_rendu
-			
+
 
 
 
@@ -131,4 +132,3 @@ class Emprunt : #Donne les infos concernant un emprunt
 	def save(self):
 		if self.Emprunt_id == None:
 			EnsEmprunt.insert_emprunt(self)
-

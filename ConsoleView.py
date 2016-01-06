@@ -387,7 +387,7 @@ def selectionnerJeu(game_id):
         selectionnerJeu(selectedGame.get_Jeu_id())
     # L'Utilisateur n'est pas adhérent
     elif(choix==2 and not(ActiveSession.get_session_User().get_abonnementValide())):
-        print "[ERREUR] Vous ne pouvez pas emprunter. Votre abonnement n'est pas valide."
+        print "[ERREUR] "
         raw_input("Continuer.")
         selectionnerJeu(selectedGame.get_Jeu_id())
 

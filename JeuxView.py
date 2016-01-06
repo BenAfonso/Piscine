@@ -198,7 +198,7 @@ class JeuxView(QWidget):
         selection = QMessageBox.information(self,
         self.trUtf8("Selection"),
         self.trUtf8("Vous avez séléctionné le jeu: \nID: "+item+" \nNom du jeu: "+self.Table.item(row,1).text()))
-	Jeu = JeuView(item=item)
+	Jeu = JeuView(item=item,session=self.parent().session)
 	# JEU VIEW ? OU POPUP.
         self.close()
         self.parent().setCentralWidget(Jeu)
