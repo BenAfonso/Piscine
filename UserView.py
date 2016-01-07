@@ -231,6 +231,7 @@ class UserView(QWidget):
     def refresh(self):
         refresh = UserView(item=self.item,session=self.session)
         self.parent().setCentralWidget(refresh)
+
     def supprimer(self):
         reply = QMessageBox.question(self, 'Confirmation',
         "Etes vous sur de vouloir supprimer l'utilisateur "+str(self.selectedUser.get_username()), QMessageBox.Yes |
@@ -241,7 +242,7 @@ class UserView(QWidget):
             "L'utilisateur a bien ete supprime !",
             QMessageBox.Ok, QMessageBox.NoButton,
             QMessageBox.NoButton)
-            self.parent().parent().setCentralWidget(user)
+            self.parent().parent().user()
 
     def promote(self):
         # L'utilisateur est admin ? Retrograder !

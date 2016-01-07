@@ -179,12 +179,20 @@ class JeuxView(QWidget):
         Annee=str(self.AnneeText.text())
         NombreJoueurs=str(self.NombreJoueursText.text())
         AgeMini=str(self.AgeMiniText.text())
-        try:
+        if Nom_jeu != "":
             EnsJeux.Jeu(Nom_jeu=Nom_jeu,Editeur=Editeur,Annee=Annee,AgeMini=AgeMini,NombreJoueurs=NombreJoueurs).save()
-            print "Jeu ajouté !"
+            QMessageBox.information(self, u"Voilà !",
+            u"Le jeu a été ajouté avec succès !",
+            QMessageBox.Ok, QMessageBox.NoButton,
+            QMessageBox.NoButton)
             self.AddJeuP.close()
-        except:
-            print "ERREUR!"
+            self.parent().parent().jeux()
+        else:
+            QMessageBox.critical(self, "ERREUR !",
+            "Erreur lors de l'ajout du jeu.",
+            QMessageBox.Ok, QMessageBox.NoButton,
+            QMessageBox.NoButton)
+            self.AddJeuP.close()
         # AJOUTER Categorie
 
 

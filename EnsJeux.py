@@ -43,6 +43,8 @@ def delete_Jeu(Jeu):
         try:
                 cur.execute("""DELETE FROM EnsJeux WHERE Jeu_id = ?""",(Jeu.get_Jeu_id(),))
                 conn.commit()
+                cur.execute("""DELETE FROM EnsExemplaires WHERE Jeu_id = ?""",(Jeu.get_Jeu_id(),))
+                conn.commit()
         except:
                 print "Erreur lors de la suppression !"
 

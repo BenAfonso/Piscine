@@ -3,6 +3,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import EnsJeux
 import EnsEmprunt
+import EnsExemplaires
 import sys
 
 
@@ -109,10 +110,10 @@ class JeuView(QWidget):
 
 
 
-        Extensions = QPushButton("Afficher Extensions")
+        Extensions = QPushButton("Afficher Extensions+")
         Emprunter = QPushButton("Emprunter")
         Reserver = QPushButton("Reserver (Non Disponible)")
-        Modifier = QPushButton("Modifier")
+        Modifier = QPushButton("Modifier+")
         Supprimer = QPushButton("Supprimer")
         ajouterExemplaire = QPushButton("Ajouter Exemplaire")
 
@@ -128,7 +129,10 @@ class JeuView(QWidget):
 
 
         self.User = self.session.get_session_User()
+
         Emprunter.clicked.connect(self.emprunter)
+        ajouterExemplaire.clicked.connect(self.ajouterExemplaire)
+        Supprimer.clicked.connect(self.supprimer)
 
         # ESPACEMENT
         spacer = QWidget()
@@ -172,3 +176,33 @@ class JeuView(QWidget):
             "Oops ! Il semblerait que votre abonnement n'est pas valide.",
             QMessageBox.Cancel, QMessageBox.NoButton,
             QMessageBox.NoButton)
+
+    def supprimer(self):
+        reply = QMessageBox.question(self, 'Confirmation',
+        u"Êtes vous sur de vouloir supprimer le jeu "+str(self.selectedGame.get_Nom_jeu()), QMessageBox.Yes |
+        QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            EnsJeux.delete_Jeu(self.selectedGame)
+            QMessageBox.information(self, "Fait !",
+            "Le jeu a bien ete supprime !",
+            QMessageBox.Ok, QMessageBox.NoButton,
+            QMessageBox.NoButton)
+            self.parent().jeux()
+
+    def refresh(self):
+        refresh = JeuView(item=self.item,session=self.session)
+        self.parent().setCentralWidget(refresh)
+
+
+    def ajouterExemplaire(self):
+        NewExemplaire = EnsExemplaires.Exemplaire(Jeu=self.selectedGame)
+        reply = QMessageBox.question(self, 'Confirmation',
+        u"Êtes vous sur de vouloir ajouter un exeplaire pour le jeu "+str(self.selectedGame.get_Nom_jeu()), QMessageBox.Yes |
+        QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            NewExemplaire.save()
+            QMessageBox.information(self, "Fait !",
+            u"Un exemplaire a bien été ajouté !",
+            QMessageBox.Ok, QMessageBox.NoButton,
+            QMessageBox.NoButton)
+            self.refresh()
