@@ -8,6 +8,7 @@ from Session import Session
 from ConnexionWidget import ConnexionWidget
 from Utilisateur import Utilisateur
 from functools import partial
+from EmpruntsView import EmpruntsView
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -48,7 +49,7 @@ class MainWindow(QMainWindow):
         # Affichage de ce bouton seulement pour les admins
         if EST_ADMIN:
             self.toolbar.addAction(QIcon('img/user.png'),'Utilisateurs',self.user)
-
+            self.toolbar.addAction("Emprunts",self.emprunts)
         # Séparation pour avoir les widgets à droite
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -138,6 +139,10 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(widget)
         AddUser.clicked.connect(self.Users.AddUser)
 
+
+    def emprunts(self):
+        Emprunts=EmpruntsView()
+        self.setCentralWidget(Emprunts)
 
     def jeux(self): # WIDGET JEUX
 

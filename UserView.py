@@ -242,7 +242,7 @@ class UserView(QWidget):
             "L'utilisateur a bien ete supprime !",
             QMessageBox.Ok, QMessageBox.NoButton,
             QMessageBox.NoButton)
-            self.parent().parent().user()
+            self.parent().user()
 
     def promote(self):
         # L'utilisateur est admin ? Retrograder !

@@ -43,6 +43,10 @@ def delete_emprunt(Emprunt):
         cur.execute("""DELETE FROM EnsEmprunt WHERE emprunt_id = ?""",(Emprunt.get_emprunt_id(),))
         conn.commit()
 
+def get_nombre_emprunts():
+        cur.execute("""SELECT COUNT(Emprunt_id) FROM EnsEmprunt""")
+        return cur.fetchone()[0]
+
 def insert_emprunt(Emprunt):
         if Emprunt.get_Exemplaire_Emprunt() == None:
             print "Oops. Vous voulez inserer quelque chose de vide !"
@@ -105,7 +109,8 @@ def rechercher_date_echeance (Date_echeance):
 def printAll():
         cur.execute("""SELECT * FROM EnsEmprunt""")
         rows = cur.fetchall()
-        for row in rows:
-            print (str(row[0])+" "+str(EnsUtilisateurs.get_user(row[1]).get_username())+" "+str(EnsExemplaires.get_Exemplaire(row[2]).get_Jeu_Exemplaire().get_Nom_jeu())+" Emprunté le: "+str(row[3])+" a rendre le : "+str(row[4])+" rendu le "+str(row[5]))
+        #for row in rows:
+        #    print (str(row[0])+" "+str(EnsUtilisateurs.get_user(row[1]).get_username())+" "+str(EnsExemplaires.get_Exemplaire(row[2]).get_Jeu_Exemplaire().get_Nom_jeu())+" Emprunté le: "+str(row[3])+" a rendre le : "+str(row[4])+" rendu le "+str(row[5]))
+        return rows
         #for row in rows:
                 #print('{0} : {1} - {2}'.format(row[0], row[1], row[2]))

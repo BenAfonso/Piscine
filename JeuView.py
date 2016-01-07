@@ -111,6 +111,7 @@ class JeuView(QWidget):
 
 
         Extensions = QPushButton("Afficher Extensions+")
+
         Emprunter = QPushButton("Emprunter")
         Reserver = QPushButton("Reserver (Non Disponible)")
         Modifier = QPushButton("Modifier+")
@@ -121,9 +122,10 @@ class JeuView(QWidget):
         VBoxBoutons.addWidget(Extensions)
         VBoxBoutons.addWidget(Emprunter)
         VBoxBoutons.addWidget(Reserver)
-        VBoxBoutons.addWidget(Modifier)
-        VBoxBoutons.addWidget(Supprimer)
-        VBoxBoutons.addWidget(ajouterExemplaire)
+        if self.session.est_admin():
+            VBoxBoutons.addWidget(Modifier)
+            VBoxBoutons.addWidget(Supprimer)
+            VBoxBoutons.addWidget(ajouterExemplaire)
 
         Grid.addLayout(HBoxCentre)
 
