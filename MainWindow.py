@@ -9,6 +9,7 @@ from ConnexionWidget import ConnexionWidget
 from Utilisateur import Utilisateur
 from functools import partial
 from EmpruntsView import EmpruntsView
+from ProfileView import ProfileView
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -56,15 +57,13 @@ class MainWindow(QMainWindow):
         self.toolbar.addWidget(spacer)
 
         # Profil & Deconnexion
-        self.toolbar.addAction(USERNAME,self.userprofile)
+        self.toolbar.addAction(USERNAME,self.profile)
         self.toolbar.addAction('Deconnexion',self.logout)
         self.jeux()
 
         # Création d'une toolbar de menu
 
 
-    def userprofile(self):
-        return 1
 
     def logout(self):
 
@@ -93,6 +92,9 @@ class MainWindow(QMainWindow):
         self.adjustSize()
 
 
+    def profile(self):
+        Profile=ProfileView(self.session)
+        self.setCentralWidget(Profile)
 
     def user(self): # WIDGET USERS
         widget = QWidget()
@@ -131,6 +133,8 @@ class MainWindow(QMainWindow):
         # Ajout d'un bouton (2)
         AddUser = QPushButton("Ajouter un Utilisateur")
         Buttons.addWidget(AddUser)
+        ReinitAll = QPushButton(u"Ré-initialiser tous abonnements")
+        Buttons.addWidget(ReinitAll)
         #  Ajout du conteneur horizontal au conteneur principal (vertical)
         VLayout.addLayout(Buttons)
         # On affecte le layout vertical au widget
@@ -138,6 +142,7 @@ class MainWindow(QMainWindow):
         #  On change le widget central !
         self.setCentralWidget(widget)
         AddUser.clicked.connect(self.Users.AddUser)
+        ReinitAll.clicked.connect(self.Users.ReinitAll)
 
 
     def emprunts(self):

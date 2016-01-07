@@ -41,6 +41,9 @@ class Emprunt : #Donne les infos concernant un emprunt
 				#self.date_emprunt = date.today()
 				# TEST DU retard
 				self.date_emprunt = date(2015,10,21)
+
+
+
 				self.date_echeance = self.calcul_Date_Echeance()
 				try:
 					EnsExemplaires.get_Exemplaire(self.Exemplaire.get_Exemplaire_id()).set_Est_disponible(False)
@@ -137,7 +140,7 @@ class Emprunt : #Donne les infos concernant un emprunt
 		""" Il manque le droit d'emprunt dans utilisateurs, que faire si il y a une reservation en cours (conflit de dates)"""
 
 	def display(self):
-		return "= Nom du jeu: "+str(self.Exemplaire.get_Jeu_Exemplaire().get_Nom_jeu())+"\n= Date Emprunt: "+str(self.date_emprunt)+"\n= Echeance: "+str(self.date_echeance)
+		return "Nom du jeu: "+str(self.Exemplaire.get_Jeu_Exemplaire().get_Nom_jeu())+"\nDate Emprunt: "+str(self.date_emprunt)+"\nEcheance: "+str(self.date_echeance)
 	def save(self):
 		if self.Emprunt_id == None:
 			EnsEmprunt.insert_emprunt(self)

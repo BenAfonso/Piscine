@@ -102,6 +102,20 @@ class UsersView(QTableWidget):
         for i, taille in enumerate(self.hedprops):
             self.horizontalHeader().resizeSection(i, taille)
 
+
+
+    def ReinitAll(self):
+        try:
+            reply = QMessageBox.question(self, 'Attention',
+            u"Vous êtes sur le point de réinitialiser TOUS les abonnements.\nÊtes vous sûrs de vouloir continuer ?", QMessageBox.Yes |
+            QMessageBox.No, QMessageBox.No)
+            if reply == QMessageBox.Yes:
+                EnsUtilisateurs.reinitAbonnements()
+                self.refresh()
+        except:
+            self.criticalError()
+
+
     def AddUser(self): # Popup pour ajouter un jeu
 
         self.AddUser = QDialog()
@@ -172,3 +186,12 @@ class UsersView(QTableWidget):
     	# JEU VIEW ? OU POPUP.
         self.close()
         self.parent().parent().setCentralWidget(User)
+
+    def refresh(self):
+        self.parent().parent().user()
+
+    def criticalError(self):
+        QMessageBox.critical(self, "ERREUR !",
+        "Oops ! Une erreur est survenue ",
+        QMessageBox.Cancel, QMessageBox.NoButton,
+        QMessageBox.NoButton)

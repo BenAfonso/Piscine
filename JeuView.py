@@ -199,7 +199,7 @@ class JeuView(QWidget):
     def ajouterExemplaire(self):
         NewExemplaire = EnsExemplaires.Exemplaire(Jeu=self.selectedGame)
         reply = QMessageBox.question(self, 'Confirmation',
-        u"Êtes vous sur de vouloir ajouter un exeplaire pour le jeu "+str(self.selectedGame.get_Nom_jeu()), QMessageBox.Yes |
+        u"Êtes vous sur de vouloir ajouter un exemplaire pour le jeu "+str(self.selectedGame.get_Nom_jeu()), QMessageBox.Yes |
         QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             NewExemplaire.save()

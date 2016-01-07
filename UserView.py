@@ -72,9 +72,9 @@ class UserView(QWidget):
         else:
             abonnementValide = QLabel("Non Valide")
 
-        empruntEnCoursTxt = QLabel("Emprunt en cours:")
+        empruntEnCoursTxt = QLabel("\n-----------------------------\nEmprunt en cours:")
         if EnsEmprunt.a_un_emprunt_en_cours(self.selectedUser):
-            empruntEnCours=QLabel("\n"+EnsEmprunt.get_emprunt_en_cours(self.selectedUser).display())
+            empruntEnCours=QLabel("\n"+EnsEmprunt.get_emprunt_en_cours(self.selectedUser).display()+"\n-----------------------------")
         else:
             empruntEnCours=QLabel("Aucun")
 
@@ -111,10 +111,12 @@ class UserView(QWidget):
 
         EmpruntRendu = QPushButton("Emprunt Rendu")
 
-        VBox1.addWidget(empruntEnCoursTxt)
-        VBox2.addWidget(QLabel("    "))
-        VBox1.addWidget(empruntEnCours)
-        VBox2.addWidget(QLabel("    "))
+        HBox3=QHBoxLayout()
+        VBox3=QVBoxLayout()
+        HBox3.addLayout(VBox3)
+        VBox3.addWidget(empruntEnCoursTxt)
+        VBox3.addWidget(empruntEnCours)
+
         # Blank
         if EnsEmprunt.a_un_emprunt_en_cours(self.selectedUser):
             VBox1.addWidget(EmpruntRendu)
@@ -162,6 +164,7 @@ class UserView(QWidget):
 
 
         Grid.addLayout(HBoxCentre)
+        Grid.addLayout(HBox3)
 
         EmpruntRendu.clicked.connect(self.rendreEmprunt)
         ReinitRetard.clicked.connect(self.reinitRetard)
