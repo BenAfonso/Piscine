@@ -57,6 +57,10 @@ class Utilisateur:
         self.nbRetard = nbRetard
         self.save()
 
+    def ajout_Retard(self,nbRetard):
+        self.nbRetard = self.nbRetard + nbRetard
+        self.save()
+
 
 ##### FONCTIONS ANNEXES #####
     def est_admin(self):
@@ -67,6 +71,11 @@ class Utilisateur:
             EnsAdmins.insert(self)
         else:
             print "Pas d'utilisateur selectionne !"
+
+    def remove_admin(self):
+        if (self.user_id != 0 and self.est_admin()):
+            EnsAdmins.delete_admin(self)
+
 
     def delete_user(self):
         """Supprime un utilisateur de l'ensemble des EnsUtilisateurs
