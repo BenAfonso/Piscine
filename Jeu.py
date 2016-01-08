@@ -93,6 +93,13 @@ class Jeu:
         self.Annee = Annee
         self.save()
 
+    def supprimer_Exemplaire(self):
+        try:
+            Exemplaire=EnsExemplaires.get_Exemplaire_dispo(self)
+            EnsExemplaires.supprimerExemplaire(Exemplaire)
+        except:
+            print "[ERREUR] Jeu :: Erreur lors de la suppression !"
+            raise
 
 
 

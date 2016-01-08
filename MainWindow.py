@@ -17,8 +17,9 @@ class MainWindow(QMainWindow):
 
         # Definition de la zone centrale de la fenetre
         zoneCentrale = QWidget()
-
+        self.session = None
         # Connexion :: Ouverture du widget
+        self.toolbar = None
         self.connexion()
 
         # Connecté ou non ?
@@ -44,20 +45,31 @@ class MainWindow(QMainWindow):
         self.toolbar = self.addToolBar('ToolBar')
 
         # Ajout d'items (=> Actions)
+        # ICONES ?
         self.toolbar.addAction(QIcon('img/icon.png'),'Jeux',self.jeux)
+        # Sans ICONES ?
+        #self.toolbar.addAction('Jeux',self.jeux)
 
 
         # Affichage de ce bouton seulement pour les admins
         if EST_ADMIN:
+            self.toolbar.addSeparator();
+            # ICONES ?
             self.toolbar.addAction(QIcon('img/user.png'),'Utilisateurs',self.user)
+            # Sans ICONES
+            #self.toolbar.addAction('Utilisateurs',self.user)
+            self.toolbar.addSeparator();
             self.toolbar.addAction("Emprunts",self.emprunts)
+            self.toolbar.addSeparator();
         # Séparation pour avoir les widgets à droite
         spacer = QWidget()
         spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.toolbar.addWidget(spacer)
 
         # Profil & Deconnexion
+        self.toolbar.addSeparator();
         self.toolbar.addAction(USERNAME,self.profile)
+        self.toolbar.addSeparator();
         self.toolbar.addAction('Deconnexion',self.logout)
         self.jeux()
 
@@ -74,6 +86,8 @@ class MainWindow(QMainWindow):
 
     def connexion(self):
 
+        if self.toolbar != None:
+            self.toolbar.close()
         self.toolbar = self.addToolBar('ToolBar')
 
         self.setBaseSize(400,200)
@@ -86,6 +100,7 @@ class MainWindow(QMainWindow):
         self.toolbar.addAction("Afficher les jeux",self.jeux)
 
         self.toolbar.addAction('Quitter',self.close)
+
         self.conn = ConnexionWidget()
 
         self.setCentralWidget(self.conn)
@@ -150,8 +165,22 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(Emprunts)
 
     def jeux(self): # WIDGET JEUX
+        if self.session == None:
+            self.toolbar.close()
+            self.toolbar = self.addToolBar('ToolBar')
 
-        Jeux=JeuxView()
+            # Ajout d'items (=> Actions)
+            self.toolbar.addAction(QIcon('img/icon.png'),'Jeux',self.jeux)
+
+
+            # Séparation pour avoir les widgets à droite
+            spacer = QWidget()
+            spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            self.toolbar.addWidget(spacer)
+
+            # Deconnexion
+            self.toolbar.addAction('Se connecter',self.connexion)
+        Jeux=JeuxView(session=self.session)
         self.setCentralWidget(Jeux)
 
     def rechercheUser(self):

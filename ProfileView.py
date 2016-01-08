@@ -49,6 +49,15 @@ class ProfileView(QWidget):
 
 
         # TOUS LES CHAMPS
+        CompteTitre = QLabel("# Compte\n")
+        EmpruntTitre = QLabel("\n# Emprunt")
+        font = QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        font.setPointSize(20)
+        CompteTitre.setFont(font)
+        EmpruntTitre.setFont(font)
+
         usernametxt = QLabel("Nom d'utilisateur: ")
         username=QLabel(str(self.selectedUser.get_username()))
 
@@ -58,7 +67,7 @@ class ProfileView(QWidget):
         elif not(self.selectedUser.get_abonnementValide()) and self.selectedUser.est_admin():
             statut = QLabel("Administrateur - Non adherent")
         elif self.selectedUser.get_abonnementValide():
-            statut= QLabel("Adherent")
+            statut= QLabel(u"Adhérent")
         else:
             statut=QLabel("Utilisateur")
 
@@ -71,13 +80,14 @@ class ProfileView(QWidget):
         else:
             abonnementValide = QLabel("Non Valide")
 
-        empruntEnCoursTxt = QLabel("\n-----------------------------\nEmprunt en cours:")
+        empruntEnCoursTxt = QLabel("\nEmprunt en cours:")
         if EnsEmprunt.a_un_emprunt_en_cours(self.selectedUser):
-            empruntEnCours=QLabel("\n"+EnsEmprunt.get_emprunt_en_cours(self.selectedUser).display()+"\n-----------------------------")
+            empruntEnCours=EnsEmprunt.get_emprunt_en_cours(self.selectedUser)
         else:
-            empruntEnCours=QLabel("Aucun")
+            empruntEnCours=None
 
 
+        ModifierMotDePasse = QPushButton("Changer mon mot de passe")
 
 
         # Grande Horizontale Milieu
@@ -86,9 +96,14 @@ class ProfileView(QWidget):
         # Vertical Gauche
         VBoxTextes = QVBoxLayout()
 
+        # Layout titre Compte
+        VBoxTextes.addWidget(CompteTitre)
+
         # Horizontale Gauches
         HBoxGauche = QHBoxLayout()
         VBoxTextes.addLayout(HBoxGauche)
+
+
 
         VBox1 = QVBoxLayout()
         VBox2 = QVBoxLayout()
@@ -108,15 +123,51 @@ class ProfileView(QWidget):
         VBox1.addWidget(abonnementValideTxt)
         VBox2.addWidget(abonnementValide)
 
+
         HBox3=QHBoxLayout()
         VBox3=QVBoxLayout()
+        VBox4=QVBoxLayout()
+
         HBox3.addLayout(VBox3)
-        VBox3.addWidget(empruntEnCoursTxt)
-        VBox3.addWidget(empruntEnCours)
+        HBox3.addLayout(VBox4)
+
+        VBoxTextes.addWidget(ModifierMotDePasse)
+
+
+        #### EMPRUUUUNT ####
+        VBoxTextes.addWidget(EmpruntTitre)
+
+        HBox31 = QHBoxLayout()
+        VBox3.addLayout(HBox31)
+        VBox31 = QVBoxLayout()
+        VBox32 = QVBoxLayout()
+        HBox31.addLayout(VBox31)
+        HBox31.addLayout(VBox32)
+        VBox4.addWidget(spacer)
+
+        if empruntEnCours != None:
+            #### INFORMATIONS EMPRUNT ####
+            NomDuJeuTxt=QLabel("Nom du jeu:")
+            NomDuJeu=QLabel(str(empruntEnCours.get_Exemplaire_Emprunt().get_Jeu_Exemplaire().get_Nom_jeu()))
+            DateEmpruntTxt=QLabel("Nom d'emprunt:")
+            DateEmprunt=QLabel(str(empruntEnCours.get_date_emprunt()))
+            DateEcheanceTxt=QLabel(u"Date d'écheance:")
+            DateEcheance=QLabel(str(empruntEnCours.get_date_echeance()))
+            #### AJOUT EMPRUNT AU LAYOUT ####
+            VBox31.addWidget(NomDuJeuTxt)
+            VBox32.addWidget(NomDuJeu)
+            VBox31.addWidget(DateEmpruntTxt)
+            VBox32.addWidget(DateEmprunt)
+            VBox31.addWidget(DateEcheanceTxt)
+            VBox32.addWidget(DateEcheance)
+        else:
+            VBox31.addWidget(QLabel("Aucun"))
+            VBox32.addWidget(QLabel("     "))
 
 
 
-        # Ajouts à faire...
+
+
 
         # Verticale Droite
         VBoxBoutons = QVBoxLayout()
@@ -127,18 +178,18 @@ class ProfileView(QWidget):
         HBoxCentre.addLayout(Blank)
         HBoxCentre.addLayout(VBoxBoutons)
 
-        ModifierMotDePasse = QPushButton("Changer mon mot de passe")
+
 
 
         # Ajout des widgets Boutons
 
-        VBoxBoutons.addWidget(ModifierMotDePasse)
+        #VBoxBoutons.addWidget(ModifierMotDePasse)
 
 
 
         Grid.addLayout(HBoxCentre)
         Grid.addLayout(HBox3)
-        #ModifierMotDePasse.clicked.connect(self.modifierMotDePasse)
+        ModifierMotDePasse.clicked.connect(self.modifierMotDePasse)
 
 
         # ESPACEMENT
@@ -154,6 +205,73 @@ class ProfileView(QWidget):
         refresh = ProfileView(session=self.session)
         self.parent().setCentralWidget(refresh)
 
+
+    def modifierMotDePasse(self):
+        self.ModifierMdp = QDialog()
+
+        Titre = QLabel("Modification Mot de passe\n")
+        font = QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        font.setPointSize(20)
+        Titre.setFont(font)
+
+        OldPassword = QLabel("Ancien mot de passe: ")
+        self.OldPasswordText = QLineEdit()
+        self.OldPasswordText.setEchoMode(QLineEdit.Password)
+
+        Password = QLabel("Nouveau mot de passe: ")
+        self.PasswordText = QLineEdit()
+        self.PasswordText.setEchoMode(QLineEdit.Password)
+
+        Password2 = QLabel(u"Ré-entrez le nouveau mot de passe: ")
+        self.PasswordText2 = QLineEdit()
+        self.PasswordText2.setEchoMode(QLineEdit.Password)
+
+        # Test si PasswordText1 = PasswordText2
+        self.SubmitButton = QPushButton(u"Changer")
+
+
+        Layout = QVBoxLayout()
+        Layout.addWidget(Titre)
+        Layout.addWidget(OldPassword)
+        Layout.addWidget(self.OldPasswordText)
+        Layout.addWidget(Password)
+        Layout.addWidget(self.PasswordText)
+        Layout.addWidget(Password2)
+        Layout.addWidget(self.PasswordText2)
+        Layout.addWidget(self.SubmitButton)
+        self.ModifierMdp.setLayout(Layout)
+        self.SubmitButton.clicked.connect(self.modifierValider)
+        self.ModifierMdp.exec_()
+
+    def modifierValider(self):
+        if str(self.OldPasswordText.text()) == str(self.selectedUser.get_password()):
+            if (len(str(self.PasswordText.text())) > 3):
+                if str(self.PasswordText.text()) == str(self.PasswordText2.text()):
+                    self.selectedUser.set_password(str(self.PasswordText.text()))
+
+                    QMessageBox.information(self, u"Voilà !",
+                    u"Votre mot de passe a été changé avec succès !",
+                    QMessageBox.Ok, QMessageBox.NoButton,
+                    QMessageBox.NoButton)
+                    self.refresh()
+                    self.ModifierMdp.close()
+                else:
+                    QMessageBox.critical(self, "ERREUR !",
+                    "Les deux mots de passe de sont pas identiques !",
+                    QMessageBox.Ok, QMessageBox.NoButton,
+                    QMessageBox.NoButton)
+            else:
+                QMessageBox.critical(self, "ERREUR !",
+                "Le mot de passe doit contenir au moins 4 caractères",
+                QMessageBox.Ok, QMessageBox.NoButton,
+                QMessageBox.NoButton)
+        else:
+            QMessageBox.critical(self, "ERREUR !",
+            "Votre mot de passe actuel est incorrect !",
+            QMessageBox.Ok, QMessageBox.NoButton,
+            QMessageBox.NoButton)
 
     def criticalError(self):
         QMessageBox.critical(self, "ERREUR !",

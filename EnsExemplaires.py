@@ -36,6 +36,14 @@ def exemplaire_to_table(Exemplaire):
         ExemplaireTable=(Exemplaire.get_Exemplaire_id(),Exemplaire.get_Jeu_id(),Exemplaire.get_Est_disponible())
         return ExemplaireTable
 
+def supprimerExemplaire(Exemplaire):
+        try:
+                ExemplaireId = Exemplaire.get_Exemplaire_id()
+                cur.execute("""DELETE FROM EnsExemplaires WHERE Exemplaire_id = ?""", (ExemplaireId,))
+        except:
+                print "[ERREUR] EnsExemplaires :: Erreur lors de la suppression !"
+                raise
+
 def get_Exemplaire_dispo(Jeu):
     # LE NOMBRE D'EXEMPLAIRE MINIMUM POUR POUVOIR EMPRUNTER
         if get_nombre_exemplaires(Jeu,disponible=1) > 0:
@@ -46,8 +54,11 @@ def get_Exemplaire_dispo(Jeu):
                 print "Oops, le jeu n'est pas disponible !"
                 raise
 
-def get_Exemplaire(exemplaire_id):
-        cur.execute("""SELECT * FROM EnsExemplaires WHERE Exemplaire_id = ?""", (exemplaire_id,))
+def get_Exemplaire(exemplaire_id=None,jeu_id=None):
+        if jeu_id == None:
+            cur.execute("""SELECT * FROM EnsExemplaires WHERE Exemplaire_id = ?""", (exemplaire_id,))
+        else:
+            cur.execute("""SELECT * FROM EnsExemplaires WHERE Jeu_id = ?""", (jeu_id,))
         try:
                 result = cur.fetchone()
                 return Exemplaire(EnsJeux.get_Jeu(result[1]),result[2],result[0])
@@ -71,7 +82,6 @@ def get_nombre_exemplaires(Jeu,disponible=2):
                 cur.execute("""SELECT COUNT(Exemplaire_id) FROM EnsExemplaires WHERE Est_Disponible = 0 and Jeu_id= ?""",(Jeu.get_Jeu_id(),))
                 result = cur.fetchone()
                 return result[0]
-
 
 
 

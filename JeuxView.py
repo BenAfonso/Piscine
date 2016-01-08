@@ -10,9 +10,9 @@ import sys
 
 
 class JeuxView(QWidget):
-    def __init__(self, *args):
+    def __init__(self,session="", *args):
         QWidget.__init__(self)
-
+        self.session = session
         self.Table = QTableWidget()
         # Conteneur Vertical
         VLayout = QVBoxLayout()
@@ -46,8 +46,10 @@ class JeuxView(QWidget):
         # Conteneur Horizontal pour boutons
         Buttons = QHBoxLayout()
         # Ajout d'un bouton (2)
+
         AddJeu = QPushButton("Ajouter un jeu")
-        Buttons.addWidget(AddJeu)
+        if self.session!=None and self.session.est_admin():
+            Buttons.addWidget(AddJeu)
         #  Ajout du conteneur horizontal au conteneur principal (vertical)
         VLayout.addLayout(Buttons)
         # On affecte le layout vertical au widget
@@ -106,7 +108,12 @@ class JeuxView(QWidget):
             self.Table.setItem(ligne, 1, QTableWidgetItem(Jeu[1]))
             self.Table.setItem(ligne, 2, QTableWidgetItem(Jeu[3]))
             self.Table.setItem(ligne, 3, QTableWidgetItem(str(Jeu[2])))
-            self.Table.setItem(ligne, 4, QTableWidgetItem(Jeu[4]))
+            self.Table.setItem(ligne, 4, QTableWidgetItem(str(Jeu[4])))
+            CurrentJeu=EnsJeux.get_Jeu(Jeu[0])
+            if CurrentJeu.get_nombre_exemplaires_dispo() > 0:
+                self.Table.item(ligne, 0).setBackground(QColor(100,100,150))
+            else:
+                self.Table.item(ligne, 0).setBackground(QColor(100,100,150))
             ligne=ligne+1
 
     # Fonction permettant d'initialiser le contenu de l'affichage (remplacer par searchmydata)
@@ -118,14 +125,20 @@ class JeuxView(QWidget):
             self.Table.setItem(ligne, 1, QTableWidgetItem(Jeu[1]))
             self.Table.setItem(ligne, 2, QTableWidgetItem(Jeu[3]))
             self.Table.setItem(ligne, 3, QTableWidgetItem(str(Jeu[2])))
-            self.Table.setItem(ligne, 4, QTableWidgetItem(Jeu[4]))
+            self.Table.setItem(ligne, 4, QTableWidgetItem(str(Jeu[5])))
+            CurrentJeu=EnsJeux.get_Jeu(Jeu[0])
+            if CurrentJeu.get_nombre_exemplaires_dispo() > 0:
+                self.Table.item(ligne, 0).setBackground(QColor(178,255,102))
+            else:
+                self.Table.item(ligne, 0).setBackground(QColor(255,102,102))
+
             ligne=ligne+1
 
     def setheaders(self):
         # On définit l'entête des colonnes
-        hedlabels = ('ID', 'Nom du jeu', 'Editeur', 'Annee', 'Nb Joueurs')
+        hedlabels = ('ID', 'Nom du jeu', 'Editeur', u'Annee', 'Nb Joueurs')
         # Largeur initiale des colonnes
-        self.Table.hedprops = (100, 250, 200, 100, 130)
+        self.Table.hedprops = (5,50,30,10,15)
         # On ajoute les colonnes au tableau
         self.Table.setHorizontalHeaderLabels(hedlabels)
         for i, taille in enumerate(self.Table.hedprops):

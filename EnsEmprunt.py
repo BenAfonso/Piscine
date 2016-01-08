@@ -43,6 +43,10 @@ def delete_emprunt(Emprunt):
         cur.execute("""DELETE FROM EnsEmprunt WHERE emprunt_id = ?""",(Emprunt.get_emprunt_id(),))
         conn.commit()
 
+def get_Emprunt_Exemplaire(Exemplaire):
+        cur.execute("""SELECT * FROM EnsEmprunt WHERE exemplaire_id = ?""",(Exemplaire.get_Exemplaire_id(),))
+        res = cur.fetchone()
+        return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5])
 def get_nombre_emprunts():
         cur.execute("""SELECT COUNT(Emprunt_id) FROM EnsEmprunt""")
         return cur.fetchone()[0]
