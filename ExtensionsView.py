@@ -16,7 +16,7 @@ class ExtensionsView(QTableWidget):
         self.Table = QTableWidget()
         self.selectedGame=selectedGame
         # On défini le nombre de colonnes
-        
+
         self.Table.setSortingEnabled(True)
         self.Table.setMinimumSize(800, 300)
         self.Table.setColumnCount(2)
@@ -163,8 +163,8 @@ class ExtensionsView(QTableWidget):
 
 
         ### Edition des liens
-        #Emprunter.clicked.connect(self.emprunter)
-        #Reserver.clicked.connect(self.reserver)
+        Emprunter.clicked.connect(self.emprunter)
+        Reserver.clicked.connect(self.reserver)
         Modifier.clicked.connect(self.modifier)
         Supprimer.clicked.connect(self.supprimer)
 
@@ -230,6 +230,24 @@ class ExtensionsView(QTableWidget):
                 "Erreur lors de la suppression de l'extension !",
                 QMessageBox.Ok, QMessageBox.NoButton,
                 QMessageBox.NoButton)
+
+
+    #### A FAIRE ####
+    
+    def emprunter(self):
+        # Si l'extension est disponible
+        # Si l'extension appartient au jeu de l'emprunt en cours
+        # Si l'user n'a pas d'emprunt en cours
+        QMessageBox.critical(self, "ERREUR !",
+        u"Fonctionnalité pas encore disponible !",
+        QMessageBox.Ok, QMessageBox.NoButton,
+        QMessageBox.NoButton)
+
+    def reserver(self):
+        QMessageBox.critical(self, "ERREUR !",
+        u"Fonctionnalité pas encore disponible !",
+        QMessageBox.Ok, QMessageBox.NoButton,
+        QMessageBox.NoButton)
 
 
 
