@@ -209,7 +209,7 @@ class JeuView(QWidget):
         if reply == QMessageBox.Yes:
             EnsJeux.delete_Jeu(self.selectedGame)
             QMessageBox.information(self, "Fait !",
-            u"Le jeu a bien ete supprimé !",
+            u"Le jeu a bien été supprimé !",
             QMessageBox.Ok, QMessageBox.NoButton,
             QMessageBox.NoButton)
             self.parent().jeux()

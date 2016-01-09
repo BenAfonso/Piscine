@@ -193,16 +193,22 @@ class JeuxView(QWidget):
         NombreJoueurs=str(self.NombreJoueursText.text())
         AgeMini=str(self.AgeMiniText.text())
         if Nom_jeu != "":
-            EnsJeux.Jeu(Nom_jeu=Nom_jeu,Editeur=Editeur,Annee=Annee,AgeMini=AgeMini,NombreJoueurs=NombreJoueurs).save()
-            QMessageBox.information(self, u"Voilà !",
-            u"Le jeu a été ajouté avec succès !",
-            QMessageBox.Ok, QMessageBox.NoButton,
-            QMessageBox.NoButton)
-            self.AddJeuP.close()
-            self.parent().parent().jeux()
+            try:
+                EnsJeux.Jeu(Nom_jeu=Nom_jeu,Editeur=Editeur,Annee=Annee,AgeMini=AgeMini,NombreJoueurs=NombreJoueurs).save()
+                QMessageBox.information(self, u"Voilà !",
+                u"Le jeu a été ajouté avec succès !",
+                QMessageBox.Ok, QMessageBox.NoButton,
+                QMessageBox.NoButton)
+                self.AddJeuP.close()
+                self.parent().parent().jeux()
+            except:
+                QMessageBox.critical(self, "ERREUR !",
+                u"Erreur lors de l'ajout du jeu. Jeu déjà existant ?",
+                QMessageBox.Ok, QMessageBox.NoButton,
+                QMessageBox.NoButton)
         else:
             QMessageBox.critical(self, "ERREUR !",
-            "Erreur lors de l'ajout du jeu.",
+            "Erreur lors de l'ajout du jeu. Rentrez un nom valide !",
             QMessageBox.Ok, QMessageBox.NoButton,
             QMessageBox.NoButton)
             self.AddJeuP.close()

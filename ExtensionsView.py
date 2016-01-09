@@ -16,10 +16,7 @@ class ExtensionsView(QTableWidget):
         self.Table = QTableWidget()
         self.selectedGame=selectedGame
         # On défini le nombre de colonnes
-
-
-
-
+        
         self.Table.setSortingEnabled(True)
         self.Table.setMinimumSize(800, 300)
         self.Table.setColumnCount(2)
@@ -155,8 +152,8 @@ class ExtensionsView(QTableWidget):
 
         Emprunter=QPushButton("Emprunter+")
         Reserver=QPushButton("Reserver+")
-        Modifier=QPushButton("Modifier+")
-        Supprimer=QPushButton("Supprimer+")
+        Modifier=QPushButton("Modifier")
+        Supprimer=QPushButton("Supprimer")
 
         Layout.addWidget(Emprunter)
         Layout.addWidget(Reserver)
@@ -169,7 +166,7 @@ class ExtensionsView(QTableWidget):
         #Emprunter.clicked.connect(self.emprunter)
         #Reserver.clicked.connect(self.reserver)
         Modifier.clicked.connect(self.modifier)
-        #Supprimer.clicked.connect(self.supprimer)
+        Supprimer.clicked.connect(self.supprimer)
 
         self.Extension.setLayout(Layout)
         self.Extension.exec_()
@@ -209,9 +206,32 @@ class ExtensionsView(QTableWidget):
         self.SubmitButton.clicked.connect(self.updateExt)
         self.ModifierExtension.exec_()
 
+    #Fonction effectuant les modification nécessaires lors de la modification d'une extension
     def updateExt(self):
-        self.currentExtension.set_Nom(str(selfd.NomExtensionText.text()))
+        self.currentExtension.set_Nom(str(self.NomExtensionText.text()))
+        self.ModifierExtension.close()
+
     #Fonction Supprimer:
+    def supprimer(self):
+        reply = QMessageBox.question(self, 'Confirmation',
+        u"Êtes vous sur de vouloir supprimer l'extension "+str(self.currentExtension.get_Nom_Extension()), QMessageBox.Yes |
+        QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            try:
+                EnsExtensions.supprimer_Extension(self.currentExtension)
+                QMessageBox.information(self, "Fait !",
+                u"L'extension a bien été supprimé !",
+                QMessageBox.Ok, QMessageBox.NoButton,
+                QMessageBox.NoButton)
+                self.refresh()
+                self.Extension.close()
+            except:
+                QMessageBox.critical(self, "ERREUR !",
+                "Erreur lors de la suppression de l'extension !",
+                QMessageBox.Ok, QMessageBox.NoButton,
+                QMessageBox.NoButton)
+
+
 
     #Fonction Emprunter:
 

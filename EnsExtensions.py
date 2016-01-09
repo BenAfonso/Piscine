@@ -65,8 +65,10 @@ def supprimer_Extension(Extension):
 			conn.commit()
 		except:
 			print "Erreur lors de la suppression de l'extension"
+			raise
 	else:
 		print "Impossible de supprimer une extension non présente dans la base."
+		raise
 
 def nombre_extensions_Jeu(Jeu): # A tester apres avoir corriger les bugs de cle primaire et attribut dispo
 	""" nombre_extensions: Jeu -> Entier, renvoie le nomrbe d'extension d'un jeu donné. Le jeu doit être dans EnsJeux"""
@@ -124,13 +126,14 @@ def get_Extension_Jeu(Jeu):
 
 def update_Extension(Extension):
 	""" update_Extension: Extension -> Extension, modifie les informations d'une extension donnée """
-	if (est_Presente_Extension(Extension)):
-		# Bordel de merde. 
+	try:
+
+		# Bordel de merde.
 		# cur.execute(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilite = ?""", (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(),)
 		cur.execute(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilite = ? WHERE Extension_id = ?""", (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(), Extension.get_Extension_id(),))
 		print "L'extension a bien ete mise a jour"
-	else:
-		print "L'extension à modifier n'existe pas."
+	except:
+		raise
 
 def printAll():
         cur.execute("""SELECT * FROM EnsExtensions""")

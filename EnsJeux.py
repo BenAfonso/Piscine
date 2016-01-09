@@ -72,6 +72,7 @@ def insert(Jeu):
                         print("Erreur lors de l'ajout du jeu")
         else:
                 print("Erreur: Un jeu est deja enregistre au meme nom.")
+                raise
 
 
 #### FONCTION SEULEMENT POUR IMPORTATION DE LA BASE INITIAL DES JEUX #####
