@@ -204,7 +204,7 @@ class ExtensionsView(QTableWidget):
         Layout.addWidget(NomExtension)
         Layout.addWidget(self.NomExtensionText)
 
-        Layout.addWidget(self.SubmitButtondd
+        Layout.addWidget(self.SubmitButton)
         self.ModifierExtension.setLayout(Layout)
         self.SubmitButton.clicked.connect(self.updateExt)
         self.ModifierExtension.exec_()
