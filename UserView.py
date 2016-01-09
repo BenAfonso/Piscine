@@ -202,12 +202,16 @@ class UserView(QWidget):
         VBoxBoutons.addWidget(ReinitRetard)
         VBoxBoutons.addWidget(Abonnement)
         VBoxBoutons.addWidget(Supprimer)
-        VBoxBoutons.addWidget(Promote)
+
+        # On empêche un admin de se retirer ses propres droits. Car c'est nul. Vive le pouvoir.
+        if self.selectedUser.get_user_id() != self.session.get_session_User().get_user_id():
+            VBoxBoutons.addWidget(Promote)
 
 
         Grid.addLayout(HBoxCentre)
         Grid.addLayout(HBox3)
 
+        # On connecte les boutons !
         EmpruntRendu.clicked.connect(self.rendreEmprunt)
         ReinitRetard.clicked.connect(self.reinitRetard)
         Abonnement.clicked.connect(self.abonnement)
@@ -287,13 +291,7 @@ class UserView(QWidget):
 
     def rendreEmprunt(self):
         try:
-            empruntEnCours=EnsEmprunt.get_emprunt_en_cours(self.selectedUser)
-            empruntEnCours.rendre_Emprunt()
-
-            #QMessageBox.information(self, "Emprunt rendu:",
-            #u"Emprunté le: "+str(empruntEnCours.get_date_emprunt())+"\nRendu le:  "+str(empruntEnCours.get_date_rendu())+"\nRetard: "+str(empruntEnCours.calcul_retard()),
-            #QMessageBox.Ok, QMessageBox.NoButton,
-            #QMessageBox.NoButton)
+            EnsEmprunt.get_emprunt_en_cours(self.selectedUser).rendre_Emprunt()
 
             QMessageBox.information(self, "Emprunt rendu !",
             u"L'emprunt a bien été rendu !",

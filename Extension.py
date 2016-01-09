@@ -32,12 +32,15 @@ class Extension:
 
     def set_Id_Jeu_Associe(self,Jeu):
         self.Jeu_id = Jeu.get_Jeu_id()
+        self.save_Extension()
 
     def set_Disponible(self,Disponible):
         self.Disponible = Disponible
+        self.save_Extension()
 
     def set_Nom(self,Nom):
-        self.Nom_Extension = Nom_Extension
+        self.Nom_Extension = Nom
+        self.save_Extension()
 
     def save_Extension(self):
         print("Test de sauvegarde")

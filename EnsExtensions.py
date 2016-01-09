@@ -125,7 +125,9 @@ def get_Extension_Jeu(Jeu):
 def update_Extension(Extension):
 	""" update_Extension: Extension -> Extension, modifie les informations d'une extension donnée """
 	if (est_Presente_Extension(Extension)):
-		cur.execute(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilite = ? """, (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(),))
+		# Bordel de merde. 
+		# cur.execute(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilite = ?""", (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(),)
+		cur.execute(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilite = ? WHERE Extension_id = ?""", (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(), Extension.get_Extension_id(),))
 		print "L'extension a bien ete mise a jour"
 	else:
 		print "L'extension à modifier n'existe pas."

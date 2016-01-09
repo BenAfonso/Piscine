@@ -4,6 +4,8 @@ from PyQt4.QtGui import *
 import EnsJeux
 import EnsEmprunt
 import EnsExemplaires
+import EnsExtensions
+from ExtensionsView import ExtensionsView
 import sys
 
 
@@ -62,10 +64,13 @@ class JeuView(QWidget):
         AgeMin=QLabel(str(selectedGame.get_AgeMini()))
         NbJoueursTxt=QLabel("Nombre de joueurs: ")
         NbJoueurs=QLabel(str(selectedGame.get_NombreJoueurs()))
+        NbExtensionsTxt=QLabel("Nombre d'extensions: ")
+        NbExtensions=QLabel(str(EnsExtensions.nombre_extensions_Jeu(selectedGame)))
         NbExTxt=QLabel("Nombre d'exemplaires: ")
         NbEx=QLabel(str(selectedGame.get_nombre_exemplaires()))
         NbExDispoTxt=QLabel("Nombre d'exemplaires disponibles: ")
         NbExDispo=QLabel(str(selectedGame.get_nombre_exemplaires_dispo()))
+
 
 
         # Grande Horizontale Milieu
@@ -94,6 +99,8 @@ class JeuView(QWidget):
         VBox2.addWidget(AgeMin)
         VBox1.addWidget(NbJoueursTxt)
         VBox2.addWidget(NbJoueurs)
+        VBox1.addWidget(NbExtensionsTxt)
+        VBox2.addWidget(NbExtensions)
         VBox1.addWidget(NbExTxt)
         VBox2.addWidget(NbEx)
         VBox1.addWidget(NbExDispoTxt)
@@ -116,7 +123,7 @@ class JeuView(QWidget):
 
 
 
-        Extensions = QPushButton("Afficher Extensions+")
+        Extensions = QPushButton("Afficher Extensions")
 
         Emprunter = QPushButton("Emprunter")
         Reserver = QPushButton("Reserver (Non Disponible)")
@@ -140,6 +147,7 @@ class JeuView(QWidget):
         if self.session != None:
             self.User = self.session.get_session_User()
 
+        Extensions.clicked.connect(self.afficherExtensions)
         Emprunter.clicked.connect(self.emprunter)
         ajouterExemplaire.clicked.connect(self.ajouterExemplaire)
         Supprimer.clicked.connect(self.supprimer)
@@ -320,3 +328,7 @@ class JeuView(QWidget):
                 "Oops, il semblerait qu'il n'y ait pas d'exemplaire disponible ! ",
                 QMessageBox.Cancel, QMessageBox.NoButton,
                 QMessageBox.NoButton)
+
+    def afficherExtensions(self):
+        Ext = ExtensionsView(self.selectedGame,self.session)
+        self.parent().setCentralWidget(Ext)

@@ -43,6 +43,8 @@ class MainWindow(QMainWindow):
 
         self.toolbar.close()
         self.toolbar = self.addToolBar('ToolBar')
+        ## On fixe la toolbar pour plus qu'elle bouge.
+        self.toolbar.setMovable(False)
 
         # Ajout d'items (=> Actions)
         # ICONES ?
@@ -89,6 +91,8 @@ class MainWindow(QMainWindow):
         if self.toolbar != None:
             self.toolbar.close()
         self.toolbar = self.addToolBar('ToolBar')
+        # On fixe la toolbar
+        self.toolbar.setMovable(False)
 
         self.setBaseSize(400,200)
 
@@ -168,6 +172,9 @@ class MainWindow(QMainWindow):
         if self.session == None:
             self.toolbar.close()
             self.toolbar = self.addToolBar('ToolBar')
+
+            #On refixe la toolbar.
+            self.toolbar.setMovable(False)
 
             # Ajout d'items (=> Actions)
             self.toolbar.addAction(QIcon('img/icon.png'),'Jeux',self.jeux)
