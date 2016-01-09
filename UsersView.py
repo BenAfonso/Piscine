@@ -63,16 +63,23 @@ class UsersView(QTableWidget):
         Users = EnsUtilisateurs.rechercher("%%%%%%%%%%%%%%%%"+keyword+"%%%%%%%%%%%%%%%%")
         self.setRowCount(len(Users))
         for User in Users:
-            self.setItem(ligne, 0, QTableWidgetItem(str(User[0])))
-            self.setItem(ligne, 1, QTableWidgetItem(User[1]))
-            self.setItem(ligne, 2, QTableWidgetItem(str(User[3])))
             currentUser = EnsUtilisateurs.get_user(int(User[0]))
+
+
+            self.setItem(ligne, 0, QTableWidgetItem(str(User[0])))
+            if currentUser.get_abonnementValide():
+                self.item(ligne, 0).setBackground(QColor(178,255,102))
+            else:
+                self.item(ligne, 0).setBackground(QColor(255,102,102))
+            self.setItem(ligne, 1, QTableWidgetItem(User[1]))
+
+
             if (EnsEmprunt.a_un_emprunt_en_cours(currentUser)):
                 emprunt = "Oui"
             else:
                 emprunt = "Non"
-            self.setItem(ligne, 3, QTableWidgetItem(emprunt))
-            self.setItem(ligne, 4, QTableWidgetItem(str(User[6])))
+            self.setItem(ligne, 2, QTableWidgetItem(emprunt))
+            self.setItem(ligne, 3, QTableWidgetItem(str(User[6])))
             ligne=ligne+1
 
     # Fonction permettant d'initialiser le contenu de l'affichage (remplacer par searchmydata)

@@ -150,8 +150,8 @@ class ExtensionsView(QTableWidget):
         Layout.addWidget(NomExtension)
 
 
-        Emprunter=QPushButton("Emprunter+")
-        Reserver=QPushButton("Reserver+")
+        Emprunter=QPushButton("Emprunter")
+        Reserver=QPushButton("Reserver")
         Modifier=QPushButton("Modifier")
         Supprimer=QPushButton("Supprimer")
 
@@ -233,7 +233,7 @@ class ExtensionsView(QTableWidget):
 
 
     #### A FAIRE ####
-    
+
     def emprunter(self):
         # Si l'extension est disponible
         # Si l'extension appartient au jeu de l'emprunt en cours

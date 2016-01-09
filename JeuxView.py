@@ -111,9 +111,9 @@ class JeuxView(QWidget):
             self.Table.setItem(ligne, 4, QTableWidgetItem(str(Jeu[4])))
             CurrentJeu=EnsJeux.get_Jeu(Jeu[0])
             if CurrentJeu.get_nombre_exemplaires_dispo() > 0:
-                self.Table.item(ligne, 0).setBackground(QColor(100,100,150))
+                self.Table.item(ligne, 0).setBackground(QColor(178,255,102))
             else:
-                self.Table.item(ligne, 0).setBackground(QColor(100,100,150))
+                self.Table.item(ligne, 0).setBackground(QColor(255,102,102))
             ligne=ligne+1
 
     # Fonction permettant d'initialiser le contenu de l'affichage (remplacer par searchmydata)
@@ -202,6 +202,7 @@ class JeuxView(QWidget):
                 self.AddJeuP.close()
                 self.parent().parent().jeux()
             except:
+                raise
                 QMessageBox.critical(self, "ERREUR !",
                 u"Erreur lors de l'ajout du jeu. Jeu déjà existant ?",
                 QMessageBox.Ok, QMessageBox.NoButton,

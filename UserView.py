@@ -297,11 +297,13 @@ class UserView(QWidget):
             u"L'emprunt a bien été rendu !",
             QMessageBox.Ok, QMessageBox.NoButton,
             QMessageBox.NoButton)
-            
-            self.refresh()
+
+
         except:
             raise
             self.criticalError()
+        finally:
+            self.refresh()
 
     def reinitRetard(self):
             try:
