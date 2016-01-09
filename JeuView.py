@@ -5,6 +5,7 @@ import EnsJeux
 import EnsEmprunt
 import EnsExemplaires
 import EnsExtensions
+import EnsReservation
 from ExtensionsView import ExtensionsView
 import sys
 
@@ -153,6 +154,7 @@ class JeuView(QWidget):
         Supprimer.clicked.connect(self.supprimer)
         retirerExemplaire.clicked.connect(self.retirerExemplaire)
         Modifier.clicked.connect(self.modifier)
+        Reserver.clicked.connect(self.reserver)
 
         # ESPACEMENT
         spacer = QWidget()
@@ -186,6 +188,7 @@ class JeuView(QWidget):
 
             # Bug catch de l'espace
             except:
+                raise
                 QMessageBox.critical(self, "ERREUR !",
                 "Oops ! Une erreur est survenue ",
                 QMessageBox.Ok, QMessageBox.NoButton,
@@ -198,6 +201,48 @@ class JeuView(QWidget):
             QMessageBox.NoButton)
         else:
             QMessageBox.warning(self, "Impossible d'emprunter",
+            "Oops ! Il semblerait que votre abonnement n'est pas valide.",
+            QMessageBox.Ok, QMessageBox.NoButton,
+            QMessageBox.NoButton)
+
+
+    def reserver(self):
+        if self.session == None:
+            QMessageBox.warning(self, "Impossible de reserver",
+            u"Oops ! il semblerait que vous ne soyez pas connecté.",
+            QMessageBox.Ok, QMessageBox.NoButton,
+            QMessageBox.NoButton)
+        elif (self.session.get_session_User().peut_reserver()):
+            try:
+                D=EnsReservation.Reservation(user=self.User,Jeu=self.selectedGame)
+                D.save()
+                ###########################
+                # AJOUTER LA CONFIRMATION #
+                ###########################
+                QMessageBox.information(self, "Reservation !",
+                u"Le jeu a bien ete reservé.\n A récupérer avant le "+str(D.calcul_date_echeance()),
+                QMessageBox.Ok, QMessageBox.NoButton,
+                QMessageBox.NoButton)
+
+                ## AUTOREFREEEEEESH ##
+                new = JeuView(item=self.item,session=self.session)
+                self.parent().setCentralWidget(new)
+
+            # Bug catch de l'espace
+            except:
+                raise
+                QMessageBox.critical(self, "ERREUR !",
+                "Oops ! Une erreur est survenue ",
+                QMessageBox.Ok, QMessageBox.NoButton,
+                QMessageBox.NoButton)
+
+        elif (EnsReservation.Reservation_EnCours(self.User)):
+            QMessageBox.warning(self, "Impossible de reserver",
+            u"Oops ! il semblerait que vous ayez déjà une reservation en cours.",
+            QMessageBox.Ok, QMessageBox.NoButton,
+            QMessageBox.NoButton)
+        else:
+            QMessageBox.warning(self, "Impossible de reserver",
             "Oops ! Il semblerait que votre abonnement n'est pas valide.",
             QMessageBox.Ok, QMessageBox.NoButton,
             QMessageBox.NoButton)

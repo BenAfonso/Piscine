@@ -297,6 +297,7 @@ class UserView(QWidget):
             u"L'emprunt a bien été rendu !",
             QMessageBox.Ok, QMessageBox.NoButton,
             QMessageBox.NoButton)
+            
             self.refresh()
         except:
             raise
@@ -339,6 +340,7 @@ class UserView(QWidget):
 
     def refresh(self):
         refresh = UserView(item=self.item,session=self.session)
+        self.close()
         self.parent().setCentralWidget(refresh)
 
     def supprimer(self):

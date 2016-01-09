@@ -6,6 +6,7 @@ from datetime import *
 import EnsUtilisateurs
 import EnsJeux
 import EnsExemplaires
+import EnsReservation
 # A MODIFIER:
 # save est une fonction locale à Emprunt et non à EnsEmprunt (Voir Exemplaire/EnsExemplaires)
 import EnsEmprunt
@@ -27,6 +28,9 @@ class Emprunt : #Donne les infos concernant un emprunt
 
 		if Emprunt_id == None:
 			# Test si l'exemplaire est disponible
+			if EnsReservation.Reservation_EnCours(User) and EnsReservation.get_Reservation_User().get_Jeu() == self.Jeu:
+				EnsReservation.supprimer_Reservation(EnsReservation.get_Reservation_User(User))
+				print "Reservation supprimé !"
 			if EnsExemplaires.get_nombre_exemplaires(Jeu,disponible=1) > 0:
 				self.Exemplaire = EnsExemplaires.get_Exemplaire_dispo(Jeu)
 			else:
@@ -91,6 +95,7 @@ class Emprunt : #Donne les infos concernant un emprunt
 				nbRetard = self.calcul_retard()
 				user.ajout_Retard(nbRetard)
 				EnsEmprunt.delete_emprunt(self)
+				print u"Emprunt supprimé !"
 		except:
 			print "ERREUR"
 

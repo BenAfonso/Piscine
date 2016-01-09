@@ -6,6 +6,7 @@
 
 import EnsUtilisateurs
 import EnsAdmins
+import EnsReservation
 import EnsEmprunt
 
 class Utilisateur:
@@ -86,6 +87,9 @@ class Utilisateur:
 
     def peut_emprunter(self):
         return (not(EnsEmprunt.a_un_emprunt_en_cours(self)) and self.abonnementValide)
+
+    def peut_reserver(self):
+        return (not(EnsReservation.Reservation_EnCours(self)) and self.abonnementValide)
 
 
 

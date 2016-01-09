@@ -1,10 +1,8 @@
 #-*-coding: utf-8 -*-
 import sqlite3
 from datetime import date, datetime
-#from Extension import Extension
-from Jeu import Jeu 
 from Reservation import Reservation
-from Utilisateur import Utilisateur
+#from Utilisateur import Utilisateur
 import EnsUtilisateurs
 import EnsExemplaires
 #import EnsExtension
@@ -27,12 +25,12 @@ def createTable():
 			Exemplaire_id INTEGER,
 			date_Reservation DATE,
 			Terminer BOOLEAN
-			
+
 					)""")
-					
+
 	conn.commit()
-	
-	
+
+
 def destroyTable():
 	cur.execute("""DROP TABLE EnsReservation""")
 	conn.commit()
@@ -40,25 +38,26 @@ def destroyTable():
 # Il faut aussi que la reservation n'ait pas "Terminer == True" à rajouter dans la requête
 def Reservation_EnCours(User) :
 
-	cur.execute(""" SELECT * FROM EnsReservation WHERE user_id = ? AND Terminer = False """, (User.get_user_id(),))
+	cur.execute(""" SELECT * FROM EnsReservation WHERE Terminer = 0 AND user_id = ? """, (User.get_user_id(),))
 	result=cur.fetchone()
 	return result != None
 
-# Historique de reservation
+# Historique de reservation ( Boolean ??????)
 def Reservation_Termine(User) :
-    
-    cur.execute(""" SELECT * FROM EnsReservation WHERE user_id = ? AND Terminer = True """, (User.get_user_id(),))
-        result=cur.fetchone()
-        return result != None
+
+    cur.execute(""" SELECT * FROM EnsReservation WHERE user_id = ? AND Terminer = 0 """, (User.get_user_id(),))
+    result=cur.fetchone()
+    return result != None
 
 # fonction qui prend un user et qui renvoie la reservation (instance)
-def get_Reservation_User(User) : 
+def get_Reservation_User(User) :
 
-	cur.execute(""" SELECT * FROM EnsReservation WHERE user_id = ? """, (User.get_user_id(),))
-	result = cur.fetchall()
-
-	for ReservationCur in result :
-		ReservationCur = Reservation(ReservationCur[0],ReservationCur[1],ReservationCur[2],ReservationCur[3],ReservationCur[4],ReservationCur[5],ReservationCur[6])
+	if self.Reservation_EnCours(User):
+		cur.execute(""" SELECT * FROM EnsReservation WHERE Terminer = 0 AND user_id = ? """, (User.get_user_id(),))
+		ReservationCur = cur.fetchone()
+		Reservation(ReservationCur[0],ReservationCur[1],ReservationCur[2],ReservationCur[3],ReservationCur[4],ReservationCur[5],ReservationCur[6])
+	else:
+		print "Pas de reservation."
 
 # fonction qui prend une reservation_id et qui renvoie la reservation (instance)
 def get_Reservation(Reservation_id):
@@ -68,29 +67,29 @@ def get_Reservation(Reservation_id):
 
 def Ajouter_Reservation(Reservation):
 	#Ajouter_Reservation : Reservation x Utilisateur x EnsReservation -> EnsReservation
-	if (not(Reservation_EnCours(EnsUtilisateurs.get_user(Reservation.get_user_id())))):
+	if (not(Reservation_EnCours(Reservation.get_user()))):
 		#try:
-		cur.execute(""" INSERT INTO EnsReservation(Reservation_id, user_id, Exemplaire_id, date_Reservation) 
-			VALUES(?, ?, ?, ?) """, (Reservation.get_Reservation_id(), Reservation.get_user_id(),Reservation.get_Exemplaire_id(), Reservation.get_date_Reservation(), ))
+		cur.execute(""" INSERT INTO EnsReservation(Reservation_id, user_id, Exemplaire_id, date_Reservation)
+			VALUES(?, ?, ?, ?) """, (Reservation.get_Reservation_id(), Reservation.get_user().get_user_id(),Reservation.get_Exemplaire_id(), Reservation.get_date_Reservation(), ))
 		conn.commit()
 		print(" Reservation ajoutée !")
 		#except:
 		#	print ("Erreur lors de l'ajout d'une reservation")
 
 	else:
-		print ("Une reservation est deja en cours " ) 
-		
+		print ("Une reservation est deja en cours " )
+
 # Reservation_id = User_id <== Faux - faut mettre get_reservation_id
 def supprimer_Reservation(Reservation):
 	#Supprime une reservation
 	try:
 		cur.execute(""" DELETE FROM EnsReservation WHERE Reservation_id = ?""", (Reservation.get_reservation_id()))
 		conn.commit()
-		
+
 	except:
 		print "Erreur lors de la suppression de la Reservation"
-		
-		
+
+
 def Nombre_De_Reservation():
 	# nombre_Reservation: EnsReservation -> Entier, renvoie le nombre de Reservation . """
 
@@ -101,7 +100,7 @@ def Nombre_De_Reservation():
 # même chose que get_reservation => mettre get_reservation_en_cours et il faut Terminer = False dans la requête et il faut le User.get_user_id()
 def rechercher_Reservation_User(User):
        #rechercher_Reservation_User: Int -> EnsReservation, renvoie la reservation de l'utilisateur que l'on veut connaitre.
-	
+
 	cur.execute("""SELECT * FROM EnsReservation WHERE user_id LIKE ?""",(user_id,))
 	Reservaton_user = cur.fetchall()
 	return Reservaton_user
@@ -109,14 +108,14 @@ def rechercher_Reservation_User(User):
 #  A modifier => Renvoyer des instances d'emprunts dans un tableau
 def rechercher_date_reservation (Date):
     cur.execute("""SELECT * FROM EnsReservation WHERE date_Reservation = ? """,Date)
-        res = cur.fetchall()
-        return res
+    res = cur.fetchall()
+    return res
 
 def Reservation_to_table(Reservation):
 	# Reservation -> List
 	ReservationTable=(Reservation.get_Reservation_id(),Reservation.get_user_id(),Reservation.get_Jeu_id(),Reservation.get_Exemplaire_id(),Reservation.get_date_Reservation())
 	return ReservationTable
-		
+
 def printAll():
 	cur.execute(""" SELECT * FROM EnsReservation""")
 	result = cur.fetchall()

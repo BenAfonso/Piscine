@@ -3,16 +3,17 @@ import EnsUtilisateurs
 import EnsJeux
 import EnsExtensions
 import EnsExemplaires
-from datetime import date, datetime
+import EnsReservation
+from datetime import date, datetime, timedelta
 
 # Rajouter implementation de la date (date automatique lors de la creation) voir Classe Emprunt de Jean
 # Faire en sorte qu'on rentre des Instances Utilisateurs et non des user (pareil pour exemplaire, ...)
-# Jeu inutile parce qu'on a l'exemplaire qui est associé au jeu 
+# Jeu inutile parce qu'on a l'exemplaire qui est associé au jeu
 
 class Reservation :
 
     def __init__(self,Reservation_id = None, user = None, Jeu = None, Extension = None ,Exemplaire = None,date_Reservation = None, Terminer = False) :
-    
+
         self.Reservation_id = Reservation_id
         self.user = user
         self.Jeu = Jeu
@@ -31,12 +32,12 @@ class Reservation :
         else:
             self.date_Reservation = date_Reservation
             reservation_perime()
-            
 
-        
-    
+
+
+
   ### GETTERS###
-  
+
     def get_Reservation_id(self):
         return self.Reservation_id
     def get_user(self):
@@ -44,16 +45,16 @@ class Reservation :
     def get_Jeu(self):
         return self.Jeu
     def get_Exemplaire_id(self):
-        return self.Exemplaire_id
+        return self.Exemplaire.get_Exemplaire_id()
     def get_date_Reservation(self):
         return self.date_Reservation
     def get_Extension_id(self):
         return self.Extension_id
     def get_Terminer(self):
         return self.Terminer
-        
+
     ##### SETTERS #####
-    
+
     def set_user(self, user):
         self.user = user
     def set_Jeu(self, Jeu):
@@ -67,8 +68,14 @@ class Reservation :
     def set_Reservation_date(self):
         self.date_Reservation = date.today()
 
-        
+
   ##### FONCTIONS ANNEXES #####
+
+    def calcul_date_echeance(self):
+        # 2 SEMAINES POUR A LA RESERVATION ?
+        date_echeance=self.date_Reservation+timedelta(days=15)
+        return date_echeance
+    # Wtf ?
     def reservation_perime(self):
         if (self.date_Reservation < date.today()):
             self.Terminer = True
