@@ -111,6 +111,14 @@ def rechercher_date_echeance (Date_echeance):
         res = cur.fetchall()
         return res
 
+
+def rechercher_Jeu_id(jeu_id):
+        cur.execute(""" SELECT * FROM EnsEmprunt WHERE Jeu_id = jeu_id""")
+        res = cur.fetchall()
+        return res
+
+
+
 def printAll():
         cur.execute("""SELECT * FROM EnsEmprunt""")
         rows = cur.fetchall()
