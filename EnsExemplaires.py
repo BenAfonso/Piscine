@@ -33,7 +33,7 @@ def destroyTable():
 
 def exemplaire_to_table(Exemplaire):
         # User -> List
-        ExemplaireTable=(Exemplaire.get_Exemplaire_id(),Exemplaire.get_Jeu_Exemplaire(),Exemplaire.get_Est_disponible())
+        ExemplaireTable=(Exemplaire.get_Exemplaire_id(),Exemplaire.get_Jeu_id(),Exemplaire.get_Est_disponible())
         return ExemplaireTable
 
 def supprimerExemplaire(Exemplaire):

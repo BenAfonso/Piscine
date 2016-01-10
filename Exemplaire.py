@@ -5,14 +5,14 @@ import EnsExemplaires
 
 class Exemplaire:
 
-    def __init__(self,Jeu_id,Est_disponible=True,Exemplaire_id=None):
+    def __init__(self,Jeu,Est_disponible=True,Exemplaire_id=None):
         self.Exemplaire_id = Exemplaire_id
-        self.Jeu_id = Jeu_id
+        self.Jeu = Jeu
         self.Est_disponible = Est_disponible
     #### GETTERS ####
 
     def get_Jeu_Exemplaire(self):
-        return self.Jeu_id
+        return self.Jeu
     def get_Est_disponible(self):
         return self.Est_disponible
     def get_Exemplaire_id(self):
