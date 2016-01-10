@@ -21,7 +21,7 @@ class Emprunt : #Donne les infos concernant un emprunt
 		-son statut (en retard ou à l'heure)
 		-sa validité  """
 	# Sa validité ??
-	def __init__(self, Emprunt_id = None,  User=None, Jeu=None,Exemplaire=None,date_emprunt=None,date_echeance=None,date_rendu=None):
+	def __init__(self, Emprunt_id = None,  User=None, Jeu=None,Exemplaire=None,date_emprunt=None,date_echeance=None,date_rendu=None, Jeu_id = None):
 
 		self.Emprunt_id = Emprunt_id   		#Id de l'emprunt
 		self.User = User 			#Id de l'adhérent
@@ -41,11 +41,10 @@ class Emprunt : #Donne les infos concernant un emprunt
 			# PréCondition: Exemplaire Disponible !
 			if (date_emprunt == None and self.Exemplaire.get_Est_disponible() and not(EnsEmprunt.a_un_emprunt_en_cours(User))):
 
-
+				self.Jeu_id = self.Exemplaire.get_Jeu_Exemplaire()
 				#self.date_emprunt = date.today()
 				# TEST DU retard
 				self.date_emprunt = date(2015,10,21)
-
 
 
 				self.date_echeance = self.calcul_Date_Echeance()
