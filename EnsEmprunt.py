@@ -29,14 +29,15 @@ def createTable():
 
                         date_emprunt DATE,
                         date_echeance DATE,
-                        date_rendu DATE)""")  #DATE est représenté comme : YYYY-MM-DD
+                        date_rendu DATE,        #DATE est représenté comme : YYYY-MM-DD
+                        Jeu_id INTEGER)""")  
         conn.commit()
 
 def destroyTable():
         cur.execute("""DROP TABLE EnsEmprunt""")
         conn.commit()
 def emprunt_to_table(Emprunt):
-		emprunt_table = (Emprunt.get_User_Emprunt().get_user_id(), Emprunt.get_Exemplaire_Emprunt().get_Exemplaire_id(), Emprunt.get_date_emprunt(), Emprunt.get_date_echeance(), Emprunt.get_date_rendu())
+		emprunt_table = (Emprunt.get_User_Emprunt().get_user_id(), Emprunt.get_Exemplaire_Emprunt().get_Exemplaire_id(), Emprunt.get_date_emprunt(), Emprunt.get_date_echeance(), Emprunt.get_date_rendu(), Emprunt.get_Jeu_id())
 		return emprunt_table
 
 def delete_emprunt(Emprunt):
@@ -46,7 +47,7 @@ def delete_emprunt(Emprunt):
 def get_Emprunt_Exemplaire(Exemplaire):
         cur.execute("""SELECT * FROM EnsEmprunt WHERE exemplaire_id = ?""",(Exemplaire.get_Exemplaire_id(),))
         res = cur.fetchone()
-        return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5])
+        return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5], Jeu_id =res[6])
 def get_nombre_emprunts():
         cur.execute("""SELECT COUNT(Emprunt_id) FROM EnsEmprunt""")
         return cur.fetchone()[0]
@@ -72,7 +73,7 @@ def update(Emprunt):
 def get_Emprunt (Emprunt_id):
         cur.execute("""SELECT * FROM EnsEmprunt WHERE emprunt_id = (?)""",(Emprunt_id,))
         res = cur.fetchone()
-        return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5])
+        return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5], Jeu_id=res[6])
 
 
 def get_emprunts_User(User):
@@ -90,14 +91,14 @@ def get_emprunt_en_cours(User):
         if a_un_emprunt_en_cours(User):
                 cur.execute("""SELECT * FROM EnsEmprunt WHERE user_id = ? AND date_rendu IS NULL""",(User.get_user_id(),) )
                 res = cur.fetchone()
-                return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5])
+                return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5], Jeu_id=res[6])
         else:
                 return None
 
 def rechercher_Exemplaire (Exemplaire):
         cur.execute("""SELECT * FROM EnsEmprunt WHERE Exemplaire_id = ?""",(Exemplaire.get_Exemplaire_id()))
         res = cur.fetchall()
-        return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5])
+        return Emprunt(Emprunt_id=res[0],User=EnsUtilisateurs.get_user(res[1]),Exemplaire=EnsExemplaires.get_Exemplaire(res[2]),date_emprunt=res[3],date_echeance=res[4],date_rendu=res[5], Jeu_id=res[6])
 
 #  A modifier => Renvoyer des instances d'emprunts dans un tableau
 def rechercher_date_emprunt (Date):

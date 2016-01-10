@@ -79,6 +79,9 @@ class Emprunt : #Donne les infos concernant un emprunt
 	def get_date_rendu(self):
 		return self.date_rendu
 
+	def get_Jeu_id(self):
+		return self.Jeu_id
+
 	def est_rendu(self):
 		return self.date_rendu != None
 
