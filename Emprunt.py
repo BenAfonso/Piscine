@@ -25,7 +25,6 @@ class Emprunt : #Donne les infos concernant un emprunt
 
 		self.Emprunt_id = Emprunt_id   		#Id de l'emprunt
 		self.User = User 			#Id de l'adhérent
-		self.Jeu_id=Jeu_id
 
 		if Emprunt_id == None:
 			# Test si l'exemplaire est disponible
@@ -80,9 +79,6 @@ class Emprunt : #Donne les infos concernant un emprunt
 
 	def get_date_rendu(self):
 		return self.date_rendu
-
-	def get_Jeu_id_Emprunt(self):
-		return self.Jeu_id
 
 	def est_rendu(self):
 		return self.date_rendu != None
