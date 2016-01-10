@@ -37,7 +37,7 @@ def get_Jeu(Jeu_id=None,Nom_jeu=None):
                 result=cur.fetchone()
                 return Jeu(result[0],result[1],result[2],result[3],result[4],result[5],result[6],result[7])
         except:
-                print "Erreur: ID du jeu non valide"
+                print ("Erreur: ID du jeu non valide")
 
 def delete_Jeu(Jeu):
         try:
@@ -46,7 +46,7 @@ def delete_Jeu(Jeu):
                 cur.execute("""DELETE FROM EnsExemplaires WHERE Jeu_id = ?""",(Jeu.get_Jeu_id(),))
                 conn.commit()
         except:
-                print "Erreur lors de la suppression !"
+                print ("Erreur lors de la suppression !")
 
 def has_Jeu(Nom_jeu):
         cur.execute("""SELECT Jeu_id FROM EnsJeux WHERE Nom_jeu = ?""",(Nom_jeu,))
@@ -110,9 +110,9 @@ def update(Jeu):
         try:
                 cur.execute("""UPDATE EnsJeux SET Nom_jeu=?,Annee=?,Editeur=?,AgeMini=?,NombreJoueurs=?,Description=?,Categorie_id=? WHERE Jeu_id=?""", (Jeu.get_Nom_jeu(),Jeu.get_Annee(),Jeu.get_Editeur(),Jeu.get_AgeMini(),Jeu.get_NombreJoueurs(),Jeu.get_Description(),Jeu.get_Categorie_id(),Jeu.get_Jeu_id()))
                 conn.commit()
-                print "Le jeu a bien été modifié !"
+                print ("Le jeu a bien été modifié !")
         except:
-                print "La modification du jeu à échouée"
+                print ("La modification du jeu à échouée")
                 raise
 def printAll():
         cur.execute("""SELECT * FROM EnsJeux""")

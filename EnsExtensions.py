@@ -32,7 +32,7 @@ def get_Extension(Extension_id=None,Nom_Extension=None):
                 result=cur.fetchone()
                 return Extension(result[0],result[1],result[2],result[3])
         except:
-                print "Erreur: ID du jeu non valide"
+                print ("Erreur: ID du jeu non valide")
 
 
 
@@ -51,12 +51,12 @@ def ajouter_Extension(Extension):
 		try:
 			cur.execute(""" INSERT INTO EnsExtensions(Extension_id, Jeu_id, Nom_Extension, Disponibilite) VALUES(?, ?, ?, ?) """, (Extension.get_Extension_id(), Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(),))
 			conn.commit()
-			print "L'extension a bien ete ajoutee"
+			print ("L'extension a bien ete ajoutee")
 		except:
-			print "Erreur lors de l'ajout de l'extension"
+			print ("Erreur lors de l'ajout de l'extension")
 
 	else:
-		print "L'extension est déjà présente dans la base."
+		print ("L'extension est déjà présente dans la base.")
 
 def supprimer_Extension(Extension):
 	if(est_Presente_Extension(Extension)):
@@ -64,10 +64,10 @@ def supprimer_Extension(Extension):
 			cur.execute(""" DELETE FROM EnsExtensions WHERE Extension_id = ?""", (Extension.get_Extension_id(),))
 			conn.commit()
 		except:
-			print "Erreur lors de la suppression de l'extension"
+			print ("Erreur lors de la suppression de l'extension")
 			raise
 	else:
-		print "Impossible de supprimer une extension non présente dans la base."
+		print ("Impossible de supprimer une extension non présente dans la base.")
 		raise
 
 def nombre_extensions_Jeu(Jeu): # A tester apres avoir corriger les bugs de cle primaire et attribut dispo
@@ -101,14 +101,14 @@ def est_Disponible_Extension(Extension): # A debugger: retourne un entier au lie
 	cur.execute(""" SELECT Disponibilite FROM EnsExtensions WHERE Extension_id = ?""", (Extension.get_Extension_id(),))
 	disponibility = cur.fetchone()
 
-	return disponibility[0]
+	return disponibility != None
 
 # ????
 def afficher_Extensions():
 	""" affiche les extensions de la table EnsExtensions """
 
 	cur.execute(""" SELECT Extension_id FROM EnsExtensions""")
-	res = cur.fetchall
+	res = cur.fetchall()
 	return res
 
 # A REVOIR =
@@ -131,7 +131,7 @@ def update_Extension(Extension):
 		# Bordel de merde.
 		# cur.execute(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilite = ?""", (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(),)
 		cur.execute(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilite = ? WHERE Extension_id = ?""", (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(), Extension.get_Extension_id(),))
-		print "L'extension a bien ete mise a jour"
+		print ("L'extension a bien ete mise a jour")
 	except:
 		raise
 

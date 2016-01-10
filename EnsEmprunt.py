@@ -53,7 +53,7 @@ def get_nombre_emprunts():
 
 def insert_emprunt(Emprunt):
         if Emprunt.get_Exemplaire_Emprunt() == None:
-            print "Oops. Vous voulez inserer quelque chose de vide !"
+            print ("Oops. Vous voulez inserer quelque chose de vide !")
         else:
             cur.execute("""INSERT INTO EnsEmprunt(user_id,exemplaire_id,date_emprunt,date_echeance,date_rendu) VALUES (?, ?, ?, ?, ?)""",emprunt_to_table(Emprunt))
             conn.commit()
@@ -64,7 +64,7 @@ def update(Emprunt):
             conn.commit()
             print("Emprunt modifie avec succes !")
         except:
-            print "La modification de l'exemplaire à échouée"
+            print ("La modification de l'exemplaire à échouée")
             raise
 
 

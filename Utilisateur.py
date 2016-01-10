@@ -71,7 +71,7 @@ class Utilisateur:
         if (self.user_id != 0):
             EnsAdmins.insert(self)
         else:
-            print "Pas d'utilisateur selectionne !"
+            print ("Pas d'utilisateur selectionne !")
 
     def remove_admin(self):
         if (self.user_id != 0 and self.est_admin()):

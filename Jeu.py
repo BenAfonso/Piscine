@@ -69,7 +69,7 @@ class Jeu:
             self.Categorie_id = Categorie_id
             # AJOUTER FONCTION UPDATE
         else:
-            print "Oops, la categorie n'existe pas !"
+            print ("Oops, la categorie n'existe pas !")
 
 
 
@@ -98,7 +98,7 @@ class Jeu:
             Exemplaire=EnsExemplaires.get_Exemplaire_dispo(self)
             EnsExemplaires.supprimerExemplaire(Exemplaire)
         except:
-            print "[ERREUR] Jeu :: Erreur lors de la suppression !"
+            print ("[ERREUR] Jeu :: Erreur lors de la suppression !")
             raise
 
 

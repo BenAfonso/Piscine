@@ -48,7 +48,7 @@ def get_user(user_id=None,username=None):
                 result= cur.fetchone()
                 return Utilisateur(result[0],result[1],result[2],result[3],result[4],result[5],result[6])
         except:
-                print "ID non valide"
+                print ("ID non valide")
 
 def reinitAbonnements():
     # Reinitialise les abonnements de TOUS les utilisateurs
@@ -66,7 +66,7 @@ def delete_user(User):
                 cur.execute("""DELETE FROM EnsUtilisateurs WHERE user_id = ?""",(User.get_user_id(),))
                 conn.commit()
         except:
-                print "Erreur lors de la suppression !"
+                print ("Erreur lors de la suppression !")
 def user_to_table(User):
         # User -> List
         UserTable=(User.get_user_id(),User.get_username(),User.get_password(),User.get_abonnementValide(),User.get_empruntEnCours(),User.get_reservationEnCours(),User.get_nbRetard())
@@ -95,9 +95,9 @@ def update(User):
         try:
                 cur.execute("""UPDATE EnsUtilisateurs SET username=?,password=?,abonnementValide=?,empruntEnCours=?,reservationEnCours=?,nbRetard=? WHERE user_id=?""",(User.get_username(),User.get_password(),User.get_abonnementValide(),User.get_empruntEnCours(),User.get_reservationEnCours(),User.get_nbRetard(),User.get_user_id()))
                 conn.commit()
-                print "Les informations de l'utilisateur ont bien été modifiées !"
+                print ("Les informations de l'utilisateur ont bien été modifiées !")
         except:
-                print "La modification des informations Utilisateur ont échouées"
+                print ("La modification des informations Utilisateur ont échouées")
                 raise
 
 

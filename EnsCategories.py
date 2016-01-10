@@ -30,14 +30,14 @@ def ajouterCategorie(nomCategorie): #ajouter un test estPresent_Categorie: Text 
                 cur.execute("""INSERT INTO EnsCategories(Categorie) VALUES (?)""",(nomCategorie,))
                 conn.commit()
         else:
-                print "Renseignez un nom !"
+                print ("Renseignez un nom !")
 
 def supprimerCategorie(Categorie_id):
         try:
                 cur.execute("""DELETE FROM EnsCategories WHERE Categorie_id = ?""",(Categorie_id,))
                 conn.commit()
         except:
-                print "Erreur lors de la suppression !"
+                print ("Erreur lors de la suppression !")
 
 def categorieExiste(Categorie):
         cur.execute("""SELECT * FROM EnsCategories WHERE Categorie_id = ?""", (Categorie_id,))
@@ -54,7 +54,7 @@ def get_Categorie(Categorie_id=None,Categorie=None):
                 cur.execute("""SELECT * FROM EnsCategories WHERE Categorie = ?""", (Categorie,))
                 result = cur.fetchone()
         else:
-                print "Erreur."
+                print ("Erreur.")
         return result
 
 

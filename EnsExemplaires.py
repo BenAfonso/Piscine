@@ -17,18 +17,18 @@ def createTable():
                         Jeu_id INTEGER,
                         Est_disponible BOOLEAN)""")
                 conn.commit()
-                print "[INFO] La table EnsExemplaires a bien été créée"
+                print ("[INFO] La table EnsExemplaires a bien été créée")
         except:
-                print "[ERROR] La table EnsExemplaire n'a pas été créée !"
+                print ("[ERROR] La table EnsExemplaire n'a pas été créée !")
 
 
 def destroyTable():
         try:
                 cur.execute("""DROP TABLE EnsExemplaires""")
                 conn.commit()
-                print "[INFO] La table EnsExemplaires a bien été supprimée"
+                print ("[INFO] La table EnsExemplaires a bien été supprimée")
         except:
-                print "[ERROR] La table EnsExemplaire n'a pas été supprimée !"
+                print ("[ERROR] La table EnsExemplaire n'a pas été supprimée !")
 
 
 def exemplaire_to_table(Exemplaire):
@@ -41,7 +41,7 @@ def supprimerExemplaire(Exemplaire):
                 ExemplaireId = Exemplaire.get_Exemplaire_id()
                 cur.execute("""DELETE FROM EnsExemplaires WHERE Exemplaire_id = ?""", (ExemplaireId,))
         except:
-                print "[ERREUR] EnsExemplaires :: Erreur lors de la suppression !"
+                print ("[ERREUR] EnsExemplaires :: Erreur lors de la suppression !")
                 raise
 
 def get_Exemplaire_dispo(Jeu):
@@ -51,7 +51,7 @@ def get_Exemplaire_dispo(Jeu):
                 result = cur.fetchone()
                 return Exemplaire(EnsJeux.get_Jeu(result[1]),result[2],result[0])
         else:
-                print "Oops, le jeu n'est pas disponible !"
+                print ("Oops, le jeu n'est pas disponible !")
                 raise
 
 def get_Exemplaire(exemplaire_id=None,jeu_id=None):
@@ -63,7 +63,7 @@ def get_Exemplaire(exemplaire_id=None,jeu_id=None):
                 result = cur.fetchone()
                 return Exemplaire(EnsJeux.get_Jeu(result[1]),result[2],result[0])
         except:
-                print "Oops, l'id de l'exemplaire n'est pas valide !"
+                print ("Oops, l'id de l'exemplaire n'est pas valide !")
 
 def get_nombre_exemplaires(Jeu,disponible=2):
         # 1 Disponibles
@@ -94,7 +94,7 @@ def insert(Exemplaire):
             conn.commit()
             print("Exemplaire ajoute avec succes !")
         except:
-            print "Erreur lors de l'ajout de l'Exemplaire"
+            print ("Erreur lors de l'ajout de l'Exemplaire")
             raise
 
 def update(Exemplaire):
@@ -103,7 +103,7 @@ def update(Exemplaire):
             conn.commit()
             print("Exemplaire modifie avec succes !")
         except:
-            print "Oops, la modification a échouée"
+            print ("Oops, la modification a échouée")
             raise
 
 

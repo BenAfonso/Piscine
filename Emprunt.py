@@ -30,12 +30,12 @@ class Emprunt : #Donne les infos concernant un emprunt
 			# Test si l'exemplaire est disponible
 			if EnsReservation.Reservation_EnCours(User) and EnsReservation.get_Reservation_User().get_Jeu() == self.Jeu:
 				EnsReservation.supprimer_Reservation(EnsReservation.get_Reservation_User(User))
-				print "Reservation supprimé !"
+				print ("Reservation supprimé !")
 			if EnsExemplaires.get_nombre_exemplaires(Jeu,disponible=1) > 0:
 				self.Exemplaire = EnsExemplaires.get_Exemplaire_dispo(Jeu)
 			else:
 				self.Exemplaire=None
-				print "Oops, ce jeu n'est pas disponible !"
+				print ("Oops, ce jeu n'est pas disponible !")
 				raise
 			self.date_rendu = date_rendu
 			# PréCondition: Exemplaire Disponible !
@@ -52,12 +52,12 @@ class Emprunt : #Donne les infos concernant un emprunt
 				try:
 					EnsExemplaires.get_Exemplaire(self.Exemplaire.get_Exemplaire_id()).set_Est_disponible(False)
 					self.save()
-					print "Un emprunt a été créé !"
+					print ("Un emprunt a été créé !")
 				except:
-					print "Oops, impossible d'emprunter, déjà un emprunt en cours ?!"
+					print ("Oops, impossible d'emprunter, déjà un emprunt en cours ?!")
 					raise
 			else:
-				print "Oops ! Emprunt non valide !"
+				print ("Oops ! Emprunt non valide !")
 				raise
 				self.date_emprunt = date_emprunt
 				self.date_echeance = date_echeance
@@ -89,15 +89,15 @@ class Emprunt : #Donne les infos concernant un emprunt
 		try:
 			EnsEmprunt.update(self)
 			if self.est_rendu():
-				print "Emprunt Rendu !"
+				print ("Emprunt Rendu !")
 				self.Exemplaire.set_Est_disponible(True)
 				user = self.get_User_Emprunt()
 				nbRetard = self.calcul_retard()
 				user.ajout_Retard(nbRetard)
 				EnsEmprunt.delete_emprunt(self)
-				print u"Emprunt supprimé !"
+				print (u"Emprunt supprimé !")
 		except:
-			print "ERREUR"
+			print ("ERREUR")
 
 	def get_Exemplaire_Emprunt(self):
 		return(self.Exemplaire)

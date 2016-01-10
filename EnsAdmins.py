@@ -27,7 +27,7 @@ def delete_admin(User):
                 cur.execute("""DELETE FROM EnsAdmins WHERE user_id = ?""",(User.get_user_id(),))
                 conn.commit()
         except: 
-                print "Erreur lors de la suppression !"
+                print ("Erreur lors de la suppression !")
 
 def insert(User):
         try:    

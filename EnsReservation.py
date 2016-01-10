@@ -57,7 +57,7 @@ def get_Reservation_User(User) :
 		ReservationCur = cur.fetchone()
 		Reservation(ReservationCur[0],ReservationCur[1],ReservationCur[2],ReservationCur[3],ReservationCur[4],ReservationCur[5],ReservationCur[6])
 	else:
-		print "Pas de reservation."
+		print ("Pas de reservation.")
 
 # fonction qui prend une reservation_id et qui renvoie la reservation (instance)
 def get_Reservation(Reservation_id):
@@ -87,7 +87,7 @@ def supprimer_Reservation(Reservation):
 		conn.commit()
 
 	except:
-		print "Erreur lors de la suppression de la Reservation"
+		print ("Erreur lors de la suppression de la Reservation")
 
 
 def Nombre_De_Reservation():

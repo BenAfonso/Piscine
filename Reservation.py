@@ -24,7 +24,7 @@ class Reservation :
                 self.Exemplaire = EnsExemplaires.get_Exemplaire_dispo(Jeu)
             else:
                 self.Exemplaire=None
-                print "Oops, ce jeu n'est pas disponible !"
+                print ("Oops, ce jeu n'est pas disponible !")
                 raise
         self.Terminer = Terminer
         if date_Reservation == None:
