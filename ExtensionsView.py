@@ -311,7 +311,7 @@ class ExtensionsView(QTableWidget):
         self.User=self.session.get_session_User()
 
         if (self.session == None):
-            QMessageBox.warning(self, "Impossible d'emprunter",
+            QMessageBox.warning(self, "Impossible de réserver",
             u"Oops ! il semblerait que vous ne soyez pas connecté.",
             QMessageBox.Ok, QMessageBox.NoButton,
             QMessageBox.NoButton)
@@ -321,7 +321,7 @@ class ExtensionsView(QTableWidget):
             if(EnsEmprunt.a_un_emprunt_en_cours(self.User)):
                 #Si l'extension correspond au jeu de l'emprunt en cours alors on crée une réservation
                 #A FAIRE: Rajouter l'id du jeu lors d'une réservation, permet une meilleure gestion des emprunts d'extensions. Extension utilise un Jeu_id.
-                if(self.selectedExtension().get_Id_Jeu_Associe() == self.User.get_emprunt_en_cours().get_Jeu_id_Emprunt()):
+                if(self.selectedExtension().get_Id_Jeu_Associe() == self.User.get_emprunt_en_cours().get_Jeu_id_Reservation()):
                     #Creation d'un nouvel emprunt concernant l'extension
                     D=EnsReservation.Reservation(User=self.User,Jeu=self.selectedGame)
                     #CONFIRMATION DE L'EMPRUNT

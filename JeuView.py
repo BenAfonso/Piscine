@@ -173,7 +173,7 @@ class JeuView(QWidget):
             QMessageBox.NoButton)
         elif (self.session.get_session_User().peut_emprunter()):
             try:
-                D=EnsEmprunt.Emprunt(User=self.User,Jeu=self.selectedGame)
+                D=EnsEmprunt.Emprunt(User=self.User,Jeu=self.selectedGame,Jeu_id=self.selectedGame.get_Jeu_id())
                 ###########################
                 # AJOUTER LA CONFIRMATION #
                 ###########################
