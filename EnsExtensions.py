@@ -26,6 +26,7 @@ def destroy_table_Extension():
 
 
 def get_Extension(Extension_id=None,Nom_Extension=None):
+	""" get_Extension: Int x Text -> Extension , renvoie un objet de type Extension correspondant à l'identifiant et/ou au nom donné en parametre"""
         if (Extension_id!=None): cur.execute("""SELECT * FROM EnsExtensions WHERE Extension_id = ?""",(Extension_id,))
         if (Nom_Extension!=None): cur.execute("""SELECT * FROM EnsExtensions WHERE Nom_Extension = ?""",(Nom_Extension,))
         try:

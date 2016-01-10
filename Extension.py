@@ -5,7 +5,7 @@ import EnsExtensions
 import EnsJeux
 
 class Extension:
-    def __init__(self,Extension_id=None, Jeu_id = None, Nom_Extension="", Disponible=True):
+    def __init__(self,Extension_id=None, Jeu_id= None, Nom_Extension="", Disponible=True):
         self.Extension_id = Extension_id
         self.Jeu_id = Jeu_id
         self.Disponible = Disponible
