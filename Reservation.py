@@ -6,9 +6,7 @@ import EnsExemplaires
 import EnsReservation
 from datetime import date, datetime, timedelta
 
-# Rajouter implementation de la date (date automatique lors de la creation) voir Classe Emprunt de Jean
-# Faire en sorte qu'on rentre des Instances Utilisateurs et non des user (pareil pour exemplaire, ...)
-# Jeu inutile parce qu'on a l'exemplaire qui est associé au jeu
+
 
 class Reservation :
 
