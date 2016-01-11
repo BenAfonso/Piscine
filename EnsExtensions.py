@@ -60,6 +60,7 @@ def ajouter_Extension(Extension):
 		print ("L'extension est déjà présente dans la base.")
 
 def supprimer_Extension(Extension):
+	""" supprimer_Extension: Extension x EnsExtensions -> EnsExtensions, est_Presente_Extension(Extension.get_Nom_Extension) == True avant suppression."""
 	if(est_Presente_Extension(Extension)):
 		try:
 			cur.execute(""" DELETE FROM EnsExtensions WHERE Extension_id = ?""", (Extension.get_Extension_id(),))
@@ -71,7 +72,7 @@ def supprimer_Extension(Extension):
 		print ("Impossible de supprimer une extension non présente dans la base.")
 		raise
 
-def nombre_extensions_Jeu(Jeu): # A tester apres avoir corriger les bugs de cle primaire et attribut dispo
+def nombre_extensions_Jeu(Jeu):
 	""" nombre_extensions: Jeu -> Entier, renvoie le nomrbe d'extension d'un jeu donné. Le jeu doit être dans EnsJeux"""
 
 	cur.execute(""" SELECT COUNT(Extension_id) FROM EnsExtensions WHERE Jeu_id = (?)""", (Jeu.get_Jeu_id(),))
@@ -86,17 +87,15 @@ def nombre_Extensions():
 	result = cur.fetchone()
 	return result[0]
 
-def rechercher_Extensions_Jeu(Jeu):  # A tester apres avoir corriger les bugs de cle primaire et attribut dispo
+def rechercher_Extensions_Jeu(Jeu):
 	""" rechercher_extension: Text -> EnsExtensions, renvoie une ou plusieurs extensions présentes en base
 	correspondant au Jeu donné en paramètre """
-	# Serieux testez vos codes !!...
-	#cur.execute =(""" SELECT Extension_id, Nom_Extension FROM EnsExtensions  WHERE EnsExtensions.Jeu_id = ? ) """, (Jeu.get_Jeu_id(),))
 
 	cur.execute(""" SELECT * FROM EnsExtensions  WHERE Jeu_id = ? """, (Jeu.get_Jeu_id(),))
 	all_Extensions = cur.fetchall()
 	return all_Extensions
 
-def est_Disponible_Extension(Extension): # A debugger: retourne un entier au lieu d'un boolean...
+def est_Disponible_Extension(Extension):
 	""" est_Disponible_Extension: Extension -> Bool, True si l'extension est disponible, False sinon. """
 
 	cur.execute(""" SELECT Disponibilite FROM EnsExtensions WHERE Extension_id = ?""", (Extension.get_Extension_id(),))
@@ -104,7 +103,6 @@ def est_Disponible_Extension(Extension): # A debugger: retourne un entier au lie
 
 	return disponibility != None
 
-# ????
 def afficher_Extensions():
 	""" affiche les extensions de la table EnsExtensions """
 
@@ -112,7 +110,6 @@ def afficher_Extensions():
 	res = cur.fetchall()
 	return res
 
-# A REVOIR =
 def get_Extension_Jeu(Jeu):
 	cur.execute("""SELECT * FROM EnsExtensions WHERE Jeu_id = ?""",(Jeu.get_Jeu_id(),))
 	res = cur.fetchall()
@@ -128,9 +125,6 @@ def get_Extension_Jeu(Jeu):
 def update_Extension(Extension):
 	""" update_Extension: Extension -> Extension, modifie les informations d'une extension donnée """
 	try:
-
-		# Bordel de merde.
-		# cur.execute(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilite = ?""", (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(),)
 		cur.execute(""" UPDATE EnsExtensions SET Jeu_id = ?, Nom_Extension = ?, Disponibilite = ? WHERE Extension_id = ?""", (Extension.get_Id_Jeu_Associe(), Extension.get_Nom_Extension(), Extension.get_Disponible(), Extension.get_Extension_id(),))
 		print ("L'extension a bien ete mise a jour")
 	except:

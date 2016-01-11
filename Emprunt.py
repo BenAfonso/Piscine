@@ -42,9 +42,9 @@ class Emprunt : #Donne les infos concernant un emprunt
 			if (date_emprunt == None and self.Exemplaire.get_Est_disponible() and not(EnsEmprunt.a_un_emprunt_en_cours(User))):
 
 
-				#self.date_emprunt = date.today()
+				self.date_emprunt = date.today()
 				# TEST DU retard
-				self.date_emprunt = date(2015,10,21)
+				#self.date_emprunt = date(2015,10,21)
 
 
 
