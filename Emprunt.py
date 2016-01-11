@@ -94,6 +94,8 @@ class Emprunt : #Donne les infos concernant un emprunt
 				user = self.get_User_Emprunt()
 				nbRetard = self.calcul_retard()
 				user.ajout_Retard(nbRetard)
+				if(user.get_nbRetard()>10):
+					user.set_abonnementValide(False)
 				EnsEmprunt.delete_emprunt(self)
 				print (u"Emprunt supprimé !")
 		except:
