@@ -241,121 +241,17 @@ class ExtensionsView(QTableWidget):
         # Si l'extension appartient au jeu de l'emprunt en cours
         # Si l'user n'a pas d'emprunt en cours
 
-        #QMessageBox.critical(self, "ERREUR !",
-        #u"Fonctionnalité pas encore disponible !",
-        #QMessageBox.Ok, QMessageBox.NoButton,
-        #QMessageBox.NoButton)
-
-        #UPDATE de la fonction
-        self.User=self.session.get_session_User()
-
-        if (self.session == None):
-            QMessageBox.warning(self, "Impossible d'emprunter",
-            u"Oops ! il semblerait que vous ne soyez pas connecté.",
-            QMessageBox.Ok, QMessageBox.NoButton,
-            QMessageBox.NoButton)
-        # l'utilisateur a un abonnement valide et un emprunt en cours
-        elif(self.User.peut_emprunter()):
-            #Si l'utilisateur a un emprunt en cours alors:
-            if(EnsEmprunt.a_un_emprunt_en_cours(self.User)):
-                #Si l'extension correspond au jeu de l'emprunt en cours alors on crée un emprunt
-                #A FAIRE: Rajouter l'id du jeu lors d'un emprunt, permet une meilleure gestion des emprunts d'extensions.
-                if(self.selectedExtension().get_Id_Jeu_Associe() == self.User.get_emprunt_en_cours().get_Jeu_id_Emprunt()):
-                    #Creation d'un nouvel emprunt concernant l'extension
-                    D=EnsEmprunt.Emprunt(User=self.User,Jeu=self.selectedGame)
-                    #CONFIRMATION DE L'EMPRUNT
-                    QMessageBox.information(self, "Emprunt !",
-                    u"L'extension a bien été empruntée.\n A rendre pour le "+str(D.calcul_Date_Echeance()),
-                    QMessageBox.Ok, QMessageBox.NoButton,
-                    QMessageBox.NoButton)
-
-                    ## AUTOREFREEEEEESH ##
-                    new = JeuView(item=self.item,session=self.session)
-                    self.parent().setCentralWidget(new)
-
-                # L'utilisateur n'a pas emprunter une extension correspondant au jeu de l'emprunt en cours
-                else:
-                    QMessageBox.warning(self, "Impossible d'emprunter",
-                    u"Vous n'avez pas le droit d'emprunter une extension n'appartenant pas au jeu en cours d'emprunt",
-                    QMessageBox.Ok, QMessageBox.NoButton,
-                    QMessageBox.NoButton)
-            #L'utilisateur n'a pas d'emprunt en cours, on crée directement un nouvel emprunt
-            else:
-                #Creation d'un nouvel emprunt concernant l'extension
-                D=EnsEmprunt.Emprunt(User=self.User,Jeu=self.selectedGame)
-                #CONFIRMATION DE L'EMPRUNT
-                QMessageBox.information(self, "Emprunt !",
-                u"L'extension a bien été empruntée.\n A rendre pour le "+str(D.calcul_Date_Echeance()),
-                QMessageBox.Ok, QMessageBox.NoButton,
-                QMessageBox.NoButton)
-
-                ## AUTOREFREEEEEESH ##
-                new = JeuView(item=self.item,session=self.session)
-                self.parent().setCentralWidget(new)
-        #L'utilisateur n'a pas d'abonnement valide
-        elif(not(self.User.peut_emprunter())):
-            QMessageBox.warning(self, "Impossible d'emprunter",
-            "Oops ! Il semblerait que votre abonnement n'est pas valide.",
-            QMessageBox.Ok, QMessageBox.NoButton,
-            QMessageBox.NoButton)
+        QMessageBox.critical(self, "ERREUR !",
+        u"Fonctionnalité pas encore disponible !",
+        QMessageBox.Ok, QMessageBox.NoButton,
+        QMessageBox.NoButton)
 
 
 
 
 
     def reserver(self):
-        #QMessageBox.critical(self, "ERREUR !",
-        #u"Fonctionnalité pas encore disponible !",
-        #QMessageBox.Ok, QMessageBox.NoButton,
-        #QMessageBox.NoButton)
-        self.User=self.session.get_session_User()
-
-        if (self.session == None):
-            QMessageBox.warning(self, "Impossible de réserver",
-            u"Oops ! il semblerait que vous ne soyez pas connecté.",
-            QMessageBox.Ok, QMessageBox.NoButton,
-            QMessageBox.NoButton)
-        # l'utilisateur a un abonnement valide et un emprunt en cours
-        elif(self.User.peut_reserver()):
-            #Si l'utilisateur a un emprunt en cours alors:
-            if(EnsEmprunt.a_un_emprunt_en_cours(self.User)):
-                #Si l'extension correspond au jeu de l'emprunt en cours alors on crée une réservation
-                #A FAIRE: Rajouter l'id du jeu lors d'une réservation, permet une meilleure gestion des emprunts d'extensions. Extension utilise un Jeu_id.
-                if(self.selectedExtension().get_Id_Jeu_Associe() == self.User.get_emprunt_en_cours().get_Jeu_id_Reservation()):
-                    #Creation d'un nouvel emprunt concernant l'extension
-                    D=EnsReservation.Reservation(User=self.User,Jeu=self.selectedGame)
-                    #CONFIRMATION DE L'EMPRUNT
-                    QMessageBox.information(self, "Reservation !",
-                    u"L'extension a bien été réservée.\n A rendre pour le "+str(D.calcul_Date_Echeance()),
-                    QMessageBox.Ok, QMessageBox.NoButton,
-                    QMessageBox.NoButton)
-
-                    ## AUTOREFREEEEEESH ##
-                    new = JeuView(item=self.item,session=self.session)
-                    self.parent().setCentralWidget(new)
-
-                # L'utilisateur n'a pas réserver une extension correspondant au jeu de la réservation en cours
-                else:
-                    QMessageBox.warning(self, "Impossible de réserver",
-                    u"Vous n'avez pas le droit de réserver une extension n'appartenant pas au jeu en cours de réservation",
-                    QMessageBox.Ok, QMessageBox.NoButton,
-                    QMessageBox.NoButton)
-            #L'utilisateur n'a pas de réservation en cours, on crée directement une nouvelle réservation
-            else:
-                #Creation d'une nouvelle réservation concernant l'extension
-                D=EnsEmprunt.Emprunt(User=self.User,Jeu=self.selectedGame)
-                #CONFIRMATION DE L'EMPRUNT
-                QMessageBox.information(self, "Réservation!",
-                u"L'extension a bien été réservée.\n A récupérer avant le "+str(D.calcul_Date_Echeance()),
-                QMessageBox.Ok, QMessageBox.NoButton,
-                QMessageBox.NoButton)
-
-                ## AUTOREFREEEEEESH ##
-                new = JeuView(item=self.item,session=self.session)
-                self.parent().setCentralWidget(new)
-        #L'utilisateur n'a pas d'abonnement valide
-        elif(not(self.User.peut_reserver())):
-            QMessageBox.warning(self, "Impossible de réserver",
-            "Oops ! Il semblerait que votre abonnement n'est pas valide.",
-            QMessageBox.Ok, QMessageBox.NoButton,
-            QMessageBox.NoButton)
+        QMessageBox.critical(self, "ERREUR !",
+        u"Fonctionnalité pas encore disponible !",
+        QMessageBox.Ok, QMessageBox.NoButton,
+        QMessageBox.NoButton)
