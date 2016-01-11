@@ -292,7 +292,8 @@ class UserView(QWidget):
     def rendreEmprunt(self):
         try:
             EnsEmprunt.get_emprunt_en_cours(self.selectedUser).rendre_Emprunt()
-
+            if(self.selectedUser.get_nbRetard()>10):
+                self.selectedUser.set_abonnementValide(False) #pénalité: l'adhérent ne peut plus emprunter de jeu.
             QMessageBox.information(self, "Emprunt rendu !",
             u"L'emprunt a bien été rendu !",
             QMessageBox.Ok, QMessageBox.NoButton,
